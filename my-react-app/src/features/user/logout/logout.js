@@ -14,7 +14,7 @@ const Logout = () => {
     return (
         <div className="logout">
           <h1>
-            Welcome <span className="user_name">{user.name}</span>
+            Welcome {user.email}<span className="user_name">{user.name}</span>
           </h1>{""}
           <button className="logout_button" onClick={(e) => handleLogout(e)}>
             Logout

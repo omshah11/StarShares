@@ -1,7 +1,7 @@
 import React from 'react';
 import Login from '../../features/user/login/login';
 import Logout from '../../features/user/logout/logout';
-import SignUp from '../../features/signup/signup'; // Import the SignUp component
+import SignUp from '../../features/signup/signup';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/user/userSlice';
 import './App.css';
