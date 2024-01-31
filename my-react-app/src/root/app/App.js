@@ -1,6 +1,9 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Login from '../../features/user/login/login';
-import Logout from '../../features/user/logout/logout';
+import Navbar from '../../features/user/navbar/navbar';
+import AboutUs from '../../features/user/aboutUs/aboutUs';
+import LandingPage from '../../features/user/landingPage/landingPage';
 import SignUp from '../../features/signup/signup';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/user/userSlice';
@@ -10,9 +13,16 @@ const App = () => {
   const user = useSelector(selectUser);
 
   return (
+    <Router>
     <div>
       {user ? (
-          <Logout />
+        <div>
+          <Navbar />
+          <Routes>
+            <Route path="/about-us" element={<AboutUs />}/>
+          </Routes>
+          <LandingPage />
+        </div>
       ) : (
         <>
           <Login />
@@ -20,6 +30,7 @@ const App = () => {
         </>
       )}
     </div>
+    </Router>
   );
 };
 
