@@ -1,0 +1,41 @@
+/* Styles for the Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #253741;
+  }
+  
+  .brand {
+    font-size: 20px;
+    color: white;
+  }
+  
+  .search-bar {
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-bar input {
+    margin-right: 10px;
+    padding: 5px;
+  }
+  
+  .features {
+    display: flex;
+    margin-right: 15px;
+  }
+  
+  .features a {
+    margin-right: 15px;
+    padding-right: 10px;
+    text-decoration: none;
+    color: white;
+  }
+  
+  /* Add hover effect for better user experience */
+  .features a:hover {
+    text-decoration: underline;
+  }
+  
