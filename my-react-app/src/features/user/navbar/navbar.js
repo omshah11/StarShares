@@ -20,10 +20,10 @@ const Navbar = () => {
 
       {/* Features on the top right */}
       <div className="features">
-        <a href="#about-us">About Us</a>
-        <a href="#portfolio">Portfolio</a>
-        <a href="#watchlist">Watchlist</a>
-        <a href="#profile">Profile</a>
+        <a href="about-us">About Us</a>
+        <a href="portfolio">Portfolio</a>
+        <a href="watchlist">Watchlist</a>
+        <a href="profile">Profile</a>
       </div>
     </nav>
   );
