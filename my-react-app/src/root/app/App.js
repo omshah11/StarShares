@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Login from '../../features/user/login/login';
 import Navbar from '../../features/user/navbar/navbar';
 import AboutUs from '../../features/user/aboutUs/aboutUs';
+import Portfolio from '../../features/user/portfolio/portfolio';
 import LandingPage from '../../features/user/landingPage/landingPage';
 import SignUp from '../../features/signup/signup';
 import { useSelector } from 'react-redux';
@@ -20,6 +21,7 @@ const App = () => {
           <Navbar />
           <Routes>
             <Route path="/about-us" element={<AboutUs />}/>
+            <Route path="/portfolio" element={<Portfolio />}/>
           </Routes>
           <LandingPage />
         </div>
