@@ -9,7 +9,7 @@ const Navbar = () => {
     <nav className="navbar">
       {/* Brand name on the top left */}
       <div className="brand">
-        <span>Star Shares</span>
+      <Link to="/home">Star Shares</Link>
       </div>
 
       {/* Search bar in the center */}
@@ -20,10 +20,10 @@ const Navbar = () => {
 
       {/* Features on the top right */}
       <div className="features">
-        <a href="about-us">About Us</a>
-        <a href="portfolio">Portfolio</a>
-        <a href="watchlist">Watchlist</a>
-        <a href="profile">Profile</a>
+        <Link to="/about-us">About Us</Link>
+        <Link to="/portfolio">Portfolio</Link>
+        <Link to="/watchlist">Watchlist</Link>
+        <Link to="/profile">Profile</Link>
       </div>
     </nav>
   );

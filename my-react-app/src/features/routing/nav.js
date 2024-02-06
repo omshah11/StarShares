@@ -9,7 +9,7 @@ export { Nav };
 function Nav() {
     const auth = useSelector(x => x.auth.value);
     const dispatch = useDispatch();
-    const logout = () => dispatch(logout());
+    const logOut = () => dispatch(logout());
 
     // only show nav when logged in
     if (!auth) return null;

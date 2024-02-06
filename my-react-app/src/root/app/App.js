@@ -18,16 +18,17 @@ const App = () => {
   return (
     <Router>
     <div>
-      {user ? (
+      {user.isLoggedIn ? (
         <div>
           <Navbar />
           <Routes>
+            <Route path="/" element={<Login />}/>
+            <Route path="/home" element={<LandingPage />}/>
             <Route path="/about-us" element={<AboutUs />}/>
             <Route path="/portfolio" element={<Portfolio />}/>
             <Route path="/watchlist" element={<Watchlist />}/>
             <Route path="/profile" element={<Profile />}/>
           </Routes>
-          <LandingPage />
         </div>
       ) : (
         <>
