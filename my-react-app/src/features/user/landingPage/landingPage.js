@@ -1,20 +1,28 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
 import { logout, selectUser } from '../userSlice'
 import "./landingPage.css";
 
 const LandingPage = () => {
   const user = useSelector(selectUser);
+  const userDetails = user.user;
+  // console.log(user)
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   
   const handleLogout = (e) => {
     e.preventDefault();
-    dispatch(logout());
+    dispatch(logout({
+      isLoggedIn: false
+    }
+    ));
+    navigate('/');
   };
     return (
         <div className="logout">
           <h1>
-            Welcome {user.email}<span className="user_name">{user.name}</span>
+            Welcome {userDetails.email}<span className="user_name">{userDetails.name}</span>
           </h1>{""}
           <button className="logout_button" onClick={(e) => handleLogout(e)}>
             Logout
