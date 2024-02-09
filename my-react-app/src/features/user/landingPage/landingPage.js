@@ -7,7 +7,7 @@ import "./landingPage.css";
 const LandingPage = () => {
   const user = useSelector(selectUser);
   const userDetails = user.user;
-  // console.log(user)
+  console.log(userDetails)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
@@ -22,7 +22,7 @@ const LandingPage = () => {
     return (
         <div className="logout">
           <h1>
-            Welcome {userDetails.email}<span className="user_name">{userDetails.name}</span>
+            Welcome {userDetails.email}<span className="user_name">{userDetails.firstName}</span>
           </h1>{""}
           <button className="logout_button" onClick={(e) => handleLogout(e)}>
             Logout

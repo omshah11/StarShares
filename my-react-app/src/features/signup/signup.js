@@ -5,7 +5,8 @@ import axios from "axios";
 import "../user/login/login.css";
 const SignUp = () => {
     
-    const [name, setName] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     
@@ -19,7 +20,8 @@ const SignUp = () => {
           method: "post",
           url: "http://localhost:5000/api/signup",
           data: {
-            name,
+            firstName,
+            lastName,
             email,
             password,
           },
@@ -50,9 +52,15 @@ const SignUp = () => {
             <h1>SignUp Here 📝</h1>
             <input
              type="name" 
-             placeholder="Name" 
-             value={name} 
-             onChange={(e) => setName(e.target.value)}
+             placeholder="First Name" 
+             value={firstName} 
+             onChange={(e) => setFirstName(e.target.value)}
+            />
+            <input
+             type="name" 
+             placeholder="Last Name" 
+             value={lastName} 
+             onChange={(e) => setLastName(e.target.value)}
             />
             <input 
              type="email"
