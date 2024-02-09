@@ -2,7 +2,7 @@
 import React from 'react';
 import "./profile.css"
 
-// About Us page component
+// Profile page component
 const Profile = () => {
   return (
     <div>
