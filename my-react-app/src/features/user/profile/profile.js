@@ -1,6 +1,5 @@
 // Import necessary dependencies
 import React from 'react';
-import "./profile.css"
 
 // Profile page component
 const Profile = () => {

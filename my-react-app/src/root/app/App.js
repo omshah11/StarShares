@@ -10,7 +10,7 @@ import LandingPage from '../../features/user/landingPage/landingPage';
 import SignUp from '../../features/signup/signup';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/user/userSlice';
-import './App.css';
+import "../../index.css"; // import Tailwind CSS main file 
 
 const App = () => {
   const user = useSelector(selectUser);

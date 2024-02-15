@@ -1,6 +1,5 @@
 // Import necessary dependencies
 import React from 'react';
-import "./aboutUs.css"
 
 // About Us page component
 const AboutUs = () => {
