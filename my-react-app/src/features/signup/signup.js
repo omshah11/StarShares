@@ -43,7 +43,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center font-inter">
+    <div className="bodycolor h-screen flex flex-col justify-center items-center font-inter">
       <form className="flex flex-col" onSubmit={(e) => handleSubmit(e)}>
         <h1 className="text-3xl font-bold mb-4">SignUp Here 📝</h1>
         <input
