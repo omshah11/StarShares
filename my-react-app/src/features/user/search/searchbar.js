@@ -1,5 +1,5 @@
-
-import {Container, InputGroup, FormControl, Button, Row, Card} from 'react-bootstrap';
+//import './searchbar.css'
+import {Container, InputGroup, FormControl, Button, Row, Card, Dropdown} from 'react-bootstrap';
 import {useState, useEffect} from 'react';
 
 const CLIENT_ID = "2f6e085b55bc4ede9131e2d7d7739c30";
@@ -9,6 +9,7 @@ function Search() {
   const [searchInput, setSearchInput] = useState("");
   const [accessToken, setAccessToken] = useState("");
   const [albums, setAlbums] = useState([]);
+  const [buttonClicked, setButtonClicked] = useState(false);
 
   useEffect(() => {
     //API Access Token
@@ -39,6 +40,7 @@ function Search() {
     var artistID = await fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=artist', searchParameters)
       .then(response => response.json())
       .then(data => {return data.artists.items[0].id})
+      //.then(data => console.log(data))
 
     console.log("Artist ID is " + artistID)
     // Get request with Artist ID grab all the albums from that artist
@@ -51,10 +53,15 @@ function Search() {
     // Display those items to the user
   }
 
+  const handleButtonClick = () => {
+    setButtonClicked(true); // Set buttonClicked state to true
+    search(); // Call fetchData function to fetch data from the API
+  };
+
   console.log(albums);
   return (
-    <div className="App">
-      {/* <Container>
+    <div className="search-bar">
+      <Container>
         <InputGroup className='mb-3' size='lg'>
           <FormControl
             placeholder="Search For Artist"
@@ -66,18 +73,37 @@ function Search() {
             }}
             onChange={event => setSearchInput(event.target.value)}
           />
-          <Button onClick={search}>
+          {/* <Button onClick={search}>
             Search
-          </Button>
+          </Button> */}
+          {/* <button class="btn" id="btn">
+            Search
+            <i class="bx bx-chevron-down" id="arrow"></i>
+          </button> */}
+          
+          <div>
+            <button onClick={handleButtonClick}>Search</button>
+            {buttonClicked && (
+              <select>
+                {albums.map((album, index) => (
+                  <option key={index} value={album.name}>
+                    <img src={album.images[2].url} style={{ width: '20px', marginRight: '5px' }} />
+                    {album.name}
+                  </option>
+                ))}
+            </select>
+            )}
+          </div>
         </InputGroup>
-      </Container> */}
-      <Container>
+      </Container>
+      
+      {/* <Container>
         <Row className='mx-2 row row-cols-4'>
           {albums.map((album, i) => {
             console.log(album);
             return(
               <Card>
-                <Card.Img src={album.images[0].url}/>
+                <Card.Img src={album.images[2].url}/>
                 <Card.Body>
                   <Card.Title>{album.name}</Card.Title>
                 </Card.Body>
@@ -85,9 +111,33 @@ function Search() {
             )
           })}
         </Row>
-      </Container>
+      </Container> */}
+
     </div>
   );
 }
+
+// const dropdownBtn = document.getElementById("btn");
+// const dropdownMenu = document.getElementById("dropdown");
+// const toggleArrow = document.getElementById("arrow");
+
+// // Toggle dropdown function
+// const toggleDropdown = function () {
+//   dropdownMenu.classList.toggle("show");
+//   toggleArrow.classList.toggle("arrow");
+// };
+
+// // Toggle dropdown open/close when dropdown button is clicked
+// dropdownBtn.addEventListener("click", function (e) {
+//   e.stopPropagation();
+//   toggleDropdown();
+// });
+
+// // Close dropdown when dom element is clicked
+// document.documentElement.addEventListener("click", function () {
+//   if (dropdownMenu.classList.contains("show")) {
+//     toggleDropdown();
+//   }
+// });
 
 export default Search;
