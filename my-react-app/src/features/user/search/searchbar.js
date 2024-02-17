@@ -1,6 +1,4 @@
-import logo from './logo.svg';
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 import {Container, InputGroup, FormControl, Button, Row, Card} from 'react-bootstrap';
 import {useState, useEffect} from 'react';
 
@@ -56,7 +54,7 @@ function Search() {
   console.log(albums);
   return (
     <div className="App">
-      <Container>
+      {/* <Container>
         <InputGroup className='mb-3' size='lg'>
           <FormControl
             placeholder="Search For Artist"
@@ -72,7 +70,7 @@ function Search() {
             Search
           </Button>
         </InputGroup>
-      </Container>
+      </Container> */}
       <Container>
         <Row className='mx-2 row row-cols-4'>
           {albums.map((album, i) => {
