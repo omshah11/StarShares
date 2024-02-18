@@ -100,22 +100,37 @@ const Portfolio = () => {
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 w-10 h-10">
                                         <img class="w-full h-full rounded-full"
-                                            src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
+                                            src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSNmANevq5C_6uKrTKHssGKOcELvMJNccZ_Omq5BumJD2YYZLzT"
                                             alt="" />
                                     </div>
                                     <div class="ml-3">
                                         <p class="text-gray-900 whitespace-no-wrap">
-                                            Blake Bowman
+                                            Usher
                                         </p>
                                     </div>
                                 </div>
                             </td>
                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                <p class="text-gray-900 whitespace-no-wrap">Editor</p>
+                                <p class="text-gray-900 whitespace-no-wrap">1000</p>
                             </td>
                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <p class="text-gray-900 whitespace-no-wrap">
-                                    Jan 01, 2020
+                                    $0.01
+                                </p>
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <p class="text-gray-900 whitespace-no-wrap">
+                                    $0.00
+                                </p>
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <p class="text-gray-900 whitespace-no-wrap">
+                                    $0.00
+                                </p>
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <p class="text-gray-900 whitespace-no-wrap">
+                                    $10.00
                                 </p>
                             </td>
                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -123,7 +138,7 @@ const Portfolio = () => {
                                     class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
                                     <span aria-hidden
                                         class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
-                                    <span class="relative">Activo</span>
+                                    <span class="relative">Positive</span>
                                 </span>
                             </td>
                         </tr>
@@ -132,67 +147,99 @@ const Portfolio = () => {
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 w-10 h-10">
                                         <img class="w-full h-full rounded-full"
-                                            src="https://images.unsplash.com/photo-1540845511934-7721dd7adec3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
+                                            src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSNmANevq5C_6uKrTKHssGKOcELvMJNccZ_Omq5BumJD2YYZLzT"
                                             alt="" />
                                     </div>
                                     <div class="ml-3">
                                         <p class="text-gray-900 whitespace-no-wrap">
-                                            Dana Moore
+                                            Usher
                                         </p>
                                     </div>
                                 </div>
                             </td>
                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                <p class="text-gray-900 whitespace-no-wrap">Editor</p>
+                                <p class="text-gray-900 whitespace-no-wrap">1000</p>
                             </td>
                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <p class="text-gray-900 whitespace-no-wrap">
-                                    Jan 10, 2020
+                                    $0.01
+                                </p>
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <p class="text-gray-900 whitespace-no-wrap">
+                                    $0.00
+                                </p>
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <p class="text-gray-900 whitespace-no-wrap">
+                                    $0.00
+                                </p>
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <p class="text-gray-900 whitespace-no-wrap">
+                                    $10.00
                                 </p>
                             </td>
                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <span
-                                    class="relative inline-block px-3 py-1 font-semibold text-orange-900 leading-tight">
+                                    class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
                                     <span aria-hidden
-                                        class="absolute inset-0 bg-orange-200 opacity-50 rounded-full"></span>
-                                    <span class="relative">Suspended</span>
+                                        class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+                                    <span class="relative">Positive</span>
                                 </span>
                             </td>
                         </tr>
                         <tr>
-                            <td class="px-5 py-5 bg-white text-sm">
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 w-10 h-10">
                                         <img class="w-full h-full rounded-full"
-                                            src="https://images.unsplash.com/photo-1522609925277-66fea332c575?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&h=160&w=160&q=80"
+                                            src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSNmANevq5C_6uKrTKHssGKOcELvMJNccZ_Omq5BumJD2YYZLzT"
                                             alt="" />
                                     </div>
                                     <div class="ml-3">
                                         <p class="text-gray-900 whitespace-no-wrap">
-                                            Alonzo Cox
+                                            Usher
                                         </p>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-5 py-5 bg-white text-sm">
-                                <p class="text-gray-900 whitespace-no-wrap">Admin</p>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <p class="text-gray-900 whitespace-no-wrap">1000</p>
                             </td>
-                            <td class="px-5 py-5 bg-white text-sm">
-                                <p class="text-gray-900 whitespace-no-wrap">Jan 18, 2020</p>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <p class="text-gray-900 whitespace-no-wrap">
+                                    $0.01
+                                </p>
                             </td>
-                            <td class="px-5 py-5 bg-white text-sm">
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <p class="text-gray-900 whitespace-no-wrap">
+                                    $0.00
+                                </p>
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <p class="text-gray-900 whitespace-no-wrap">
+                                    $0.00
+                                </p>
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <p class="text-gray-900 whitespace-no-wrap">
+                                    $10.00
+                                </p>
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <span
-                                    class="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
+                                    class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
                                     <span aria-hidden
-                                        class="absolute inset-0 bg-red-200 opacity-50 rounded-full"></span>
-                                    <span class="relative">Inactive</span>
+                                        class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+                                    <span class="relative">Positive</span>
                                 </span>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <p class="pt-3 text-gray-600">
+            <p class="pt-1 text-gray-600">
                 Source: <a class="underline" href="https://tailwindcomponents.com/component/table-responsive-with-filters">https://tailwindcomponents.com/component/table-responsive-with-filters</a>
             </p>
         </div>
