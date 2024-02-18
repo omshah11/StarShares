@@ -1,0 +1,31 @@
+/* profile.css */
+.profile {
+    font-weight: bold; /* Make the text bold */
+    font-family: Arial, sans-serif; /* Use Arial font */
+    margin: 20px; /* Add some margin around the profile container */
+    width: 90%; /* Set the width of the profile container to 90% of its parent container */
+    max-width: 600px; /* Set a maximum width for the profile container */
+  }
+
+  .edit {
+    float: none;
+  }
+
+  .info {
+    font-weight: bold; /* Make the text bold */
+    font-family: Arial, sans-serif; /* Use Arial font */
+  }
+
+  .feed {
+    font-weight: initial;
+  }
+
+.profile img {
+    /* Set the maximum width and height for the profile image */
+    max-width: 100px; /* Change this value to your desired width */
+    max-height: 100px; /* Change this value to your desired height */
+    /* Ensure the image maintains its aspect ratio */
+    width: auto;
+    height: auto;
+  }
+  
