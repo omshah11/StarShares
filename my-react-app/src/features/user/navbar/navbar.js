@@ -6,7 +6,7 @@ import "./navbar.css";
 // Functional component for the Navbar
 const Navbar = () => {
   return (
-    <nav className="navbar flex justify-between items-center px-4 py-2 text-white">
+    <nav className="bgcolorSS2 flex justify-between items-center px-4 py-2 text-white">
       {/* Brand name on the top left */}
       <div className="brand text-lg font-bold">
         <Link to="/home">Star Shares</Link>
@@ -18,7 +18,7 @@ const Navbar = () => {
         {/* <button type="button">Search</button> */}
       </div>
 
-      {/* Features on the top right */}
+      {/* Features on the top right Kanayo Anyakpor Worked On Styling Components.*/}
       <div className="features flex items-center">
         <Link to="/about-us" className="mr-4">About Us</Link>
         <Link to="/portfolio" className="mr-4">Portfolio</Link>

@@ -2,3 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.bgcolorSS{
+    background: #37515F;
+}
+
+.bgcolorSS2{
+    background: #253741;
+}
