@@ -1,4 +1,3 @@
-//import './searchbar.css'
 import {Container, InputGroup, FormControl, Button, Row, Card, Dropdown} from 'react-bootstrap';
 import {useState, useEffect} from 'react';
 

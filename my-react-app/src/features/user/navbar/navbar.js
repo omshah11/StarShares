@@ -13,12 +13,15 @@ const Navbar = () => {
       <Link to="/home">Star Shares</Link>
       </div>
 
+      {/* Andy's original code */}
       {/* Search bar in the center */}
       {/* <div className="search-bar">
         <input type="text" placeholder="Search..."/>
         <input id="search" type="button" value="search" onClick={Search}></input>
         {/* <button type="button">Search</button> */}
       {/*</div> */}
+
+      {/* Implementing my code from searchbar.js*/}
       <Search/>
       
       {/* Features on the top right */}
