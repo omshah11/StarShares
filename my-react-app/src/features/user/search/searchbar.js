@@ -7,7 +7,10 @@ const CLIENT_SECRET = "88eeb98034e5422099cce4f6467a3d51";
 function Search() {
   const [searchInput, setSearchInput] = useState("");
   const [accessToken, setAccessToken] = useState("");
-  const [albums, setAlbums] = useState([]);
+  // const [albums, setAlbums] = useState([]);
+  // const [artists, setArtists] = useState([]);
+  // const [tracks, setTracks] = useState([]);
+  const [items, setItems] = useState([])
   const [buttonClicked, setButtonClicked] = useState(false);
 
   useEffect(() => {
@@ -26,7 +29,7 @@ function Search() {
 
   // Search
   async function search() {
-    console.log("Search for " + searchInput); //Bruno Mars
+    console.log("Search for " + searchInput);
 
     // Get request using search to get the Artist ID
     var searchParameters = {
@@ -36,19 +39,23 @@ function Search() {
         'Authorization': 'Bearer ' + accessToken
       }
     }
-    var artistID = await fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=artist', searchParameters)
-      .then(response => response.json())
-      .then(data => {return data.artists.items[0].id})
-      //.then(data => console.log(data))
-
-    console.log("Artist ID is " + artistID)
-    // Get request with Artist ID grab all the albums from that artist
-    var returnedAlbums = await fetch('https://api.spotify.com/v1/artists/' + artistID + '/albums' + '?include_groups=album&market=US&limit=50', searchParameters)
+    var artistID = await fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=album,artist,track', searchParameters)
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        setAlbums(data.items);
+        setItems(data.albums.items);
+        setItems(data.artists.items);
+        setItems(data.tracks.items);
       });
+
+    console.log("Artist ID is " + artistID)
+    // Get request with Artist ID grab all the albums from that artist
+    // var returnedAlbums = await fetch('https://api.spotify.com/v1/artists/' + artistID + '/albums' + '?include_groups=album&market=US&limit=50', searchParameters)
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log(data);
+    //     setAlbums(data.items);
+    //   });
     // Display those items to the user
   }
 
@@ -57,7 +64,7 @@ function Search() {
     search(); // Call fetchData function to fetch data from the API
   };
 
-  console.log(albums);
+  console.log(items);
   return (
     <div className="search-bar">
       <Container>
@@ -77,9 +84,9 @@ function Search() {
             <button onClick={handleButtonClick}>Search</button>
             {buttonClicked && (
               <select>
-                {albums.map((album, index) => (
+                {items.map((album, index) => (
                   <option key={index} value={album.name}>
-                    <img src={album.images[2].url} style={{ width: '20px', marginRight: '5px' }} />
+                    {/* <img src={album.images[2].url} style={{ width: '20px', marginRight: '5px' }} /> */}
                     {album.name}
                   </option>
                 ))}
