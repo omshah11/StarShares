@@ -1,5 +1,6 @@
 import {Container, InputGroup, FormControl, Button, Row, Card, Dropdown} from 'react-bootstrap';
 import {useState, useEffect} from 'react';
+import { useNavigate } from "react-router-dom";
 
 const CLIENT_ID = "2f6e085b55bc4ede9131e2d7d7739c30";
 const CLIENT_SECRET = "88eeb98034e5422099cce4f6467a3d51";
@@ -9,6 +10,7 @@ function Search() {
   const [accessToken, setAccessToken] = useState("");
   const [items, setItems] = useState([])
   const [buttonClicked, setButtonClicked] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     //API Access Token
@@ -50,6 +52,7 @@ function Search() {
 
   const handleButtonClick = () => {
     setButtonClicked(true); // Set buttonClicked state to true
+    navigate("/search-page");
     search(); // Call fetchData function to fetch data from the API
   };
 
@@ -71,15 +74,15 @@ function Search() {
 
           <div>
             <button onClick={handleButtonClick}>Search</button>
-            {buttonClicked && (
-              <select>
-                {items.map((album, index) => (
-                  <option key={index} value={album.name}>
-                    {album.name}
-                  </option>
-                ))}
-            </select>
-            )}
+            {buttonClicked //&& (
+            //   <select>
+            //     {items.map((album, index) => (
+            //       <option key={index} value={album.name}>
+            //         {album.name}
+            //       </option>
+            //     ))}
+            // </select>)
+            }
           </div>
         </InputGroup>
       </Container>

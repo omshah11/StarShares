@@ -8,6 +8,7 @@ import Watchlist from '../../features/user/watchlist/watchlist';
 import Profile from '../../features/user/profile/profile';
 import LandingPage from '../../features/user/landingPage/landingPage';
 import SignUp from '../../features/signup/signup';
+import SearchPage from '../../features/user/search/searchPage';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/user/userSlice';
 import './App.css';
@@ -28,6 +29,7 @@ const App = () => {
             <Route path="/portfolio" element={<Portfolio />}/>
             <Route path="/watchlist" element={<Watchlist />}/>
             <Route path="/profile" element={<Profile />}/>
+            <Route path="/search-page" element={<SearchPage />}/>
           </Routes>
         </div>
       ) : (
