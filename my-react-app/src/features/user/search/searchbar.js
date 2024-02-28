@@ -2,61 +2,17 @@ import {Container, InputGroup, FormControl, Button, Row, Card, Dropdown} from 'r
 import {useState, useEffect} from 'react';
 import { useNavigate } from "react-router-dom";
 
-const CLIENT_ID = "2f6e085b55bc4ede9131e2d7d7739c30";
-const CLIENT_SECRET = "88eeb98034e5422099cce4f6467a3d51";
-
-function Search() {
+function SearchBar() {
   const [searchInput, setSearchInput] = useState("");
-  const [accessToken, setAccessToken] = useState("");
-  const [items, setItems] = useState([])
-  const [buttonClicked, setButtonClicked] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    //API Access Token
-    var authParameters = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: 'grant_type=client_credentials&client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET
-    }
-    fetch('https://accounts.spotify.com/api/token', authParameters)
-      .then(result => result.json())
-      .then(data => setAccessToken(data.access_token))
-  }, [])
-
-  // Search
-  async function search() {
-    console.log("Search for " + searchInput);
-
-    // Get request using search
-    var searchParameters = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + accessToken
-      }
-    }
-    var artistID = await fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=album,artist,track', searchParameters)
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        setItems(data.artists.items);
-        setItems(data.albums.items);
-        setItems(data.tracks.items);
-      });
-
-    console.log("Artist ID is " + artistID)
-  }
-
   const handleButtonClick = () => {
-    setButtonClicked(true); // Set buttonClicked state to true
+  //   setButtonClicked(true); // Set buttonClicked state to true
     navigate("/search-page");
-    search(); // Call fetchData function to fetch data from the API
+  //   search(); // Call fetchData function to fetch data from the API
   };
 
-  console.log(items);
+  // console.log(items);
   return (
     <div className="search-bar">
       <Container>
@@ -66,13 +22,17 @@ function Search() {
             type="input"
             onKeyPress={event => {
               if (event.key == "Enter"){
-                search();
+                navigate("/search-page");
+                //search();
               }
             }}
             onChange={event => setSearchInput(event.target.value)}
           />
+          <Button onClick={handleButtonClick}>
+            Search
+          </Button>
 
-          <div>
+          {/* <div>
             <button onClick={handleButtonClick}>Search</button>
             {buttonClicked //&& (
             //   <select>
@@ -83,7 +43,7 @@ function Search() {
             //     ))}
             // </select>)
             }
-          </div>
+          </div> */}
         </InputGroup>
       </Container>
 
@@ -91,4 +51,4 @@ function Search() {
   );
 }
 
-export default Search;
+export default SearchBar;

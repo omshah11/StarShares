@@ -2,7 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import './navbar.css';
-import Search from '../search/searchbar';
+import SearchBar from '../search/searchbar';
 
 // Functional component for the Navbar
 const Navbar = () => {
@@ -22,7 +22,7 @@ const Navbar = () => {
       {/*</div> */}
 
       {/* Implementing my code from searchbar.js*/}
-      <Search/>
+      <SearchBar/>
       
       {/* Features on the top right */}
       <div className="features">
