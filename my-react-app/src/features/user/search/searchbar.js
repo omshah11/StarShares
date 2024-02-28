@@ -1,13 +1,19 @@
 import {Container, InputGroup, FormControl, Button, Row, Card, Dropdown} from 'react-bootstrap';
 import {useState, useEffect} from 'react';
 import { useNavigate } from "react-router-dom";
+import { getInput } from './searchSlice';
+import { useDispatch } from 'react-redux';
 
 function SearchBar() {
   const [searchInput, setSearchInput] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleButtonClick = () => {
   //   setButtonClicked(true); // Set buttonClicked state to true
+    dispatch(getInput({
+      searchInput: searchInput
+    }));
     navigate("/search-page");
   //   search(); // Call fetchData function to fetch data from the API
   };

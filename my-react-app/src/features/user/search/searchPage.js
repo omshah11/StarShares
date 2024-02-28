@@ -4,6 +4,7 @@ import "./searchPage.css"
 import {Container, InputGroup, FormControl, Button, Row, Card} from 'react-bootstrap';
 import {useState, useEffect, React, useContext} from 'react';
 import {useLocation} from 'react-router-dom';
+import { useSelector } from 'react-redux';
 // import { searchInput } from "./searchbar";
 
 const CLIENT_ID = "2f6e085b55bc4ede9131e2d7d7739c30";
@@ -11,7 +12,8 @@ const CLIENT_SECRET = "88eeb98034e5422099cce4f6467a3d51";
 
 // About Us page component
 const SearchPage = () => {
-  const [searchInput, setSearchInput] = useState("");
+  //const [searchInput, setSearchInput] = useState("");
+  const searchInput = useSelector(search => search.searchQuery.searchInput);
   const [accessToken, setAccessToken] = useState("");
   const [items, setItems] = useState([])
   const [buttonClicked, setButtonClicked] = useState(false);
