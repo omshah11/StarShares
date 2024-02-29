@@ -25,17 +25,6 @@ const Watchlist = () => {
     setWatchlist(watchlist.filter((stock) => stock.id !== id));
   };
 
-  const toggleCompleted = (id) => {
-    setWatchlist(
-      watchlist.map((stock) => {
-        if (stock.id === id) {
-          return { ...stock, completed: !stock.completed }; // Spread the stock object and toggle completed
-        } else {
-          return stock;
-        }
-      })
-    );
-  };
 
   return (
     <div className="todo-list">
@@ -44,7 +33,6 @@ const Watchlist = () => {
           key={stock} // Use stock.id as the key
           task={stock}
           deleteTask={deleteFromWatchlist}
-          toggleCompleted={toggleCompleted}
         />
       ))}
       <input value={stock} onChange={(e) => setStock(e.target.value)} />
