@@ -1,13 +1,54 @@
-// Import necessary dependencies
-import React from 'react';
-import "./watchlist.css"
+import React, { useState } from "react";
+import TodoItem from "./TodoItem";
+import { useSelector } from "react-redux";
+import { selectUser } from "../userSlice";
 
-// About Us page component
+import "./watchlist.css";
+
 const Watchlist = () => {
+  const user = useSelector(selectUser);
+  const [watchlist, setWatchlist] = useState(user.watchlist);
+  console.log(watchlist);
+  const [stock, setStock] = useState("");
+
+  const addToWatchlist = () => {
+    const newStock = {
+      id: Math.random().toString(), // Generate a unique ID for the new stock
+      name: stock,
+      completed: false
+    };
+    setWatchlist([...watchlist, newStock]); // Spread the previous watchlist and add the new stock
+    setStock("");
+  };
+
+  const deleteFromWatchlist = (id) => {
+    setWatchlist(watchlist.filter((stock) => stock.id !== id));
+  };
+
+  const toggleCompleted = (id) => {
+    setWatchlist(
+      watchlist.map((stock) => {
+        if (stock.id === id) {
+          return { ...stock, completed: !stock.completed }; // Spread the stock object and toggle completed
+        } else {
+          return stock;
+        }
+      })
+    );
+  };
+
   return (
-    <div>
-      <h1>Watchlist</h1>
-      <p>Placeholder for Watchlist.</p>
+    <div className="todo-list">
+      {watchlist.map((stock) => (
+        <TodoItem
+          key={stock} // Use stock.id as the key
+          task={stock}
+          deleteTask={deleteFromWatchlist}
+          toggleCompleted={toggleCompleted}
+        />
+      ))}
+      <input value={stock} onChange={(e) => setStock(e.target.value)} />
+      <button onClick={addToWatchlist}>Add</button>
     </div>
   );
 };
