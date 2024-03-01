@@ -5,14 +5,12 @@ import {Container, InputGroup, FormControl, Button, Row, Card} from 'react-boots
 import {useState, useEffect, React, useContext} from 'react';
 import {useLocation} from 'react-router-dom';
 import { useSelector } from 'react-redux';
-// import { searchInput } from "./searchbar";
 
 const CLIENT_ID = "2f6e085b55bc4ede9131e2d7d7739c30";
 const CLIENT_SECRET = "88eeb98034e5422099cce4f6467a3d51";
 
 // About Us page component
 const SearchPage = () => {
-  //const [searchInput, setSearchInput] = useState("");
   const searchInput = useSelector(search => search.searchQuery.searchInput);
   const [accessToken, setAccessToken] = useState("");
   const [items, setItems] = useState([])
@@ -38,14 +36,14 @@ const SearchPage = () => {
     console.log("Search for " + searchInput);
 
     // Get request using search
-    var searchParameters = {
+    let searchParameters = {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + accessToken
       }
     }
-    var artistID = await fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=album,artist,track', searchParameters)
+    let artistID = await fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=album,artist,track', searchParameters)
       .then(response => response.json())
       .then(data => {
         console.log(data);
@@ -57,26 +55,17 @@ const SearchPage = () => {
     console.log("Artist ID is " + artistID)
   }
 
-  // const handleButtonClick = () => {
-  //   setButtonClicked(true); // Set buttonClicked state to true
-  //   search(); // Call fetchData function to fetch data from the API
-  // };
-
-  console.log(items);
+  // console.log(process.env.CLIENT_ID)
+  // console.log(process.env.CLIENT_SECRET)
+  search();
   return (
     <div>
-      <h1>About Us</h1>
-      <h2>Our Goal</h2>
-      <p>This is the About Us page. Add your description here.</p>
-      <h2>Who We Are</h2>
-      <p>This is the About Us page. Add your description here.</p>
       <Container>
       <Row className='mx-2 row row-cols-5'>
       {items.map((item, i) => {
           console.log(item);
           return(
             <Card>
-              <Card.Img src={item.images[0].url}/>
               <Card.Body>
                 <Card.Title>{item.name}</Card.Title>
               </Card.Body>
