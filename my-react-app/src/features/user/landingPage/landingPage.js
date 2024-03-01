@@ -1,13 +1,12 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
-import { logout, selectUser } from '../userSlice'
+import { logout, selectToken, selectUser } from '../userSlice'
 import "./landingPage.css";
 
 const LandingPage = () => {
   const user = useSelector(selectUser);
   const userDetails = user.user;
-  console.log(userDetails)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
