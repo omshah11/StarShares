@@ -1,15 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TodoItem from "./TodoItem";
 import { useSelector } from "react-redux";
 import { selectUser } from "../userSlice";
-
+import axios from "axios";
 import "./watchlist.css";
 
 const Watchlist = () => {
   const user = useSelector(selectUser);
   const [watchlist, setWatchlist] = useState(user.watchlist);
-  console.log(watchlist);
+  const [stockDetailedList, setStockDetailedList] = useState([]);
   const [stock, setStock] = useState("");
+
+  useEffect(() => {
+    // Call getStocks when the component mounts and whenever watchlist changes
+    getStocks();
+  }, [watchlist]); // Dependency array ensures the effect is triggered when watchlist changes
+
+  const getStocks = async () => {
+    for (let i = 0; i < watchlist.length; i++) {
+      const currentStockId = watchlist[i];
+  
+      const getStock = {
+        method: "get",
+        url: "http://localhost:5000/api/getStock",
+        params: {
+          stockId: currentStockId,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+  
+      try {
+        const stockDetails = await axios(getStock);
+        console.log(stockDetails.data.stock.cost)
+        setStockDetailedList((prevList) => [...prevList, stockDetails]);
+      } catch (error) {
+        console.error("Error fetching stock details:", error);
+      }
+    }
+  };
+  
 
   const addToWatchlist = () => {
     const newStock = {
@@ -28,10 +59,11 @@ const Watchlist = () => {
 
   return (
     <div className="todo-list">
-      {watchlist.map((stock) => (
+      <h1>Watchlist</h1>
+      {stockDetailedList.map((stock) => (
         <TodoItem
-          key={stock} // Use stock.id as the key
-          task={stock}
+          stockname={stock.data.stock.artistName}
+          stockcost={stock.data.stock.cost}
           deleteTask={deleteFromWatchlist}
         />
       ))}

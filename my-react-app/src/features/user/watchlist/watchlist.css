@@ -4,6 +4,5 @@
     margin-bottom: 8px;
    }
    .todo-item p {
-    color: #888;
-    text-decoration: line-through;
+    color: white;
    }

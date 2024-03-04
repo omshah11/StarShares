@@ -1,10 +1,11 @@
 import React from 'react';
-function TodoItem({ stock, deleteStock}) {
- 
+import "./watchlist.css";
+function TodoItem({ stockname, stockcost, deleteStock}) {
  return (
  <div className="todo-item">
-<p>{stock}</p>
-<button onClick={() => deleteStock(stock)}>
+<p>Artist Name: {stockname}</p>
+<p>Cost: {stockcost}</p>
+<button onClick={() => deleteStock(stockname)}>
  X
  </button>
  </div>
