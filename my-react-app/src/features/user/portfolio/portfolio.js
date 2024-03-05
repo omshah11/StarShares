@@ -22,7 +22,7 @@ const Portfolio = () => {
     };
 
     return (
-        <div className='h-screen w-screen bgcolorSS text-white'>
+        <div className='h-full w-full bgcolorSS text-white'>
             
             <div className="m-auto bg-white w-1/2">
                 <Chart className="m-auto"options={options} series={options.series} type="line" />

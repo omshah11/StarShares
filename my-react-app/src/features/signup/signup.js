@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../user/userSlice";
+import {Link} from 'react-router-dom';
 import axios from "axios";
+import SignupImg from "../../Imgs/landing.jpg"
 
 const SignUp = () => {
   const [firstName, setFirstName] = useState('');
@@ -43,52 +45,73 @@ const SignUp = () => {
   };
 
   return (
-    <div className="h-screen bgcolorSS">
-      <div className="flex items-center justify-center h-screen">
-        <img className="ml-auto rounded-lg object-left object-cover h-96 w-210" src="https://s3-alpha-sig.figma.com/img/cc49/f321/e7983b799f4436b161310d1e24f960b6?Expires=1709510400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=EBsNY7LJXCdyeMjZP2769EayTr~sT6ohWZ1pKEYUfEpgIegkk~kpyeIn3yASkLTTiqINePWLQARVT~laHHjk5Zycj93LxiNo4UuPYqfvHw4qo44LK1FkKRvcLEV3fQ0NhBvuy0OIYeVjzoIWqXTVzLPf2fAdjxJoSnU79oM9Ksd1z97kvVEr78vFfp21ZFq-eDs8GoZkOBa0ng8dTkzNyk8MtTf6A8zwLzAKqO2EqL5Fr5epKHgNZsXN8ZC-8R7y5F-QybZsMHHQZGgLc2bW-6Sf0vnBAaarOX~b4urtawVO7-hEwCB3eCsq7nDbtGXmYkAlr~-9yCQnbHtOdn0g5g__"/>
-        <div className="border-black relative border-2  rounded-md bgcolorSS2 container mx-auto h-130 w-96 flex flex-col justify-center items-center font-inter">
-          <form className="h-130 flex flex-col pt-16" onSubmit={(e) => handleSubmit(e)}>
-            <h1 className="text-white absolute left-24 top-3 text-3xl font-bold mb-4">SignUp Here 📝</h1>
-            <input
-              type="name"
-              placeholder="First Name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              className="w-80 py-4 px-2 border-b-2 border-black mb-4"
-            />
-            <input
-              type="name"
-              placeholder="Last Name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              className="w-80 py-4 px-2 border-b-2 border-black mb-4"
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-80 py-4 px-2 border-b-2 border-black mb-4"
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-80 py-4 px-2 border-b-2 border-black mb-4"
-            />
-            <button
-              type="submit"
-              className="bg-black text-white py-4 px-6 rounded-lg"
-            >
-              Submit
-            </button>
-          </form>
-          <p className="text-white">Already have an account? <span className="underline font-semibold"><a href="/login">Login</a></span></p>
-        </div>
+  <section className="flex flex-col md:flex-row h-screen items-center bgcolorSS">
+    <div className="hidden lg:block w-full md:w-1/2 xl:w-2/3 h-screen">
+      <img
+        className="ml-auto object-left object-cover w-full h-full"
+        src={SignupImg}
+        alt="Signup Background"
+      />
+    </div>
+
+    <div className="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12 flex items-center justify-center">
+      <div className="w-full h-100">
+        <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">
+          Sign Up for an Account
+        </h1>
+
+        <form className="flex flex-col mt-6" onSubmit={(e) => handleSubmit(e)}>
+          <input
+            type="name"
+            placeholder="First Name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+          />
+
+          <input
+            type="name"
+            placeholder="Last Name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+          />
+
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+          />
+
+          <button
+            type="submit"
+            className="w-full block bgcolorSS2 hover:bgcolorSS focus:bgcolorSS text-white font-semibold rounded-lg px-4 py-3 mt-6"
+          >
+            Submit
+          </button>
+        </form>
+
+        <p className="text-black mt-8">
+          Already have an account?{" "}
+          <span className="underline font-semibold">
+            <Link to="/login">Login</Link>
+          </span>
+        </p>
       </div>
     </div>
-  );
+  </section>
+);
+
 };
 
 export default SignUp;

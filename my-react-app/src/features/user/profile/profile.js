@@ -1,8 +1,8 @@
-// Import necessary dependencies
-import React from 'react';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../userSlice';
 import "./profile.css"
-
-// Profile page component
+import defaultImage from './default.png'; // import the default image
 const Profile = () => {
   const userDetails = useSelector(selectUser).user;
   const [editing, setEditing] = useState(false);

@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login, selectUser, setCurrentUser } from "../userSlice";
+import {Link} from 'react-router-dom';
 import axios from "axios";
 import "../../../index.css";
+import Loginimg from "../../../Imgs/landing.jpg"
 
 const Login = () => {
   const [name, setName] = useState("");
@@ -73,38 +75,53 @@ const Login = () => {
   };
 
   return (
-    <div className="h-screen bgcolorSS">
-    <div className="flex items-center justify-center h-screen">
-      <img className="ml-auto rounded-lg object-left object-cover h-96 w-210" src="https://s3-alpha-sig.figma.com/img/cc49/f321/e7983b799f4436b161310d1e24f960b6?Expires=1709510400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=EBsNY7LJXCdyeMjZP2769EayTr~sT6ohWZ1pKEYUfEpgIegkk~kpyeIn3yASkLTTiqINePWLQARVT~laHHjk5Zycj93LxiNo4UuPYqfvHw4qo44LK1FkKRvcLEV3fQ0NhBvuy0OIYeVjzoIWqXTVzLPf2fAdjxJoSnU79oM9Ksd1z97kvVEr78vFfp21ZFq-eDs8GoZkOBa0ng8dTkzNyk8MtTf6A8zwLzAKqO2EqL5Fr5epKHgNZsXN8ZC-8R7y5F-QybZsMHHQZGgLc2bW-6Sf0vnBAaarOX~b4urtawVO7-hEwCB3eCsq7nDbtGXmYkAlr~-9yCQnbHtOdn0g5g__"/>
-      
-    <div className="border-black relative border-2  rounded-md bgcolorSS2 container mx-auto h-96 w-96 flex flex-col justify-center items-center font-inter">
-      <form className=" flex flex-col" onSubmit={(e) => handleSubmit(e)}>
-        <h1 className="text-white absolute left-24 top-6 text-3xl font-bold mb-4">Login Here 📝</h1>
+    <section className="flex flex-col md:flex-row h-screen items-center bgcolorSS">
+    
+
+      <div className=" hidden lg:block w-full md:w-1/2 xl:w-2/3 h-screen">
+      <img className="ml-auto  object-left object-cover w-full h-full" src={Loginimg}/>
+      </div>
+
+    <div className="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12
+        flex items-center justify-center">
+
+    <div className="w-full h-100">
+
+      <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">Log in to your account</h1>
+
+      <form className=" flex flex-col mt-6" onSubmit={(e) => handleSubmit(e)}>
+        <div>
+        <label class="block text-gray-700">Email Address</label>
         <input
           type="email"
-          placeholder="Email"
+          placeholder="Enter Email Address"
           value={email} 
           onChange={(e) => setEmail(e.target.value)}
-          className="w-80 py-4 px-2 border-b-2 border-black mb-4"
+          className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
         />
+        </div>
+        <div className="mt-4">
+        <label class="block text-gray-700">Password</label>
         <input
           type="password"
-          placeholder="Password"
+          placeholder="Enter Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-80 py-4 px-2 border-b-2 border-black mb-4"
+          className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
         />
+        </div>
         <button
           type="submit"
-          className="bg-black text-white py-4 px-6 rounded-lg"
+          className="w-full block bgcolorSS2 hover:bgcolorSS focus:bgcolorSS text-white font-semibold rounded-lg
+          px-4 py-3 mt-6"
         >
           Submit
         </button>
       </form>
-      <p className="text-white">Not On Star Shares? <span className="underline font-semibold"><a href="/signup">Create an Account</a></span></p>
+      <p className="text-black mt-8">Not On StarShares? <span className="underline font-semibold"><Link to="/">Create an Account</Link></span></p>
     </div>
     </div>
-    </div>
+    </section>
   );
 };
 
