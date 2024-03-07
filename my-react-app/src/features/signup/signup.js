@@ -11,6 +11,8 @@ const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
+  const bcrypt = require('bcryptjs');
+  const salt = bcrypt.genSaltSync(10);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,7 +25,7 @@ const SignUp = () => {
           firstName,
           lastName,
           email,
-          password,
+          password: bcrypt.hashSync(password, salt),
         },
         headers: {
           'Content-Type': 'application/json',
