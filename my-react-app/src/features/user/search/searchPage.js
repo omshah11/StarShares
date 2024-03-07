@@ -52,7 +52,7 @@ const SearchPage = () => {
         setItems(data.tracks.items);
       });
 
-    console.log("Artist ID is " + artistID)
+    //console.log("Artist ID is " + artistID)
   }
 
   // console.log(process.env.CLIENT_ID)
