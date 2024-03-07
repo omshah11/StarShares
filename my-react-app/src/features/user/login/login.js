@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login, selectUser, setCurrentUser } from "../userSlice";
+import {Link} from 'react-router-dom';
 import axios from "axios";
-import "./login.css";
+import "../../../index.css";
+import Loginimg from "../../../Imgs/landing.jpg"
 
 const Login = () => {
   const [name, setName] = useState("");
@@ -68,31 +70,60 @@ const Login = () => {
     } catch (error) {
       // Handle error, log it, or show a user-friendly message
       console.error("Error during login:", error);
+      // Kanayo Anyakpor Worked On Styling Components.
     }
   };
 
-    return (
-      <div className="login">
-        <form className="login_form" onSubmit={(e) => handleSubmit(e)}>
-          <h1>Login Here 📝</h1>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button type="submit" className="submit_btn">
-            Submit
-          </button>
-        </form>
+  return (
+    <section className="flex flex-col md:flex-row h-screen items-center bgcolorSS">
+    
+
+      <div className=" hidden lg:block w-full md:w-1/2 xl:w-2/3 h-screen">
+      <img className="ml-auto  object-left object-cover w-full h-full" src={Loginimg}/>
       </div>
-    );
+
+    <div className="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12
+        flex items-center justify-center">
+
+    <div className="w-full h-100">
+
+      <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">Log in to your account</h1>
+
+      <form className=" flex flex-col mt-6" onSubmit={(e) => handleSubmit(e)}>
+        <div>
+        <label class="block text-gray-700">Email Address</label>
+        <input
+          type="email"
+          placeholder="Enter Email Address"
+          value={email} 
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+        />
+        </div>
+        <div className="mt-4">
+        <label class="block text-gray-700">Password</label>
+        <input
+          type="password"
+          placeholder="Enter Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+        />
+        </div>
+        <button
+          type="submit"
+          className="w-full block bgcolorSS2 hover:bgcolorSS focus:bgcolorSS text-white font-semibold rounded-lg
+          px-4 py-3 mt-6"
+        >
+          Submit
+        </button>
+      </form>
+      <p className="text-black mt-8">Not On StarShares? <span className="underline font-semibold"><Link to="/">Create an Account</Link></span></p>
+    </div>
+    </div>
+    </section>
+  );
 };
 
 export default Login;
+

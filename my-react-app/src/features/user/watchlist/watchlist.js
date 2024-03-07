@@ -1,6 +1,5 @@
 // Import necessary dependencies
 import React from 'react';
-import "./watchlist.css"
 
 // About Us page component
 const Watchlist = () => {
