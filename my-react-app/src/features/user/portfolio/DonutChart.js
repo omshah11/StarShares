@@ -32,7 +32,7 @@ const DonutChart = () => {
   };
 
   return (
-    <div className='bg-white mx-2 mr-10 border-2 border-gray-600  drop-shadow-md rounded-xl '>
+    <div className='bg-white mx-2 border-2 border-gray-600  drop-shadow-md rounded-xl '>
     <div className='flex flex-col justify-center px-auto'>
       <h2 className='w-full h-full flex justify-center items-center text-xl font-semibold my-4'>Individual Owned Stock Breakdown</h2>
       <div className=' min-w-full min-h-full  flex flex-grow'> {/* Adjust width and height as needed */}
