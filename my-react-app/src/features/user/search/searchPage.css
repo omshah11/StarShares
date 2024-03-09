@@ -1,0 +1,72 @@
+/* Card container */
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  /* Individual card */
+  .card {
+    width: 300px; /* Adjust the width as needed */
+    margin: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow to the card */
+  }
+  
+  /* Card image */
+  .card-img-top {
+    width: 100%;
+    height: auto;
+  }
+  
+  /* Card body */
+  .card-body {
+    padding: 20px;
+  }
+  
+  /* Card title */
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  /* Card text */
+  .card-text {
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  /* Modal content */
+  .modal-content {
+    background-color: #fff;
+    border-radius: 5px;
+  }
+  
+  /* Modal title */
+  .modal-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  /* Modal body */
+  .modal-body {
+    padding: 20px;
+  }
+  
+  /* Modal footer */
+  .modal-footer {
+    justify-content: center;
+    border-top: none;
+  }
+  
+  /* Close button */
+  .close {
+    color: #000;
+    opacity: 0.5;
+    font-size: 1.25rem;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    opacity: 0.75;
+    text-decoration: none;
+  }

@@ -1,6 +1,7 @@
 // Import necessary dependencies
 // import React from 'react';
 import "./searchPage.css"
+// import '../../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import {Container, InputGroup, FormControl, Button, Row, Col, Card, Modal} from 'react-bootstrap';
 import {useState, useEffect, React, useContext} from 'react';
 import {useLocation} from 'react-router-dom';
@@ -13,9 +14,11 @@ const CLIENT_SECRET = "88eeb98034e5422099cce4f6467a3d51";
 const SearchPage = () => {
   const searchInput = useSelector(search => search.searchQuery.searchInput);
   const [accessToken, setAccessToken] = useState("");
-  const [items, setItems] = useState([])
-  const [buttonClicked, setButtonClicked] = useState(false);
-  const { state } = useLocation();
+  const [results, setResults] = useState([])
+  const [showModal, setShowModal] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
+  // const [buttonClicked, setButtonClicked] = useState(false);
+  // const { state } = useLocation();
 
   useEffect(() => {
     //API Access Token
@@ -32,6 +35,7 @@ const SearchPage = () => {
   }, [])
 
   // Search
+  const wait = ms => new Promise(r => setTimeout(r, ms));
   async function search() {
     console.log("Search for " + searchInput);
 
@@ -43,78 +47,82 @@ const SearchPage = () => {
         'Authorization': 'Bearer ' + accessToken
       }
     }
-    let artistID = await fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=album,artist', searchParameters)
+    
+    let artistID = await fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=artist,album,track', searchParameters)
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        setItems(data.artists.items);
-        setItems(data.albums.items);
-        //setItems(data.tracks.items);
+        setResults(data.artists.items);
+        setResults(data.albums.items);
+        setResults(data.tracks.items);
       });
 
     //console.log("Artist ID is " + artistID)
   }
 
-  const openModal = () => {
-    var modalWrap = document.createElement('div');
-    modalWrap.innerHTML = `
-      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              ...
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+
+  search();
+
+  const handleCardClick = (track) => {
+    setSelectedCard(track);
+    setShowModal(true);
   };
+
+  return (
+    <div className="container">
+      <div className="row">
+        {results.map((artist) => (
+          <div key={artist.id} className="col-md-4 mb-3">
+            <Card>
+            {/* <Card.Img variant="top" src={artist.images[0]} /> */}
+              <Card.Body>
+                <Card.Title>{artist.name}</Card.Title>
+                <Card.Text>{artist.type}</Card.Text>
+                <Button variant="primary" onClick={() => handleCardClick(artist)}>Open Modal</Button>
+              </Card.Body>
+            </Card>
+          </div>
+        ))}
+      </div>
+
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>{selectedCard && selectedCard.name}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedCard && selectedCard.type}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
+  );
 
   // console.log(process.env.CLIENT_ID)
   // console.log(process.env.CLIENT_SECRET)
-  search();
-  return (
-    <div>
-      {/* <Container> */}
-      {/* <Row className='mx-2 row row-cols-5'> */}
-      {/* <Row> */}
-        {/* <Col className='col-5 col-md-6'> */}
-      {items.map((item, i) => {
-          console.log(item);
-          return(
-            // <Card>
-            //   {/* <Card.Img scr={item.images[0]}/> */}
-            //   <Card.Body>
-            //     <Card.Title>{item.name}</Card.Title>
-            //   </Card.Body>
-            // </Card>
-            <div>
-              <Container>
-                <Row className='mx-2 row row-cols-5'>
-                  <Button onClick={openModal}>
-                    {item.name}
-                  </Button>
-                </Row>
-              </Container>
-              
-            </div>
-          )
-        })}
-        {/* </Col> */}
-      {/* </Row> */}
-    {/* </Container> */}
-  </div>
-  );
+  // search();
+  // return (
+  //   <div>
+  //     {results.map((result, i) => {
+  //         console.log(result);
+  //         return(
+  //             <Container>
+  //               <Row className='mx-2 row row-cols-5'>
+  //                 <Card>
+  //                   {/* <Card.Img src={result.images[1].url}/> */}
+  //                   <Card.Body>
+  //                   </Card.Body>
+  //                 </Card>
+  //                 <Button onClick={openModal}>
+  //                   {result.name}
+  //                 </Button>
+  //               </Row>
+  //             </Container>
+  //         )
+  //       })}
+  // </div>
+  // );
 };
 
 export default SearchPage;
