@@ -1,6 +1,9 @@
 import React from 'react';
-import Chart from 'react-apexcharts';
 import OwnedStocks from './OwnedStocks';
+import DonutChart from './DonutChart';
+import LineChart from './LineChart';
+import BarChart from './BarChart';
+import { Bar } from 'react-chartjs-2';
 
 const Portfolio = () => {
     const chartData = [30, 40, 35, 50, 49, 60, 70, 91, 125];
@@ -22,13 +25,24 @@ const Portfolio = () => {
     };
 
     return (
-        <div className='h-full w-full bgcolorSS text-white'>
-            
-            <div className="m-auto bg-white w-1/2">
-                <Chart className="m-auto"options={options} series={options.series} type="line" />
+        <div className=' justify-center px-64 flex flex-col h-full w-full bg-slate-200'>
+            <div className=''>
+            <div className="mx-5 flex flex-row justify-center items-center">
+                <div className='w-1/2'>
+                <h1 className="my-10 text-4xl font-semibold text-center">John's Portfolio</h1>
+                <div className="">
+                    <LineChart />
+                    <BarChart />
+                </div>
+                </div>
+                <div className=" mx-5 justify-center items-center w-1/2">
+                    <DonutChart className="" scale="200px"/>
+                </div>
             </div>
-            <OwnedStocks className=""/>
-            
+            </div>
+            <div className="mt-8">
+                <OwnedStocks />
+            </div>
         </div>
     );
 };

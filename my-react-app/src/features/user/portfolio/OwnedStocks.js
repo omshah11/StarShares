@@ -9,8 +9,8 @@ const OwnedStocks = () => {
         {/* This div contains the "Owned Stocks" section */}
         <div class="w-full mt-12">
           {/* This paragraph contains the title of the section */}
-          <p class="text-xl pb-3 flex items-center">
-            <i class="fas fa-list mr-3"></i> Owned Stocks
+          <p class="text-xl pb-3 flex items-center font-semibold my-2">
+            <i class="fas fa-list mr-3"></i> Owned Shares
           </p>
 
           {/* This div contains the table of owned stocks */}
