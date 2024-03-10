@@ -1,31 +1,105 @@
 /* profile.css */
-.profile {
-    font-weight: bold; /* Make the text bold */
-    font-family: Arial, sans-serif; /* Use Arial font */
-    margin: 20px; /* Add some margin around the profile container */
-    width: 90%; /* Set the width of the profile container to 90% of its parent container */
-    max-width: 600px; /* Set a maximum width for the profile container */
-  }
+.profile-container {
+  display: flex;
+  justify-content: space-between;
+}
 
-  .edit {
-    float: none;
-  }
+/* profile.css */
+.profile-card {
+  font-weight: bold; /* Make the text bold */
+  font-family: Arial, sans-serif; /* Use Arial font */
+  margin: 20px; /* Add some margin around the profile container */
+  width: 90%; /* Set the width of the profile container to 90% of its parent container */
+  max-width: 600px; /* Set a maximum width for the profile container */
+  background-color: #f9f9f9;
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  margin-left: 20px;
+}
 
-  .info {
-    font-weight: bold; /* Make the text bold */
-    font-family: Arial, sans-serif; /* Use Arial font */
-  }
+.edit {
+  float: none;
+}
 
-  .feed {
-    font-weight: initial;
-  }
+.info {
+  font-weight: bold; /* Make the text bold */
+  font-family: Arial, sans-serif; /* Use Arial font */
+}
 
-.profile img {
-    /* Set the maximum width and height for the profile image */
-    max-width: 100px; /* Change this value to your desired width */
-    max-height: 100px; /* Change this value to your desired height */
-    /* Ensure the image maintains its aspect ratio */
-    width: auto;
-    height: auto;
-  }
-  
+.feed {
+  font-weight: initial;
+}
+
+.profile-card img {
+  /* Set the maximum width and height for the profile image */
+  max-width: 100px; /* Change this value to your desired width */
+  max-height: 100px; /* Change this value to your desired height */
+  /* Ensure the image maintains its aspect ratio */
+  width: auto;
+  height: auto;
+}
+
+
+.biography-card {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  margin-left: 20px; /* Add some spacing between cards */
+}
+
+textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+button {
+  margin-top: 10px;
+}
+
+.play-button {
+  position: relative;
+  background-color: #1db954;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.play-button:hover {
+  background-color: #198c4f;
+}
+
+/* Create the triangle (play icon) */
+.play-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 14px solid #fff;
+}
+
+/* PlayButton.css */
+.dummy-play-button {
+  background-color: #1db954;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  /* Add any other styling you'd like */
+}
+
+.dummy-play-button:hover {
+  background-color: #198c4f;
+}
+
