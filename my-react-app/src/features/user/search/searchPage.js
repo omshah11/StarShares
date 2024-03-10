@@ -17,8 +17,6 @@ const SearchPage = () => {
   const [results, setResults] = useState([])
   const [showModal, setShowModal] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
-  // const [buttonClicked, setButtonClicked] = useState(false);
-  // const { state } = useLocation();
 
   useEffect(() => {
     //API Access Token
@@ -35,7 +33,6 @@ const SearchPage = () => {
   }, [])
 
   // Search
-  const wait = ms => new Promise(r => setTimeout(r, ms));
   async function search() {
     console.log("Search for " + searchInput);
 
@@ -86,43 +83,24 @@ const SearchPage = () => {
       </div>
 
       <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>{selectedCard && selectedCard.name}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {selectedCard && selectedCard.type}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>Close</Button>
-        </Modal.Footer>
+        <div className="modal-container">
+          <div className="modal-content">
+            <Modal.Header closeButton>
+              <Modal.Title>{selectedCard && selectedCard.name}</Modal.Title>
+              {/* Test */}
+            </Modal.Header>
+            <Modal.Body>
+              {/* {selectedCard && selectedCard.type} */}
+              {/* test */}
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowModal(false)}>Close</Button>
+            </Modal.Footer>
+          </div>
+        </div>
       </Modal>
     </div>
   );
-
-  // console.log(process.env.CLIENT_ID)
-  // console.log(process.env.CLIENT_SECRET)
-  // search();
-  // return (
-  //   <div>
-  //     {results.map((result, i) => {
-  //         console.log(result);
-  //         return(
-  //             <Container>
-  //               <Row className='mx-2 row row-cols-5'>
-  //                 <Card>
-  //                   {/* <Card.Img src={result.images[1].url}/> */}
-  //                   <Card.Body>
-  //                   </Card.Body>
-  //                 </Card>
-  //                 <Button onClick={openModal}>
-  //                   {result.name}
-  //                 </Button>
-  //               </Row>
-  //             </Container>
-  //         )
-  //       })}
-  // </div>
-  // );
 };
 
 export default SearchPage;
