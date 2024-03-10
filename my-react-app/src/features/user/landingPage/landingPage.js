@@ -18,6 +18,12 @@ const LandingPage = () => {
     ));
     navigate('/');
   };
+
+  const navigateToArtistPage = (e) => {
+    e.preventDefault();
+    navigate('/artist');
+  } 
+
     return (
         <div className="logout">
           <h1>
@@ -26,6 +32,7 @@ const LandingPage = () => {
           <button className="logout_button" onClick={(e) => handleLogout(e)}>
             Logout
           </button>
+          <button className="" onClick={(e) => navigateToArtistPage(e)}> </button>
         </div>
     );
 };
