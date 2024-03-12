@@ -67,7 +67,8 @@ const SearchPage = () => {
 
       if (searchData.artists) {
         console.log(searchData.artists.items);
-        setResults(results =>[...results, searchData.artists.items]);
+        // setResults(results =>[...results, searchData.artists.items]);
+        setResults(searchData.artists.items);
       }
     
       // if (searchData.tracks) {
@@ -91,7 +92,7 @@ const SearchPage = () => {
         {results.map((artist) => (
           <div key={artist.id} className="col-md-4 mb-3">
             <Card>
-            {/* <Card.Img variant="top" src={artist.images[0].url} /> */}
+            <Card.Img variant="top" src={artist.images && artist.images.length > 0 ? artist.images[0].url : 'placeholder-url'} />
               <Card.Body>
                 <Card.Title>{artist.name}</Card.Title>
                 <Card.Text>{artist.type}</Card.Text>
