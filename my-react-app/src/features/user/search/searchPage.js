@@ -10,13 +10,25 @@ import { useSelector } from 'react-redux';
 const CLIENT_ID = "2f6e085b55bc4ede9131e2d7d7739c30";
 const CLIENT_SECRET = "88eeb98034e5422099cce4f6467a3d51";
 
-// About Us page component
 const SearchPage = () => {
-  const searchInput = useSelector(search => search.searchQuery.searchInput);
+  const [searchInput, setSearchInput] = useState("");
   const [accessToken, setAccessToken] = useState("");
-  const [results, setResults] = useState([])
+  const [results, setResults] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    // Retrieve search input from URL query parameter
+    const searchParams = new URLSearchParams(location.search);
+    const query = searchParams.get('searchInput');
+    console.log("QUERY IS " + query);
+    if (query) {
+      setSearchInput(query);
+      search(query);
+    }
+  }, [location.search]);
+
 
   useEffect(() => {
     //API Access Token
@@ -33,7 +45,7 @@ const SearchPage = () => {
   }, [])
 
   // Search
-  async function search() {
+  async function search(searchInput) {
     console.log("Search for " + searchInput);
 
     // Get request using search
@@ -45,20 +57,28 @@ const SearchPage = () => {
       }
     }
     
-    let artistID = await fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=artist,album,track', searchParameters)
+    let searchData = await fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=artist,album,track', searchParameters)
       .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        setResults(data.artists.items);
-        setResults(data.albums.items);
-        setResults(data.tracks.items);
-      });
+    
+      if (searchData.albums) {
+        console.log(searchData.artists.items);
+        setResults(searchData.albums.items);
+      }
 
-    //console.log("Artist ID is " + artistID)
+      if (searchData.artists) {
+        console.log(searchData.artists.items);
+        setResults(results =>[...results, searchData.artists.items]);
+      }
+    
+      // if (searchData.tracks) {
+      //   setResults(searchData.tracks.items);
+      // }
+
+    // console.log("Artist ID is " + searchData)
   }
 
 
-  search();
+  //search();
 
   const handleCardClick = (track) => {
     setSelectedCard(track);
@@ -71,7 +91,7 @@ const SearchPage = () => {
         {results.map((artist) => (
           <div key={artist.id} className="col-md-4 mb-3">
             <Card>
-            {/* <Card.Img variant="top" src={artist.images[0]} /> */}
+            {/* <Card.Img variant="top" src={artist.images[0].url} /> */}
               <Card.Body>
                 <Card.Title>{artist.name}</Card.Title>
                 <Card.Text>{artist.type}</Card.Text>
@@ -90,7 +110,7 @@ const SearchPage = () => {
               {/* Test */}
             </Modal.Header>
             <Modal.Body>
-              {/* {selectedCard && selectedCard.type} */}
+              {selectedCard && selectedCard.type}
               {/* test */}
             </Modal.Body>
             <Modal.Footer>
