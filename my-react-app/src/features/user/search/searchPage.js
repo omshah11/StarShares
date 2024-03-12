@@ -29,7 +29,6 @@ const SearchPage = () => {
     }
   }, [location.search]);
 
-
   useEffect(() => {
     //API Access Token
     var authParameters = {
@@ -48,6 +47,8 @@ const SearchPage = () => {
   async function search(searchInput) {
     console.log("Search for " + searchInput);
 
+    let allItems = [];
+
     // Get request using search
     let searchParameters = {
       method: 'GET',
@@ -59,27 +60,27 @@ const SearchPage = () => {
     
     let searchData = await fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=artist,album,track', searchParameters)
       .then(response => response.json())
-    
-      if (searchData.albums) {
-        console.log(searchData.artists.items);
-        setResults(searchData.albums.items);
-      }
 
+      // Add artists items to the array
       if (searchData.artists) {
-        console.log(searchData.artists.items);
-        // setResults(results =>[...results, searchData.artists.items]);
-        setResults(searchData.artists.items);
+        allItems.push(...searchData.artists.items);
       }
+
+      // Add albums items to the array
+      if (searchData.albums) {
+        allItems.push(...searchData.albums.items);
+      }
+
+      // Add tracks items to the array
+      if (searchData.tracks) {
+        allItems.push(...searchData.tracks.items);
+        console.log(searchData.tracks)
+      }
+
+      // Set the combined array to the results state
+      setResults(allItems);
     
-      // if (searchData.tracks) {
-      //   setResults(searchData.tracks.items);
-      // }
-
-    // console.log("Artist ID is " + searchData)
   }
-
-
-  //search();
 
   const handleCardClick = (track) => {
     setSelectedCard(track);
@@ -89,15 +90,28 @@ const SearchPage = () => {
   return (
     <div className="container">
       <div className="row">
-        {results.map((artist) => (
-          <div key={artist.id} className="col-md-4 mb-3">
+        {results.map((item) => (
+          <div key={item.id} className="col-md-4 mb-3">
             <Card>
-            <Card.Img variant="top" src={artist.images && artist.images.length > 0 ? artist.images[0].url : 'placeholder-url'} />
-              <Card.Body>
-                <Card.Title>{artist.name}</Card.Title>
-                <Card.Text>{artist.type}</Card.Text>
-                <Button variant="primary" onClick={() => handleCardClick(artist)}>Open Modal</Button>
-              </Card.Body>
+              {item.type === 'track' ? (
+                <>
+                  <Card.Img variant="top" src={item.album.images && item.album.images.length > 0 ? item.album.images[0].url : 'placeholder-url'} />
+                  <Card.Body>
+                    <Card.Title>{item.name}</Card.Title>
+                    <Card.Text>{item.type}</Card.Text>
+                    <Button variant="primary" onClick={() => handleCardClick(item)}>Open Modal</Button>
+                  </Card.Body>
+                </>
+              ) : (
+                <>
+                  <Card.Img variant="top" src={item.images && item.images.length > 0 ? item.images[0].url : 'placeholder-url'} />
+                  <Card.Body>
+                    <Card.Title>{item.name}</Card.Title>
+                    <Card.Text>{item.type}</Card.Text>
+                    <Button variant="primary" onClick={() => handleCardClick(item)}>Open Modal</Button>
+                  </Card.Body>
+                </>
+              )}
             </Card>
           </div>
         ))}
@@ -108,11 +122,12 @@ const SearchPage = () => {
           <div className="modal-content">
             <Modal.Header closeButton>
               <Modal.Title>{selectedCard && selectedCard.name}</Modal.Title>
-              {/* Test */}
             </Modal.Header>
             <Modal.Body>
               {selectedCard && selectedCard.type}
-              {/* test */}
+              {selectedCard && selectedCard.images && selectedCard.images.length > 0 && (
+                <img src={selectedCard.images[0].url} alt={selectedCard.name} style={{ width: '100%', height: 'auto' }} />
+              )}
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={() => setShowModal(false)}>Close</Button>

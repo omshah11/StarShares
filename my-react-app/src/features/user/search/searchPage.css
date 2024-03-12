@@ -34,12 +34,17 @@
     color: #666;
   }
   
-  * Modal container */
+/* Modal container */
 .modal-container {
+  position: fixed; /* Fixed positioning */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh; /* Make modal container cover entire viewport height */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
 }
 
 /* Modal content */
@@ -47,6 +52,7 @@
   background-color: #fff;
   border-radius: 5px;
   max-width: 80%; /* Adjust maximum width as needed */
+  z-index: 1000; /* Ensure the modal appears above other content */
 }
 
 /* Modal title */
