@@ -92,23 +92,23 @@ const SearchPage = () => {
       <div className="row">
         {results.map((item) => (
           <div key={item.id} className="col-md-4 mb-3">
-            <Card>
+            <Card onClick={() => handleCardClick(item)}>
               {item.type === 'track' ? (
                 <>
                   <Card.Img variant="top" src={item.album.images && item.album.images.length > 0 ? item.album.images[0].url : 'placeholder-url'} />
                   <Card.Body>
                     <Card.Title>{item.name}</Card.Title>
                     <Card.Text>{item.type}</Card.Text>
-                    <Button variant="primary" onClick={() => handleCardClick(item)}>Open Modal</Button>
+                    {/* <Button variant="primary" onClick={() => handleCardClick(item)}>Open Modal</Button> */}
                   </Card.Body>
                 </>
               ) : (
                 <>
-                  <Card.Img variant="top" src={item.images && item.images.length > 0 ? item.images[0].url : 'placeholder-url'} />
+                  <Card.Img variant="top" src={item.images && item.images.length > 0 ? item.images[0].url : 'https://i0.wp.com/sunrisedaycamp.org/wp-content/uploads/2020/10/placeholder.png?ssl=1'} />
                   <Card.Body>
                     <Card.Title>{item.name}</Card.Title>
                     <Card.Text>{item.type}</Card.Text>
-                    <Button variant="primary" onClick={() => handleCardClick(item)}>Open Modal</Button>
+                    {/* <Button variant="primary" onClick={() => handleCardClick(item)}>Open Modal</Button> */}
                   </Card.Body>
                 </>
               )}
@@ -122,16 +122,18 @@ const SearchPage = () => {
           <div className="modal-content">
             <Modal.Header closeButton>
               <Modal.Title>{selectedCard && selectedCard.name}</Modal.Title>
+              {/* <Button variant="secondary" onClick={() => setShowModal(false)}>Close</Button> */}
+              <Button onClick={() => setShowModal(false)}>Close</Button>
             </Modal.Header>
             <Modal.Body>
               {selectedCard && selectedCard.type}
               {selectedCard && selectedCard.images && selectedCard.images.length > 0 && (
-                <img src={selectedCard.images[0].url} alt={selectedCard.name} style={{ width: '100%', height: 'auto' }} />
+                <img src={selectedCard.images[0].url} alt={selectedCard.name} style={{ width: '50%', height: 'auto' }} />
               )}
             </Modal.Body>
-            <Modal.Footer>
+            {/* <Modal.Footer>
               <Button variant="secondary" onClick={() => setShowModal(false)}>Close</Button>
-            </Modal.Footer>
+            </Modal.Footer> */}
           </div>
         </div>
       </Modal>
