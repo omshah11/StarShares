@@ -6,7 +6,6 @@ import axios from "axios";
 import "./login.css";
 
 const Login = () => {
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
@@ -16,6 +15,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
+      console.log("Reached here");
       const configuration = {
         method: "get", // Assuming you are using a GET request for login
         url: "http://localhost:5000/api/getUserByEmail",
@@ -30,7 +30,7 @@ const Login = () => {
   
       // Send the login request
       const response = await axios(configuration);
-  
+      console.log(response.data);
       // Assuming your server returns a token upon successful login
       const token = response.data.token;
       const firstName = response.data.user.firstName;

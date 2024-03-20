@@ -4,7 +4,7 @@ import { createSlice } from '@reduxjs/toolkit'
 export const userSlice = createSlice({
     name: 'user', // Name of the slice
     initialState: { // Initial state of the slice
-        user: null, // User data
+        user: {}, // User data
         isLoggedIn: false, // Boolean indicating whether the user is logged in or not
         token: null // User token
     },
@@ -14,6 +14,8 @@ export const userSlice = createSlice({
             state.user = action.payload.user; // Update user data
             state.isLoggedIn = action.payload.isLoggedIn; // Update login status
             state.token = action.payload.token; // Update user token
+
+            localStorage.setItem('token', action.payload.token);
         },
         // Reducer function for handling user logout
         logout: (state) => {
@@ -21,6 +23,8 @@ export const userSlice = createSlice({
             state.user = null
             state.isLoggedIn = false
             state.token = null
+
+            localStorage.removeItem('token');
         },
         // Reducer function for setting the current user
         setCurrentUser: (state, action) => {
