@@ -2,6 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import './navbar.css';
+import SearchBar from '../search/searchbar';
 
 // Functional component for the Navbar
 const Navbar = () => {
@@ -12,12 +13,17 @@ const Navbar = () => {
       <Link to="/home">Star Shares</Link>
       </div>
 
+      {/* Andy's original code */}
       {/* Search bar in the center */}
-      <div className="search-bar">
-        <input type="text" placeholder="Search..." />
+      {/* <div className="search-bar">
+        <input type="text" placeholder="Search..."/>
+        <input id="search" type="button" value="search" onClick={Search}></input>
         {/* <button type="button">Search</button> */}
-      </div>
+      {/*</div> */}
 
+      {/* Implementing my code from searchbar.js*/}
+      <SearchBar/>
+      
       {/* Features on the top right */}
       <div className="features">
         <Link to="/about-us">About Us</Link>
