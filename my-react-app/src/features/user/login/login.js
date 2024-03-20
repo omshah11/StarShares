@@ -15,7 +15,6 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      console.log("Reached here");
       const configuration = {
         method: "get", // Assuming you are using a GET request for login
         url: "http://localhost:5000/api/getUserByEmail",

@@ -23,6 +23,7 @@ export const userSlice = createSlice({
             state.user = null
             state.isLoggedIn = false
             state.token = null
+            state.currentUser = null
 
             localStorage.removeItem('token');
         },

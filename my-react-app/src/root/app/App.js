@@ -1,6 +1,6 @@
 import { React, useEffect } from "react";
-//import jwt from 'jsonwebtoken';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import axios from "axios";
 import Login from "../../features/user/login/login";
 import Navbar from "../../features/user/navbar/navbar";
 import AboutUs from "../../features/user/aboutUs/aboutUs";
@@ -10,26 +10,19 @@ import Profile from "../../features/user/profile/profile";
 import LandingPage from "../../features/user/landingPage/landingPage";
 import SignUp from "../../features/signup/signup";
 import { useSelector, useDispatch } from "react-redux";
-import { selectUser, selectToken } from "../../features/user/userSlice";
+import { selectUser} from "../../features/user/userSlice";
 import { login } from "../../features/user//userSlice";
 import "./App.css";
-import { store } from "./store";
 
 const App = () => {
   const user = useSelector(selectUser);
-  const token = useSelector(selectToken);
   const dispatch = useDispatch();
 
   useEffect(() => {
     // Check if token exists in local storage or cookies
-    console.log("Reached inside useEffect");
     const storedToken = localStorage.getItem("token");
-    console.log("retireved token from local storage: ", storedToken);
-    console.log(user);
-    const payload = jwt.verify(storedToken, 'your-secret-key');
-    console.log(payload);
     if (storedToken) {
-      // Dispatch login action with stored token
+      retrieveUser(storedToken);
       dispatch(
         login({
           token: storedToken,
@@ -37,6 +30,49 @@ const App = () => {
       );
     }
   }, []);
+
+  const retrieveUser = async (userToken) => {
+    try {
+      const configuration = {
+        method: "get", // Assuming you are using a GET request for login
+        url: "http://localhost:5000/api/getUserByToken",
+        params: { // Pass parameters as 'params' instead of 'data'
+          userToken
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+  
+      // Send the login request
+      const response = await axios(configuration);
+
+      const firstName = response.data.user.firstName;
+      const lastName = response.data.user.lastName;
+      const email = response.data.user.email;
+      const password = response.data.user.password;
+  
+      // Assuming 'loggedIn' is derived from the userState or another logic
+      const loggedIn = true;
+  
+      // Dispatching the login action with separate properties for user and isLoggedIn
+      dispatch(
+        login({
+          user: {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: password,
+          },
+          isLoggedIn: loggedIn,
+          token: userToken, // Include the token in the login action
+        })
+      );
+    }catch (error) {
+      // Handle error, log it, or show a user-friendly message
+      console.error(error);
+    }
+  };
 
   return (
     <Router>
