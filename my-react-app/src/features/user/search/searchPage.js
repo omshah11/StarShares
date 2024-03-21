@@ -6,17 +6,21 @@ import {Container, InputGroup, FormControl, Button, Row, Col, Card, Modal} from 
 import {useState, useEffect, React, useContext} from 'react';
 import {useLocation} from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { getInput } from './searchSlice';
+import { useDispatch } from 'react-redux';
 
 const CLIENT_ID = "2f6e085b55bc4ede9131e2d7d7739c30";
 const CLIENT_SECRET = "88eeb98034e5422099cce4f6467a3d51";
 
 const SearchPage = () => {
   const [searchInput, setSearchInput] = useState("");
-  const [accessToken, setAccessToken] = useState("");
+  // const [accessToken, setAccessToken] = useState("");
+  const accessToken = useSelector(search => search.searchQuery.accessToken);
   const [results, setResults] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const location = useLocation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // Retrieve search input from URL query parameter
@@ -42,8 +46,12 @@ const SearchPage = () => {
     }
     fetch('https://accounts.spotify.com/api/token', authParameters)
       .then(result => result.json())
-      .then(data => setAccessToken(data.access_token))
+      // .then(data => setAccessToken(data.access_token))
+      .then(data => accessToken)
   }, [])
+  dispatch(getInput({
+    accessToken: accessToken
+  }));
 
   // Search
   async function search(searchInput) {
