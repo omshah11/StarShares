@@ -24,6 +24,8 @@ const SearchPage = () => {
     const query = searchParams.get('searchInput');
     console.log("QUERY IS " + query);
     if (query) {
+      console.log("searched: " + query);
+      console.log("Here");
       setSearchInput(query);
       search(query);
     }
@@ -45,7 +47,8 @@ const SearchPage = () => {
 
   // Search
   async function search(searchInput) {
-    console.log("Search for " + searchInput);
+    //console.log("Search for " + searchInput);
+    console.log("Access token: ", accessToken);
 
     let allItems = [];
 
@@ -61,6 +64,8 @@ const SearchPage = () => {
     let searchData = await fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=artist,album,track', searchParameters)
       .then(response => response.json())
 
+
+      console.log("Reached here");
       // Add artists items to the array
       if (searchData.artists) {
         allItems.push(...searchData.artists.items);
