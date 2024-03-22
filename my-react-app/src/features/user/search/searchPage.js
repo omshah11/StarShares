@@ -6,21 +6,22 @@ import {Container, InputGroup, FormControl, Button, Row, Col, Card, Modal} from 
 import {useState, useEffect, React, useContext} from 'react';
 import {useLocation} from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { getInput } from './searchSlice';
+import { getAccessToken, getTokenDate } from './searchSlice';
 import { useDispatch } from 'react-redux';
 
 const CLIENT_ID = "2f6e085b55bc4ede9131e2d7d7739c30";
 const CLIENT_SECRET = "88eeb98034e5422099cce4f6467a3d51";
-
+//BQDKiso05zUvw72aCtD6oVZWqIedgIP57Pl6k1eAX9jpi_VPQE8Z2
 const SearchPage = () => {
   const [searchInput, setSearchInput] = useState("");
-  // const [accessToken, setAccessToken] = useState("");
-  const accessToken = useSelector(search => search.searchQuery.accessToken);
+  const [accessToken, setAccessToken] = useState("");
   const [results, setResults] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const location = useLocation();
   const dispatch = useDispatch();
+  const currentDate = Date.now();
+  const spotifyAcessToken = useSelector(search => search.searchQuery.accessToken);
 
   useEffect(() => {
     // Retrieve search input from URL query parameter
@@ -44,19 +45,22 @@ const SearchPage = () => {
       },
       body: 'grant_type=client_credentials&client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET
     }
-    fetch('https://accounts.spotify.com/api/token', authParameters)
-      .then(result => result.json())
-      // .then(data => setAccessToken(data.access_token))
-      .then(data => accessToken)
+    if(!spotifyAcessToken || spotifyAcessToken === ""){
+        const tokenExpirationDate = new Date(Date.now() + (60 * 60 * 1000)).toLocaleTimeString('PST'); // Adding 60 minutes in milliseconds
+        // dispatch(getTokenDate({tokenExpirationDate: tokenExpirationDate}))
+        fetch('https://accounts.spotify.com/api/token', authParameters)
+        .then(result => result.json())
+        .then(data => dispatch(getAccessToken({accessToken: data.access_token})))
+        .then(date => dispatch(getTokenDate({tokenExpirationDate: tokenExpirationDate})))
+        // .then(date => console.log(date))
+        // .then(data => accessToken)
+    }
   }, [])
-  dispatch(getInput({
-    accessToken: accessToken
-  }));
 
   // Search
   async function search(searchInput) {
     //console.log("Search for " + searchInput);
-    console.log("Access token: ", accessToken);
+    // console.log("Access token: ", accessToken);
 
     let allItems = [];
 
@@ -65,7 +69,7 @@ const SearchPage = () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + accessToken
+        'Authorization': 'Bearer ' + spotifyAcessToken
       }
     }
     
