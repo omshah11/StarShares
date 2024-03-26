@@ -11,7 +11,7 @@ import LandingPage from "../../features/user/landingPage/landingPage";
 import SignUp from "../../features/signup/signup";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser} from "../../features/user/userSlice";
-import { login } from "../../features/user//userSlice";
+import { login, logout } from "../../features/user//userSlice";
 import "./App.css";
 
 const App = () => {
@@ -22,12 +22,22 @@ const App = () => {
     // Check if token exists in local storage or cookies
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
-      retrieveUser(storedToken);
+      try {
+        retrieveUser(storedToken);
       dispatch(
         login({
           token: storedToken,
         })
       );
+      }catch(error) {
+        console.error(error);
+        dispatch(logout({
+          user: {},
+          isLoggedIn: false,
+          token: null
+        }
+        ));
+      }
     }
   }, []);
 

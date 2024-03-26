@@ -13,7 +13,9 @@ const LandingPage = () => {
   const handleLogout = (e) => {
     e.preventDefault();
     dispatch(logout({
-      isLoggedIn: false
+      user: {},
+      isLoggedIn: false,
+      token: null
     }
     ));
     navigate('/');
