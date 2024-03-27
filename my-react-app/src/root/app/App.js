@@ -8,9 +8,10 @@ import Watchlist from '../../features/user/watchlist/watchlist';
 import Profile from '../../features/user/profile/profile';
 import LandingPage from '../../features/user/landingPage/landingPage';
 import SignUp from '../../features/signup/signup';
+import ArtistPage from '../../features/artist/ArtistPage';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/user/userSlice';
-import './App.css';
+import "../../index.css"; // import Tailwind CSS main file 
 
 const App = () => {
   const user = useSelector(selectUser);
@@ -28,13 +29,16 @@ const App = () => {
             <Route path="/portfolio" element={<Portfolio />}/>
             <Route path="/watchlist" element={<Watchlist />}/>
             <Route path="/profile" element={<Profile />}/>
+            <Route path="/artist" element={<ArtistPage />}/>
           </Routes>
         </div>
       ) : (
-        <>
-          <Login />
-          <SignUp />
-        </>
+        <div>
+          <Routes>
+            <Route path="/" element={<SignUp />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </div>
       )}
     </div>
     </Router>
