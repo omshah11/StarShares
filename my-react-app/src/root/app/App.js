@@ -11,7 +11,7 @@ import SignUp from '../../features/signup/signup';
 import ArtistPage from '../../features/artist/ArtistPage';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/user/userSlice';
-import './App.css';
+import "../../index.css"; // import Tailwind CSS main file 
 
 const App = () => {
   const user = useSelector(selectUser);
@@ -33,10 +33,12 @@ const App = () => {
           </Routes>
         </div>
       ) : (
-        <>
-          <Login />
-          <SignUp />
-        </>
+        <div>
+          <Routes>
+            <Route path="/" element={<SignUp />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </div>
       )}
     </div>
     </Router>
