@@ -3,6 +3,7 @@ import TodoItem from "./TodoItem";
 import { useSelector } from "react-redux";
 import { selectUser } from "../userSlice";
 import axios from "axios";
+import WatchlistedStocks from "./WatchlistedStocks";
 import "./watchlist.css";
 
 const Watchlist = () => {
@@ -59,7 +60,6 @@ const Watchlist = () => {
 
   return (
     <div className="todo-list">
-      <h1>Watchlist</h1>
       {stockDetailedList.map((stock) => (
         <TodoItem
           stockname={stock.data.stock.artistName}
@@ -67,6 +67,9 @@ const Watchlist = () => {
           deleteTask={deleteFromWatchlist}
         />
       ))}
+      <div>
+        <WatchlistedStocks />
+      </div>
       <input value={stock} onChange={(e) => setStock(e.target.value)} />
       <button onClick={addToWatchlist}>Add</button>
     </div>
