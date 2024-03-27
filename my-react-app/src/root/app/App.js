@@ -30,8 +30,6 @@ const App = () => {
             <Route path="/watchlist" element={<Watchlist />}/>
             <Route path="/profile" element={<Profile />}/>
             <Route path="/artist" element={<ArtistPage />}/>
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/login" element={<Login />} />
           </Routes>
         </div>
       ) : (
