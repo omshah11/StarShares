@@ -10,7 +10,7 @@ import Profile from "../../features/user/profile/profile";
 import LandingPage from "../../features/user/landingPage/landingPage";
 import SignUp from "../../features/signup/signup";
 import { useSelector, useDispatch } from "react-redux";
-import { selectUser} from "../../features/user/userSlice";
+import { selectUser } from "../../features/user/userSlice";
 import { login, logout } from "../../features/user//userSlice";
 import "./App.css";
 
@@ -22,22 +22,7 @@ const App = () => {
     // Check if token exists in local storage or cookies
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
-      try {
-        retrieveUser(storedToken);
-      dispatch(
-        login({
-          token: storedToken,
-        })
-      );
-      }catch(error) {
-        console.error(error);
-        dispatch(logout({
-          user: {},
-          isLoggedIn: false,
-          token: null
-        }
-        ));
-      }
+      retrieveUser(storedToken);
     }
   }, []);
 
@@ -46,14 +31,15 @@ const App = () => {
       const configuration = {
         method: "get", // Assuming you are using a GET request for login
         url: "http://localhost:5000/api/getUserByToken",
-        params: { // Pass parameters as 'params' instead of 'data'
-          userToken
+        params: {
+          // Pass parameters as 'params' instead of 'data'
+          userToken,
         },
         headers: {
           "Content-Type": "application/json",
         },
       };
-  
+
       // Send the login request
       const response = await axios(configuration);
 
@@ -61,10 +47,10 @@ const App = () => {
       const lastName = response.data.user.lastName;
       const email = response.data.user.email;
       const password = response.data.user.password;
-  
+
       // Assuming 'loggedIn' is derived from the userState or another logic
       const loggedIn = true;
-  
+
       // Dispatching the login action with separate properties for user and isLoggedIn
       dispatch(
         login({
@@ -78,9 +64,20 @@ const App = () => {
           token: userToken, // Include the token in the login action
         })
       );
-    }catch (error) {
+    } catch (error) {
       // Handle error, log it, or show a user-friendly message
-      console.error(error);
+      if (error.response.status === 401) {
+        // Token is expired, handle it silently
+        dispatch(
+          logout({
+            user: {},
+            isLoggedIn: false,
+            token: null,
+          })
+        );
+      } else {
+        console.error(error);
+      }
     }
   };
 
