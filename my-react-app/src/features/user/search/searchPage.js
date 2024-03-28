@@ -11,7 +11,6 @@ import { useDispatch } from 'react-redux';
 
 const CLIENT_ID = "2f6e085b55bc4ede9131e2d7d7739c30";
 const CLIENT_SECRET = "88eeb98034e5422099cce4f6467a3d51";
-//BQDKiso05zUvw72aCtD6oVZWqIedgIP57Pl6k1eAX9jpi_VPQE8Z2
 const SearchPage = () => {
   const [searchInput, setSearchInput] = useState("");
   const [accessToken, setAccessToken] = useState("");
@@ -46,12 +45,12 @@ const SearchPage = () => {
       body: 'grant_type=client_credentials&client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET
     }
     if(!spotifyAcessToken || spotifyAcessToken === ""){
-        const tokenExpirationDate = new Date(Date.now() + (60 * 60 * 1000)).toLocaleTimeString('PST'); // Adding 60 minutes in milliseconds
+        // const tokenExpirationDate = new Date(Date.now() + (60 * 60 * 1000)).toLocaleTimeString('PST'); // Adding 60 minutes in milliseconds
         // dispatch(getTokenDate({tokenExpirationDate: tokenExpirationDate}))
         fetch('https://accounts.spotify.com/api/token', authParameters)
         .then(result => result.json())
         .then(data => dispatch(getAccessToken({accessToken: data.access_token})))
-        .then(date => dispatch(getTokenDate({tokenExpirationDate: tokenExpirationDate})))
+        // .then(date => dispatch(getTokenDate({tokenExpirationDate: tokenExpirationDate})))
         // .then(date => console.log(date))
         // .then(data => accessToken)
     }
