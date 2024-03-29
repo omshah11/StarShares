@@ -1,11 +1,35 @@
-import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from '../../features/counter/counterSlice'; // Importing the counter slice reducer
-import userReducer from '../../features/user/userSlice'; // Importing the user slice reducer
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import { combineReducers } from 'redux';
+import { persistReducer, persistStore } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import counterReducer from '../../features/counter/counterSlice';
+import userReducer from '../../features/user/userSlice';
 
-// Configure the Redux store with reducers for managing state
-export default configureStore({
-  reducer: {
-      counter: counterReducer, // Assigning the counter slice reducer under the 'counter' key
-      user: userReducer, // Assigning the user slice reducer under the 'user' key
-  }
+const rootReducer = combineReducers({
+  user: userReducer,
+  counter: counterReducer,
+  // Add other reducers as needed
 });
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['user'],
+  // serialize: false, // Ignore serializing certain actions
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+// Use configureStore to create the Redux store
+const store = configureStore({
+  reducer: persistedReducer, // Pass the persisted reducer
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
+});
+
+// Create the persistor
+const persistor = persistStore(store);
+
+export { store, persistor };
