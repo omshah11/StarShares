@@ -3,7 +3,8 @@
 import "./searchPage.css"
 // import '../../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import {Container, InputGroup, FormControl, Button, Row, Col, Card, Modal} from 'react-bootstrap';
-import {useState, useEffect, React, useContext} from 'react';
+import {useState, useEffect, useContext} from 'react';
+import React from 'react';
 import {useLocation} from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getAccessToken, getTokenDate } from './searchSlice';
@@ -17,6 +18,7 @@ const SearchPage = () => {
   const [results, setResults] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
   const location = useLocation();
   const dispatch = useDispatch();
   const currentDate = Date.now();
@@ -44,7 +46,7 @@ const SearchPage = () => {
       },
       body: 'grant_type=client_credentials&client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET
     }
-    if(!spotifyAcessToken || spotifyAcessToken === ""){
+    // if(!spotifyAcessToken || spotifyAcessToken === ""){
         // const tokenExpirationDate = new Date(Date.now() + (60 * 60 * 1000)).toLocaleTimeString('PST'); // Adding 60 minutes in milliseconds
         // dispatch(getTokenDate({tokenExpirationDate: tokenExpirationDate}))
         fetch('https://accounts.spotify.com/api/token', authParameters)
@@ -53,7 +55,7 @@ const SearchPage = () => {
         // .then(date => dispatch(getTokenDate({tokenExpirationDate: tokenExpirationDate})))
         // .then(date => console.log(date))
         // .then(data => accessToken)
-    }
+    // }
   }, [])
 
   // Search
@@ -101,11 +103,17 @@ const SearchPage = () => {
   const handleCardClick = (track) => {
     setSelectedCard(track);
     setShowModal(true);
+    setScrollPosition(window.scrollY);
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    window.scrollTo(0, scrollPosition); // Restore scroll position
   };
 
   return (
-    <div className="container">
-      <div className="row">
+    <div className="page">
+      {/* <div className="row"> */}
         {results.map((item) => (
           <div key={item.id} className="col-md-4 mb-3">
             <Card onClick={() => handleCardClick(item)}>
@@ -131,7 +139,7 @@ const SearchPage = () => {
             </Card>
           </div>
         ))}
-      </div>
+      {/* </div> */}
 
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <div className="modal-container">
@@ -139,7 +147,7 @@ const SearchPage = () => {
             <Modal.Header closeButton>
               <Modal.Title>{selectedCard && selectedCard.name}</Modal.Title>
               {/* <Button variant="secondary" onClick={() => setShowModal(false)}>Close</Button> */}
-              <Button onClick={() => setShowModal(false)}>Close</Button>
+              <Button onClick={handleModalClose}>Close</Button>
             </Modal.Header>
             <Modal.Body>
               {selectedCard && selectedCard.type}
