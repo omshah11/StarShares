@@ -47,21 +47,11 @@ const Login = () => {
       const firstName = userResponse.data.user.firstName;
       const lastName = userResponse.data.user.lastName;
 
-      const getWatchlist = {
-        method: "get",
-        url: "http://localhost:5000/api/getWatchlist",
-        params: {
-          userId,
-        },
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-
       // Dispatching the login action with separate properties for user and isLoggedIn
       dispatch(
         login({
           user: {
+            id: userId,
             firstName: firstName,
             lastName: lastName,
             email: email,
@@ -86,6 +76,17 @@ const Login = () => {
 
       // Send the get Watchlist request
       try {
+        const getWatchlist = {
+          method: "get",
+          url: "http://localhost:5000/api/getWatchlist",
+          params: {
+            userId
+          },
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+
         const watchlistResponse = await axios(getWatchlist);
         // Server returns a token successfully
         
