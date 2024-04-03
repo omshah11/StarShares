@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
-import { logout, selectToken, selectUser } from '../userSlice'
+import { logout, selectToken, selectUser, selectRecentlyViewedArtists } from '../userSlice'
 import Logo from '../../../Imgs/starsharesLogo.png';
 
 const LandingPage = () => {
@@ -51,7 +51,7 @@ const LandingPage = () => {
       </div>
       <div>
         <h1 className='text-4xl font-semibold text-[#37515F] my-24'>Recently Viewed Artists</h1>
-        
+        IMPLEMENT WHEN SEARCH IS PULLED
       </div>
 
       <div>
