@@ -119,7 +119,7 @@ const SearchPage = () => {
                   <Card.Img variant="top" src={item.album.images && item.album.images.length > 0 ? item.album.images[0].url : 'placeholder-url'} />
                   <Card.Body>
                     <Card.Title>{item.name}</Card.Title>
-                    <Card.Text>{item.type}</Card.Text>
+                    {/* <Card.Text>{item.type}</Card.Text> */}
                   </Card.Body>
                 </>
               ) : (
@@ -127,7 +127,7 @@ const SearchPage = () => {
                   <Card.Img variant="top" src={item.images && item.images.length > 0 ? item.images[0].url : 'https://i0.wp.com/sunrisedaycamp.org/wp-content/uploads/2020/10/placeholder.png?ssl=1'} />
                   <Card.Body>
                     <Card.Title>{item.name}</Card.Title>
-                    <Card.Text>{item.type}</Card.Text>
+                    {/* <Card.Text>{item.type}</Card.Text> */}
                   </Card.Body>
                 </>
               )}
@@ -135,14 +135,14 @@ const SearchPage = () => {
           </div>
         ))}
 
-      {/* <Modal show={showModal} onHide={handleModalClose}>
+      <Modal show={showModal} onHide={handleModalClose}>
         <div className="modal-container">
           <div className="modal-content">
             <Modal.Header className="modal-header" closeButton>
               <Modal.Title>{selectedCard && selectedCard.name}</Modal.Title>
               <Button className="close" onClick={handleModalClose}>X</Button>
             </Modal.Header>
-            <Modal.Body>
+            {/* <Modal.Body>
               {selectedCard.type === 'track' ? (
                 <>
                   <div className="left">
@@ -166,10 +166,10 @@ const SearchPage = () => {
                   </div>
                 </>
               )}
-            </Modal.Body>
+            </Modal.Body> */}
           </div>
         </div>
-      </Modal> */}
+      </Modal>
       
     </div>
   );
