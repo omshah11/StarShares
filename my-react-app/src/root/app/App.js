@@ -9,6 +9,7 @@ import Watchlist from "../../features/user/watchlist/watchlist";
 import Profile from "../../features/user/profile/profile";
 import LandingPage from "../../features/user/landingPage/landingPage";
 import SignUp from "../../features/signup/signup";
+import SearchPage from '../../features/user/search/searchPage';
 import ArtistPage from '../../features/artist/ArtistPage';
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "../../features/user/userSlice";

@@ -135,7 +135,7 @@ const SearchPage = () => {
           </div>
         ))}
 
-      <Modal show={showModal} onHide={handleModalClose}>
+      {/* <Modal show={showModal} onHide={handleModalClose}>
         <div className="modal-container">
           <div className="modal-content">
             <Modal.Header className="modal-header" closeButton>
@@ -146,7 +146,6 @@ const SearchPage = () => {
               {selectedCard.type === 'track' ? (
                 <>
                   <div className="left">
-                  {/* {selectedCard && selectedCard.type} */}
                     {selectedCard && selectedCard.album.images && selectedCard.album.images.length > 0 && (
                       <img src={selectedCard.album.images[0].url} alt={selectedCard.name} style={{ width: '100%', height: 'auto' }} />
                     )}
@@ -158,7 +157,6 @@ const SearchPage = () => {
               ) : (
                 <>
                   <div className="left">
-                    {/* {selectedCard && selectedCard.type} */}
                     {selectedCard && selectedCard.images && selectedCard.images.length > 0 && (
                       <img src={selectedCard.images[0].url} alt={selectedCard.name} style={{ width: '100%', height: 'auto' }} />
                     )}
@@ -171,7 +169,7 @@ const SearchPage = () => {
             </Modal.Body>
           </div>
         </div>
-      </Modal>
+      </Modal> */}
       
     </div>
   );
