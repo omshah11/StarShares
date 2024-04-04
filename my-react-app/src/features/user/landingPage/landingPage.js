@@ -2,7 +2,6 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import { logout, selectToken, selectUser } from '../userSlice'
-import "./landingPage.css";
 
 const LandingPage = () => {
   const user = useSelector(selectUser);
@@ -13,11 +12,19 @@ const LandingPage = () => {
   const handleLogout = (e) => {
     e.preventDefault();
     dispatch(logout({
-      isLoggedIn: false
+      user: {},
+      isLoggedIn: false,
+      token: null
     }
     ));
     navigate('/');
   };
+
+  const navigateToArtistPage = (e) => {
+    e.preventDefault();
+    navigate('/artist');
+  } 
+
     return (
         <div className="logout">
           <h1>
@@ -26,6 +33,7 @@ const LandingPage = () => {
           <button className="logout_button" onClick={(e) => handleLogout(e)}>
             Logout
           </button>
+          <button className="" onClick={(e) => navigateToArtistPage(e)}> </button>
         </div>
     );
 };
