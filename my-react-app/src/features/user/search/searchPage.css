@@ -75,8 +75,13 @@
 .modal-content {
   background-color: #fff;
   border-radius: 5px;
+  /* display:block; */
   max-width: 80%; /* Adjust maximum width as needed */
   z-index: 1000; /* Ensure the modal appears above other content */
+}
+
+.modal-header{
+  /* display:inline-flex; */
 }
 
 /* Modal title */
@@ -88,6 +93,7 @@
 /* Modal body */
 .modal-body {
   padding: 20px;
+  display: flex;
 }
 
 /* Modal footer */
@@ -101,6 +107,7 @@
   color: #000;
   opacity: 0.5;
   font-size: 1.25rem;
+  justify-content:flex-end;
 }
 
 .close:hover,

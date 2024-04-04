@@ -1,8 +1,5 @@
-// Import necessary dependencies
-// import React from 'react';
 import "./searchPage.css"
-// import '../../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import {Container, InputGroup, FormControl, Button, Row, Col, Card, Modal} from 'react-bootstrap';
+import {Container, InputGroup, FormControl, Button, Row, Col, Card, Modal, ModalFooter} from 'react-bootstrap';
 import {useState, useEffect, useContext} from 'react';
 import React from 'react';
 import {useLocation} from 'react-router-dom';
@@ -87,6 +84,7 @@ const SearchPage = () => {
       // Add albums items to the array
       if (searchData.albums) {
         allItems.push(...searchData.albums.items);
+        console.log(searchData.albums)
       }
 
       // Add tracks items to the array
@@ -113,7 +111,6 @@ const SearchPage = () => {
 
   return (
     <div className="page">
-      {/* <div className="row"> */}
         {results.map((item) => (
           <div key={item.id} className="col-md-4 mb-3">
             <Card onClick={() => handleCardClick(item)}>
@@ -123,7 +120,6 @@ const SearchPage = () => {
                   <Card.Body>
                     <Card.Title>{item.name}</Card.Title>
                     <Card.Text>{item.type}</Card.Text>
-                    {/* <Button variant="primary" onClick={() => handleCardClick(item)}>Open Modal</Button> */}
                   </Card.Body>
                 </>
               ) : (
@@ -132,35 +128,51 @@ const SearchPage = () => {
                   <Card.Body>
                     <Card.Title>{item.name}</Card.Title>
                     <Card.Text>{item.type}</Card.Text>
-                    {/* <Button variant="primary" onClick={() => handleCardClick(item)}>Open Modal</Button> */}
                   </Card.Body>
                 </>
               )}
             </Card>
           </div>
         ))}
-      {/* </div> */}
 
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
+      <Modal show={showModal} onHide={handleModalClose}>
         <div className="modal-container">
           <div className="modal-content">
-            <Modal.Header closeButton>
+            <Modal.Header className="modal-header" closeButton>
               <Modal.Title>{selectedCard && selectedCard.name}</Modal.Title>
-              {/* <Button variant="secondary" onClick={() => setShowModal(false)}>Close</Button> */}
-              <Button onClick={handleModalClose}>Close</Button>
+              <Button className="close" onClick={handleModalClose}>X</Button>
             </Modal.Header>
             <Modal.Body>
-              {selectedCard && selectedCard.type}
-              {selectedCard && selectedCard.images && selectedCard.images.length > 0 && (
-                <img src={selectedCard.images[0].url} alt={selectedCard.name} style={{ width: '50%', height: 'auto' }} />
+              {selectedCard.type === 'track' ? (
+                <>
+                  <div className="left">
+                  {/* {selectedCard && selectedCard.type} */}
+                    {selectedCard && selectedCard.album.images && selectedCard.album.images.length > 0 && (
+                      <img src={selectedCard.album.images[0].url} alt={selectedCard.name} style={{ width: '100%', height: 'auto' }} />
+                    )}
+                  </div>
+                  <div className="right">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="left">
+                    {/* {selectedCard && selectedCard.type} */}
+                    {selectedCard && selectedCard.images && selectedCard.images.length > 0 && (
+                      <img src={selectedCard.images[0].url} alt={selectedCard.name} style={{ width: '100%', height: 'auto' }} />
+                    )}
+                  </div>
+                  <div className="right">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                  </div>
+                </>
               )}
             </Modal.Body>
-            {/* <Modal.Footer>
-              <Button variant="secondary" onClick={() => setShowModal(false)}>Close</Button>
-            </Modal.Footer> */}
           </div>
         </div>
       </Modal>
+      
     </div>
   );
 };
