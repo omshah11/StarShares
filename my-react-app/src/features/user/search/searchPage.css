@@ -11,9 +11,27 @@
   /* margin: 0 */
 }
 
-.section{
+.results{
+  height: 100%;
+  width: 100%;
+  padding-top: 50px;
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter-button {
+  margin-right: 10px;
+}
+
+.filter-button.active {
+  background-color: rgb(225, 108, 18);
+  color: white;
+}
+
+.filter-button:not(.active):hover {
+  background-color:rgb(225, 108, 18);
+  color: white;
+  border-color: #007bff;
 }
 
 /* Card container */
@@ -81,7 +99,7 @@
 }
 
 .modal-header{
-  /* display:inline-flex; */
+  display:flex;
 }
 
 /* Modal title */

@@ -1,5 +1,5 @@
 import "./searchPage.css"
-import {Container, InputGroup, FormControl, Button, Row, Col, Card, Modal, ModalFooter} from 'react-bootstrap';
+import { Form, Button, Row, Col, Card, Modal, ModalFooter} from 'react-bootstrap';
 import {useState, useEffect, useContext} from 'react';
 import React from 'react';
 import {useLocation} from 'react-router-dom';
@@ -19,6 +19,12 @@ const SearchPage = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const currentDate = Date.now();
+  const [filters, setFilters] = useState({
+    artist: true,
+    album: true,
+    track: true,
+    genre: false
+  });
   const spotifyAcessToken = useSelector(search => search.searchQuery.accessToken);
 
   useEffect(() => {
@@ -28,7 +34,7 @@ const SearchPage = () => {
     console.log("QUERY IS " + query);
     if (query) {
       console.log("searched: " + query);
-      console.log("Here");
+      // console.log("Here");
       setSearchInput(query);
       search(query);
     }
@@ -61,6 +67,10 @@ const SearchPage = () => {
     // console.log("Access token: ", accessToken);
 
     let allItems = [];
+    let searchTypes = Object.entries(filters)
+      .filter(([_, enabled]) => enabled)
+      .map(([type, _]) => type)
+      .join(',');
 
     // Get request using search
     let searchParameters = {
@@ -71,31 +81,64 @@ const SearchPage = () => {
       }
     }
     
-    let searchData = await fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=artist,album,track', searchParameters)
+    // let searchData = await fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=artist,album,track', searchParameters)
+    let searchData = await fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=' + searchTypes, searchParameters)
       .then(response => response.json())
 
 
       console.log("Reached here");
       // Add artists items to the array
       if (searchData.artists) {
+        // console.log("woah " + searchData.artists.items[0].genres)
+        // let i = 0;
+        // while(i <searchData.artists.length){
+        //   // genres.set(i.genres, i.name);
+        //   console.log("heyo")
+        //   i++;
+        // }
+
+        for (const i of searchData.artists.items){
+          // console.log(i.genres)
+          if(i.genres.length > 0){
+            for (const j of i.genres){
+              // console.log(j + ", " + i.name)
+              // genres.set(j, i.name)
+            }
+          }
+          // genres.set(i.genres, i.name)
+        }
+
+        // genres.set(searchData.artist.genres, searchData.artist.name)
         allItems.push(...searchData.artists.items);
       }
 
       // Add albums items to the array
       if (searchData.albums) {
         allItems.push(...searchData.albums.items);
-        console.log(searchData.albums)
+        // console.log(searchData.albums)
       }
 
       // Add tracks items to the array
       if (searchData.tracks) {
         allItems.push(...searchData.tracks.items);
-        console.log(searchData.tracks)
+        // console.log(searchData.tracks)
       }
 
       // Set the combined array to the results state
       setResults(allItems);
     
+  }
+
+  const handleGenreButton = () => {
+    console.log(results)
+  }
+
+  const handleFilterChange = (filterName) => {
+    setFilters(prevFilters => ({
+      ...prevFilters,
+      [filterName]: !prevFilters[filterName]
+    }));
+    // search(searchInput)
   }
 
   const handleCardClick = (track) => {
@@ -108,69 +151,98 @@ const SearchPage = () => {
     setShowModal(false);
     window.scrollTo(0, scrollPosition); // Restore scroll position
   };
+  // console.log(genres)
 
   return (
     <div className="page">
+       <div className="filters">
+        <Button
+          className={`filter-button ${filters.artist ? "active" : ""}`}
+          onClick={() => handleFilterChange('artist')}
+        >
+          Artist
+        </Button>
+        <Button
+          className={`filter-button ${filters.album ? "active" : ""}`}
+          onClick={() => handleFilterChange('album')}
+        >
+          Album
+        </Button>
+        <Button
+          className={`filter-button ${filters.track ? "active" : ""}`}
+          onClick={() => handleFilterChange('track')}
+        >
+          Track
+        </Button>
+        <Button
+          className={`filter-button ${filters.genre ? "active" : ""}`}
+          onClick={() => handleFilterChange('genre')}
+        >
+          Genre
+        </Button>
+        <Button onClick={search(searchInput)}></Button>
+      </div>
+      <div className="results">
         {results.map((item) => (
-          <div key={item.id} className="col-md-4 mb-3">
-            <Card onClick={() => handleCardClick(item)}>
-              {item.type === 'track' ? (
-                <>
-                  <Card.Img variant="top" src={item.album.images && item.album.images.length > 0 ? item.album.images[0].url : 'placeholder-url'} />
-                  <Card.Body>
-                    <Card.Title>{item.name}</Card.Title>
-                    {/* <Card.Text>{item.type}</Card.Text> */}
-                  </Card.Body>
-                </>
-              ) : (
-                <>
-                  <Card.Img variant="top" src={item.images && item.images.length > 0 ? item.images[0].url : 'https://i0.wp.com/sunrisedaycamp.org/wp-content/uploads/2020/10/placeholder.png?ssl=1'} />
-                  <Card.Body>
-                    <Card.Title>{item.name}</Card.Title>
-                    {/* <Card.Text>{item.type}</Card.Text> */}
-                  </Card.Body>
-                </>
-              )}
-            </Card>
-          </div>
-        ))}
+            <div key={item.id} className="col-md-4 mb-3">
+              <Card onClick={() => handleCardClick(item)}>
+                {item.type === 'track' ? (
+                  <>
+                    <Card.Img variant="top" src={item.album.images && item.album.images.length > 0 ? item.album.images[0].url : 'placeholder-url'} />
+                    <Card.Body>
+                      <Card.Title>{item.name}</Card.Title>
+                      {/* <Card.Text>{item.type}</Card.Text> */}
+                    </Card.Body>
+                  </>
+                ) : (
+                  <>
+                    <Card.Img variant="top" src={item.images && item.images.length > 0 ? item.images[0].url : 'https://i0.wp.com/sunrisedaycamp.org/wp-content/uploads/2020/10/placeholder.png?ssl=1'} />
+                    <Card.Body>
+                      <Card.Title>{item.name}</Card.Title>
+                      {/* <Card.Text>{item.type}</Card.Text> */}
+                    </Card.Body>
+                  </>
+                )}
+              </Card>
+            </div>
+          ))}
 
-      <Modal show={showModal} onHide={handleModalClose}>
-        <div className="modal-container">
-          <div className="modal-content">
-            <Modal.Header className="modal-header" closeButton>
-              <Modal.Title>{selectedCard && selectedCard.name}</Modal.Title>
-              <Button className="close" onClick={handleModalClose}>X</Button>
-            </Modal.Header>
-            {/* <Modal.Body>
-              {selectedCard.type === 'track' ? (
-                <>
-                  <div className="left">
-                    {selectedCard && selectedCard.album.images && selectedCard.album.images.length > 0 && (
-                      <img src={selectedCard.album.images[0].url} alt={selectedCard.name} style={{ width: '100%', height: 'auto' }} />
-                    )}
-                  </div>
-                  <div className="right">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="left">
-                    {selectedCard && selectedCard.images && selectedCard.images.length > 0 && (
-                      <img src={selectedCard.images[0].url} alt={selectedCard.name} style={{ width: '100%', height: 'auto' }} />
-                    )}
-                  </div>
-                  <div className="right">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-                  </div>
-                </>
-              )}
-            </Modal.Body> */}
+        <Modal show={showModal} onHide={handleModalClose}>
+          <div className="modal-container">
+            <div className="modal-content">
+              <Modal.Header className="modal-header" closeButton>
+                <Modal.Title>{selectedCard && selectedCard.name}</Modal.Title>
+                <Button className="close" onClick={handleModalClose}>X</Button>
+              </Modal.Header>
+              {/* <Modal.Body>
+                {selectedCard.type === 'track' ? (
+                  <>
+                    <div className="left">
+                      {selectedCard && selectedCard.album.images && selectedCard.album.images.length > 0 && (
+                        <img src={selectedCard.album.images[0].url} alt={selectedCard.name} style={{ width: '100%', height: 'auto' }} />
+                      )}
+                    </div>
+                    <div className="right">
+                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="left">
+                      {selectedCard && selectedCard.images && selectedCard.images.length > 0 && (
+                        <img src={selectedCard.images[0].url} alt={selectedCard.name} style={{ width: '100%', height: 'auto' }} />
+                      )}
+                    </div>
+                    <div className="right">
+                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                    </div>
+                  </>
+                )}
+              </Modal.Body> */}
+            </div>
           </div>
-        </div>
-      </Modal>
-      
+        </Modal>
+      </div>
     </div>
   );
 };
