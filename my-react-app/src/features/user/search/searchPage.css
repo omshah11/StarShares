@@ -20,7 +20,9 @@
 }
 
 .filter-button {
+  padding: 20px;
   margin-right: 10px;
+  border-radius: 12px;
 }
 
 .filter-button.active {
