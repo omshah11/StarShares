@@ -1,21 +1,100 @@
 /* profile.css */
-.profile-container {
+:root {
+  --main-background-color: #f9f9f9; /* Default color */
+  --main-border-color: #ccc;
+}
+
+.profile-container{
+  max-width: 1920px;
+  max-height: 1080px;
+  align-items: center;
+  overflow: visible;
+  overflow-wrap: normal;
+}
+
+.h2 {
+  font-weight: bold; /* Make the text bold */
+  font-family: Arial, sans-serif; /* Use Arial font */
+}
+
+.profile-container-1{
+  margin-top: 2%;
+  margin-left: 2%;
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+  overflow: visible;
+  overflow-wrap: normal;
+}
+
+.profile-container-2{
+  margin-top: 2%;
+  margin-left: 2%;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: visible;
+  overflow-wrap: normal;
+}
+
+.news-container {
+  font-weight: bold; /* Make the text bold */
+  font-family: Arial, sans-serif; /* Use Arial font */
+  width: 640px; /* Set the width of the profile container to 90% of its parent container */
+  height: 170px;
+  max-height: 500px; /* Set a maximum width for the profile container */
+  max-width: 640px; /* Set a maximum width for the profile container */
+  margin-left: 2%;
+  background-color: var(--main-background-color);
+  padding: 20px;
+  border: 2px solid var(--main-border-color);
+  border-radius: 8px;
+  overflow: auto;
+  overflow-x: hidden;
+
+}
+
+.transactions-container {
+  font-weight: bold; /* Make the text bold */
+  font-family: Arial, sans-serif; /* Use Arial font */
+  width: 90%; /* Set the width of the profile container to 90% of its parent container */
+  height: 270px;
+  max-height: 500px; /* Set a maximum width for the profile container */
+  max-width: 480px; /* Set a maximum width for the profile container */
+  margin-left: 2%;
+  background-color: var(--main-background-color);
+  padding: 20px;
+  border: 2px solid var(--main-border-color);
+  border-radius: 8px;
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+.play-container{
+  font-weight: bold; /* Make the text bold */
+  font-family: Arial, sans-serif; /* Use Arial font */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  overflow-wrap: normal;
+  max-width: fit-content;
+  background-color: var(--main-background-color);
+  padding: 20px;
+  border: 2px solid var(--main-border-color);
+  border-radius: 8px;
 }
 
 /* profile.css */
 .profile-card {
+  height: 270px;
   font-weight: bold; /* Make the text bold */
   font-family: Arial, sans-serif; /* Use Arial font */
-  margin: 20px; /* Add some margin around the profile container */
   width: 90%; /* Set the width of the profile container to 90% of its parent container */
+  max-height: auto; /* Set a maximum width for the profile container */
   max-width: 600px; /* Set a maximum width for the profile container */
-  background-color: #f9f9f9;
+  background-color: var(--main-background-color);
   padding: 20px;
-  border: 2px solid #ccc;
+  border: 2px solid var(--main-border-color);
   border-radius: 8px;
-  margin-left: 20px;
 }
 
 .edit {
@@ -42,11 +121,18 @@
 
 
 .biography-card {
-  background-color: #f9f9f9;
+  background-color: var(--main-background-color);
+  position: relative;
+  width: 300px;
+  height: 270px;
+  max-width: 300px;
+  max-height: 270px;
   padding: 20px;
-  border: 2px solid #ccc;
+  border: 2px solid var(--main-border-color);
   border-radius: 8px;
-  margin-left: 20px; /* Add some spacing between cards */
+  overflow: auto;
+  overflow-x: hidden; /* Make the text bold */
+  font-family: Arial, sans-serif;
 }
 
 textarea {
@@ -59,10 +145,11 @@ button {
 }
 
 .play-button {
-  position: relative;
   background-color: #1db954;
   color: #fff;
   border: none;
+  margin-top: 10px;
+  margin-left: 100px;
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
@@ -87,16 +174,22 @@ button {
   border-top: 14px solid #fff;
 }
 
+
+
 /* PlayButton.css */
 .dummy-play-button {
   background-color: #1db954;
   color: #fff;
-  border: none;
+  border: 2px solid #000000;
+  border-radius: 8px;
   padding: 10px 20px;
+  margin-top: 12%;
+  margin-left: 1%;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
   /* Add any other styling you'd like */
+  
 }
 
 .dummy-play-button:hover {

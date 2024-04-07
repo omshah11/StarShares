@@ -1,33 +1,37 @@
 // BiographyCard.js
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../userSlice';
 
-const BiographyCard = ({ initialBio, onSave }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [bio, setBio] = useState(initialBio);
+const BiographyCard = () => {
+  const defaultBio = "This is the Default Bio"; // Default bio text
+  const userDetails = useSelector(selectUser).user;
+  const [editing, setEditing] = useState(false);
+  const [profileBio, setProfileBio] = useState(userDetails.profileBio || defaultBio); // Initialize with user's bio or default
 
   const handleEdit = () => {
-    setIsEditing(true);
+    setEditing(true);
   };
 
   const handleSave = () => {
-    onSave(bio); // Call the parent component's onSave function
-    setIsEditing(false);
+    setEditing(false);
+    // Save the updated profileBio (you'll need to implement this logic)
   };
 
   return (
     <div className="biography-card">
-      <h1>Bio</h1>
-      {isEditing ? (
+      <h2>Bio</h2>
+      {editing ? (
         <textarea
-          value={bio}
-          onChange={(e) => setBio(e.target.value)}
+          value={profileBio}
+          onChange={(e) => setProfileBio(e.target.value)} // Update profileBio state
           rows="5"
           placeholder="Write your biography here"
         />
       ) : (
-        <p>{bio}</p>
+        <p>{profileBio}</p>
       )}
-      {isEditing ? (
+      {editing ? (
         <button onClick={handleSave}>Save</button>
       ) : (
         <button onClick={handleEdit}>Edit</button>

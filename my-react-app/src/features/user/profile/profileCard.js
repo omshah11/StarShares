@@ -5,6 +5,10 @@ import "./profile.css";
 import defaultImage from './default.png'; // import the default image
 
 const ProfileCard = () => {
+  const [backgroundColor, setBackgroundColor] = useState('#f9f9f9'); // Initial color
+  const [borderColor, setBorderColor] = useState('#ccc'); // Initial color
+  const [coloring, setColoring] = useState(false);
+
   const userDetails = useSelector(selectUser).user;
   const [editing, setEditing] = useState(false);
   const [user, setUser] = useState({
@@ -19,6 +23,10 @@ const ProfileCard = () => {
     setEditing(!editing);
   };
 
+  const handleColor = () => {
+    setColoring(!coloring);
+  }
+
   const handleChange = (e) => {
     if (e.target.name === 'profileImage') {
       setUser({...user, profileImage: URL.createObjectURL(e.target.files[0])});
@@ -27,10 +35,16 @@ const ProfileCard = () => {
     }
   };
 
+  const handleColorChange = (e) => {
+    // Change the background color to a new value
+    setBackgroundColor(e.target.value);
+    setBorderColor(e.target.value);
+  };
+
   return (
     <div className="profile">
-      <div className="profile-card">
-        <h1>Profile</h1>
+      <div style={{backgroundColor}} className="profile-card">
+        <h2>Profile</h2>
         <img src={user.profileImage} alt="ProfileCard" />
         {editing ? (
           <div className="edit">
@@ -47,7 +61,19 @@ const ProfileCard = () => {
             <p>Password: {user.password}</p>
           </div>
         )}
-        <button onClick={handleEdit}>{editing ? 'Save' : 'Edit Profile'}</button>
+        {coloring ? (
+          <div className="color-change">
+            <input type="color" onChange={handleColorChange} />
+          </div>
+        ) :
+        ( 
+          <div className="standard">
+          </div>
+        )}
+        <div>
+          <button onClick={handleEdit}>{editing ? 'Save' : 'Edit Profile'}</button>
+          <button style={{marginLeft: '2%'}} onClick={handleColor}> {coloring ? 'Save' : 'Change Color'}</button>
+        </div>
       </div>
     </div>
   );
