@@ -2,7 +2,7 @@ import "./searchPage.css"
 import { Form, Button, Row, Col, Card, Modal, ModalFooter} from 'react-bootstrap';
 import {useState, useEffect, useContext} from 'react';
 import React from 'react';
-import {useLocation} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getAccessToken, getTokenDate } from './searchSlice';
 import { useDispatch } from 'react-redux';
@@ -19,6 +19,7 @@ const SearchPage = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const currentDate = Date.now();
+  const navigate = useNavigate();
   const [filters, setFilters] = useState({
     artist: true,
     album: true,
@@ -65,7 +66,7 @@ const SearchPage = () => {
   async function search(searchInput) {
     //console.log("Search for " + searchInput);
     // console.log("Access token: ", accessToken);
-
+    // window.location.reload(true);
     let allItems = [];
     let searchTypes = Object.entries(filters)
       .filter(([_, enabled]) => enabled)
@@ -89,13 +90,6 @@ const SearchPage = () => {
       console.log("Reached here");
       // Add artists items to the array
       if (searchData.artists) {
-        // console.log("woah " + searchData.artists.items[0].genres)
-        // let i = 0;
-        // while(i <searchData.artists.length){
-        //   // genres.set(i.genres, i.name);
-        //   console.log("heyo")
-        //   i++;
-        // }
 
         for (const i of searchData.artists.items){
           // console.log(i.genres)
@@ -139,6 +133,7 @@ const SearchPage = () => {
       [filterName]: !prevFilters[filterName]
     }));
     // search(searchInput)
+    // console.log(filters)
   }
 
   const handleCardClick = (track) => {
@@ -151,36 +146,48 @@ const SearchPage = () => {
     setShowModal(false);
     window.scrollTo(0, scrollPosition); // Restore scroll position
   };
+
+  const handleStockBtn = (entered) => {
+    // navigate(`/artist-page/${entered}`);
+    console.log("been clicked")
+  };
   // console.log(genres)
+
+  const fb = () => {
+    search(searchInput)
+  }
 
   return (
     <div className="page">
-       <div className="filters">
-        <Button
-          className={`filter-button ${filters.artist ? "active" : ""}`}
-          onClick={() => handleFilterChange('artist')}
-        >
-          Artist
-        </Button>
-        <Button
-          className={`filter-button ${filters.album ? "active" : ""}`}
-          onClick={() => handleFilterChange('album')}
-        >
-          Album
-        </Button>
-        <Button
-          className={`filter-button ${filters.track ? "active" : ""}`}
-          onClick={() => handleFilterChange('track')}
-        >
-          Track
-        </Button>
-        <Button
-          className={`filter-button ${filters.genre ? "active" : ""}`}
-          onClick={() => handleFilterChange('genre')}
-        >
-          Genre
-        </Button>
-        <Button onClick={search(searchInput)}></Button>
+      <div className="header">
+        <div className="filters">
+          <Button
+            className={`filter-button ${filters.artist ? "active" : ""}`}
+            onClick={() => handleFilterChange('artist')}
+          >
+            Artist
+          </Button>
+          <Button
+            className={`filter-button ${filters.album ? "active" : ""}`}
+            onClick={() => handleFilterChange('album')}
+          >
+            Album
+          </Button>
+          <Button
+            className={`filter-button ${filters.track ? "active" : ""}`}
+            onClick={() => handleFilterChange('track')}
+          >
+            Track
+          </Button>
+          <Button
+            className={`filter-button ${filters.genre ? "active" : ""}`}
+            onClick={() => handleFilterChange('genre')}
+          >
+            Genre
+          </Button>
+          {/* <Button onClick={search(searchInput)}></Button> */}
+          </div>
+          <div><Button onClick={fb}>Filter</Button></div>
       </div>
       <div className="results">
         {results.map((item) => (
@@ -191,7 +198,7 @@ const SearchPage = () => {
                     <Card.Img variant="top" src={item.album.images && item.album.images.length > 0 ? item.album.images[0].url : 'placeholder-url'} />
                     <Card.Body>
                       <Card.Title>{item.name}</Card.Title>
-                      {/* <Card.Text>{item.type}</Card.Text> */}
+                      <Card.Text>{item.type}</Card.Text>
                     </Card.Body>
                   </>
                 ) : (
@@ -199,7 +206,7 @@ const SearchPage = () => {
                     <Card.Img variant="top" src={item.images && item.images.length > 0 ? item.images[0].url : 'https://i0.wp.com/sunrisedaycamp.org/wp-content/uploads/2020/10/placeholder.png?ssl=1'} />
                     <Card.Body>
                       <Card.Title>{item.name}</Card.Title>
-                      {/* <Card.Text>{item.type}</Card.Text> */}
+                      <Card.Text>{item.type}</Card.Text>
                     </Card.Body>
                   </>
                 )}
@@ -224,6 +231,7 @@ const SearchPage = () => {
                     </div>
                     <div className="right">
                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                      <Button className="stockBtn">Artist Page</Button>
                     </div>
                   </>
                 ) : (
@@ -235,6 +243,7 @@ const SearchPage = () => {
                     </div>
                     <div className="right">
                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                      <Button className="stockBtn">{selectedCard.name}</Button>
                     </div>
                   </>
                 )}
