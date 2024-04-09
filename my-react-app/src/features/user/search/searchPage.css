@@ -42,6 +42,29 @@
   border-color: #007bff;
 }
 
+.enter-filter {
+  padding: 15px 25px;
+  font-size: 24px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #04AA6D;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
+
+.enter-filter:hover {
+  background-color: #3e8e41
+}
+
+.enter-filter:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
 /* Card container */
 /* .card-container {
     display: flex;

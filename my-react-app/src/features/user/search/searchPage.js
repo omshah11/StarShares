@@ -3,9 +3,8 @@ import { Form, Button, Row, Col, Card, Modal, ModalFooter} from 'react-bootstrap
 import {useState, useEffect, useContext} from 'react';
 import React from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { getAccessToken, getTokenDate } from './searchSlice';
-import { useDispatch } from 'react-redux';
 
 const CLIENT_ID = "2f6e085b55bc4ede9131e2d7d7739c30";
 const CLIENT_SECRET = "88eeb98034e5422099cce4f6467a3d51";
@@ -23,8 +22,7 @@ const SearchPage = () => {
   const [filters, setFilters] = useState({
     artist: true,
     album: true,
-    track: true,
-    genre: false
+    track: true
   });
   const spotifyAcessToken = useSelector(search => search.searchQuery.accessToken);
 
@@ -66,7 +64,6 @@ const SearchPage = () => {
   async function search(searchInput) {
     //console.log("Search for " + searchInput);
     // console.log("Access token: ", accessToken);
-    // window.location.reload(true);
     let allItems = [];
     let searchTypes = Object.entries(filters)
       .filter(([_, enabled]) => enabled)
@@ -90,41 +87,25 @@ const SearchPage = () => {
       console.log("Reached here");
       // Add artists items to the array
       if (searchData.artists) {
-
-        for (const i of searchData.artists.items){
-          // console.log(i.genres)
-          if(i.genres.length > 0){
-            for (const j of i.genres){
-              // console.log(j + ", " + i.name)
-              // genres.set(j, i.name)
-            }
-          }
-          // genres.set(i.genres, i.name)
-        }
-
-        // genres.set(searchData.artist.genres, searchData.artist.name)
         allItems.push(...searchData.artists.items);
+        console.log(searchData.artists)
       }
 
       // Add albums items to the array
       if (searchData.albums) {
         allItems.push(...searchData.albums.items);
-        // console.log(searchData.albums)
+        console.log(searchData.albums)
       }
 
       // Add tracks items to the array
       if (searchData.tracks) {
         allItems.push(...searchData.tracks.items);
-        // console.log(searchData.tracks)
+        console.log(searchData.tracks)
       }
 
       // Set the combined array to the results state
       setResults(allItems);
     
-  }
-
-  const handleGenreButton = () => {
-    console.log(results)
   }
 
   const handleFilterChange = (filterName) => {
@@ -148,10 +129,9 @@ const SearchPage = () => {
   };
 
   const handleStockBtn = (entered) => {
-    // navigate(`/artist-page/${entered}`);
+    navigate(`/artist?=${entered}`);
     console.log("been clicked")
   };
-  // console.log(genres)
 
   const fb = () => {
     search(searchInput)
@@ -179,15 +159,9 @@ const SearchPage = () => {
           >
             Track
           </Button>
-          <Button
-            className={`filter-button ${filters.genre ? "active" : ""}`}
-            onClick={() => handleFilterChange('genre')}
-          >
-            Genre
-          </Button>
           {/* <Button onClick={search(searchInput)}></Button> */}
           </div>
-          <div><Button onClick={fb}>Filter</Button></div>
+          <div><Button className="enter-filter" onClick={fb}>Filter</Button></div>
       </div>
       <div className="results">
         {results.map((item) => (
@@ -221,8 +195,37 @@ const SearchPage = () => {
                 <Modal.Title>{selectedCard && selectedCard.name}</Modal.Title>
                 <Button className="close" onClick={handleModalClose}>X</Button>
               </Modal.Header>
-              {/* <Modal.Body>
-                {selectedCard.type === 'track' ? (
+              <Modal.Body>
+                {selectedCard && (
+                  <>
+                  {selectedCard.type === 'track' ? (
+                    <>
+                      <div className="left">
+                        {selectedCard && selectedCard.album.images && selectedCard.album.images.length > 0 && (
+                          <img src={selectedCard.album.images[0].url} alt={selectedCard.name} style={{ width: '100%', height: 'auto' }} />
+                        )}
+                      </div>
+                      <div className="right">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                        <Button className="stockBtn">Artist Page</Button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="left">
+                        {selectedCard && selectedCard.images && selectedCard.images.length > 0 && (
+                          <img src={selectedCard.images[0].url} alt={selectedCard.name} style={{ width: '100%', height: 'auto' }} />
+                        )}
+                      </div>
+                      <div className="right">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                        <Button className="stockBtn" onClick={handleStockBtn(selectedCard.name)}>{selectedCard.name}</Button>
+                      </div>
+                    </>
+                  )}
+                  </>
+                )}
+                {/* {selectedCard.type === 'track' ? (
                   <>
                     <div className="left">
                       {selectedCard && selectedCard.album.images && selectedCard.album.images.length > 0 && (
@@ -243,11 +246,11 @@ const SearchPage = () => {
                     </div>
                     <div className="right">
                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-                      <Button className="stockBtn">{selectedCard.name}</Button>
+                      <Button className="stockBtn" onClick={handleStockBtn(selectedCard.name)}>{selectedCard.name}</Button>
                     </div>
                   </>
-                )}
-              </Modal.Body> */}
+                )} */}
+              </Modal.Body>
             </div>
           </div>
         </Modal>
