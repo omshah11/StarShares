@@ -46,18 +46,23 @@ const RecentlyViewedArtist = () => {
   }, [recentlyViewedArtists]);
 
   return (
-    <div>
-      {artistDetailsList.map(artistDetails => (
-        <div className="block rounded-lg bg-white shadow-secondary-1 dark:bg-surface-dark" key={artistDetails.id}>
-          <h2>{artistDetails.name}</h2>
-          <a href={artistDetails.external_urls.spotify}>
-          <img  className="rounded-t-lg"
-                src={artistDetails.images[0]?.url} 
-                alt={artistDetails.name}
-               />
-          </a>
+    <div className="mx-20 m-auto grid grid-cols-5 gap-4 gap-x-4">
+  {artistDetailsList.map(artistDetails => (
+    <div key={artistDetails.id} className="card-container">
+      <div className="block rounded-lg bg-white shadow-secondary-1 dark:bg-surface-dark">
+      <a href={artistDetails.external_urls.spotify}>
+          <div
+            className="rounded-t-lg"
+            style={{
+              height: '400px',
+              backgroundImage: `url(${artistDetails.images[0]?.url})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          ></div>
+        </a>
 
-          <div className="p-6 text-surface dark:text-white">
+        <div className="p-6 text-surface dark:text-white">
           <h5 className="mb-2 text-xl font-medium leading-tight">{artistDetails.name}</h5>
           <p className="mb-4 text-base">
             Some quick example text to build on the card title and make up the
@@ -65,19 +70,17 @@ const RecentlyViewedArtist = () => {
           </p>
           <button
             type="button"
-            className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
+            className="bg-green-300 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal  shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
             data-twe-ripple-init
-            data-twe-ripple-color="light"
-          >
-            Button
+            data-twe-ripple-color="light" onClick={() => window.open(artistDetails.external_urls.spotify, '_blank')}>
+            Spotify
           </button>
         </div>
-
-          <a href={artistDetails.external_urls.spotify}>Spotify Link</a>
-          {/* Display bio or any other artist details */}
-        </div>
-      ))}
+      </div>
     </div>
+  ))}
+</div>
+
   );
 };
 
