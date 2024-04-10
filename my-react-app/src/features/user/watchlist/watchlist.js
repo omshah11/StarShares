@@ -11,15 +11,13 @@ const CLIENT_SECRET = "88eeb98034e5422099cce4f6467a3d51";
 
 const Watchlist = () => {
   const user = useSelector(selectUser);
-  const dispatch = useDispatch;
+  const dispatch = useDispatch();
   const [watchlist, setWatchlist] = useState(user.watchlist);
+  console.log("watchlist: ", watchlist);
   const [stockDetailedList, setStockDetailedList] = useState([]);
   const [stock, setStock] = useState("");
-
-  //
   const [accessToken, setAccessToken] = useState("");
   const [items, setItems] = useState([]);
-  //
 
   useEffect(() => {
     var authParameters = {
@@ -38,8 +36,8 @@ const Watchlist = () => {
       .then((data) => setAccessToken(data.access_token));
 
     // Call getStocks when the component mounts and whenever watchlist changes
-    //getStocks();
     sampleArtist();
+    getStocks();
   }, [watchlist]); // Dependency array ensures the effect is triggered when watchlist changes
 
   const sampleArtist = async () => {
@@ -51,19 +49,18 @@ const Watchlist = () => {
       },
     };
     let artistID = await fetch(
-      "https://api.spotify.com/v1/search?q=" + "SZA" + "&type=album,artist",
+      "https://api.spotify.com/v1/search?q=" + "Arijit" + "&type=album,artist",
       searchParameters
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log(data.artists.items);
+        console.log("data received: ", data);
         setItems(data.artists.items);
-        console.log(items[0].name);
-        //setItems(data.tracks.items);
       });
   };
 
   const getStocks = async () => {
+    setStockDetailedList([]);
     for (let i = 0; i < watchlist.length; i++) {
       const currentStockId = watchlist[i];
 
@@ -80,7 +77,6 @@ const Watchlist = () => {
 
       try {
         const stockDetails = await axios(getStock);
-        console.log(stockDetails.data.stock.cost);
         setStockDetailedList((prevList) => [...prevList, stockDetails]);
       } catch (error) {
         console.error("Error fetching stock details:", error);
@@ -121,15 +117,17 @@ const Watchlist = () => {
     }
   };
 
-  const addToWatchlist = async (artistStock) => {
+  const addToWatchlist = async () => {
+    //sampleArtist();
+    console.log("detailed stock list: ", stockDetailedList);
+    //let updatedItems = await sampleArtist();
+    console.log("exited sample artist function");
+    console.log("item : ", items);
+    let artistStock = items[0];
     const userId = user.user.id;
-    console.log(user.user);
     let stockId = "";
     const artistName = artistStock.name;
-    // const newStock = {
-    //   id: stockId, // Spotify artist ID
-    //   name: artistStock.name,
-    // };
+    const artistImage = artistStock.images[0];
 
     try {
       const addStockToDB = {
@@ -137,6 +135,7 @@ const Watchlist = () => {
         url: "http://localhost:5000/api/addStock",
         data: {
           artistName,
+          artistImage,
         },
         headers: {
           "Content-Type": "application/json",
@@ -144,7 +143,8 @@ const Watchlist = () => {
       };
 
       const addStockToDBresponse = await axios(addStockToDB);
-      stockId = addStockToDBresponse.stockId;
+      console.log(addStockToDBresponse);
+      stockId = addStockToDBresponse.data.stock._id;
     } catch (error) {
       if (error.response.status === 400) {
         stockId = error.response.data.stock._id;
@@ -171,25 +171,55 @@ const Watchlist = () => {
 
       // Send the signup request
       const response = await axios(addStockToWatchlist);
-      console.log(response);
+      setWatchlist([...watchlist, stockId]); // Spread the previous watchlist and add the new stock
+
+      dispatch(
+        setUserWatchlist({
+          watchlist: [...watchlist, stockId],
+        })
+      );
     } catch (error) {
       console.error(error);
     }
-    // Assuming server returns a token upon successful signup
-
-    setWatchlist([...watchlist, stockId]); // Spread the previous watchlist and add the new stock
-    setStock(stockId);
   };
 
-  const deleteFromWatchlist = (id) => {
-    setWatchlist(watchlist.filter((stock) => stock.id !== id));
+  const deleteFromWatchlist = async (stockId) => {
+    const userId = user.user.id;
+    try {
+      const deleteFromWatchlist = {
+        method: "post",
+        url: "http://localhost:5000/api/deleteFromWatchlist",
+        data: {
+          userId,
+          stockId,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      // Send the signup request
+      const response = await axios(deleteFromWatchlist);
+      setWatchlist(watchlist.filter((stock) => stock !== stockId));
+
+      dispatch(
+        setUserWatchlist({
+          watchlist: watchlist,
+        })
+      );
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <div className="todo-list">
       {user.watchlist ? (
         <div>
-          <WatchlistedStocks watchlist={watchlist}/>
+          <WatchlistedStocks
+            stockDetailedList={stockDetailedList}
+            deleteStock={deleteFromWatchlist}
+          />
         </div>
       ) : (
         <div>
@@ -199,7 +229,7 @@ const Watchlist = () => {
       )}
       <div>
         {/* <input value={stock} onChange={(e) => setStock(e.target.value)} /> */}
-        <button onClick={() => addToWatchlist(items[0])}>Add</button>
+        <button onClick={() => addToWatchlist()}>Add</button>
       </div>
     </div>
   );
