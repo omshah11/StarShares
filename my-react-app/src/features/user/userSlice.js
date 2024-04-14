@@ -19,12 +19,13 @@ export const userSlice = createSlice({
             localStorage.setItem('token', action.payload.token);
         },
         // Reducer function for handling user logout
-        logout: (state) => {
+        logout: (state, action) => {
 
-            state.user = null
-            state.isLoggedIn = false
-            state.token = null
-            state.currentUser = null
+            state.user = action.payload.user;
+            state.isLoggedIn = action.payload.isLoggedIn;
+            state.token = action.payload.token;
+            state.currentUser = action.payload.currentUser;
+            state.watchlist = action.payload.watchlist;
 
             localStorage.removeItem('token');
         },

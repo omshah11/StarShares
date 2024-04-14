@@ -22,7 +22,9 @@ const App = () => {
   useEffect(() => {
     // Check if token exists in local storage or cookies
     const storedToken = localStorage.getItem("token");
+    console.log(storedToken);
     if (storedToken) {
+      console.log(storedToken);
       retrieveUser(storedToken);
     }
   }, []);
@@ -49,6 +51,7 @@ const App = () => {
       const lastName = response.data.user.lastName;
       const email = response.data.user.email;
       const password = response.data.user.password;
+      const watchlist = response.data.user.watchlist;
 
       // Assuming 'loggedIn' is derived from the userState or another logic
       const loggedIn = true;
@@ -61,10 +64,11 @@ const App = () => {
             firstName: firstName,
             lastName: lastName,
             email: email,
-            password: password,
+            password: password
           },
           isLoggedIn: loggedIn,
           token: userToken, // Include the token in the login action
+          watchlist: watchlist,
         })
       );
     } catch (error) {

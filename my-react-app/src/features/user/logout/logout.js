@@ -1,6 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout, selectUser } from '../userSlice'
+import Watchlist from '../watchlist/watchlist';
 
 const Logout = () => {
   const user = useSelector(selectUser); // Retrieving user data from Redux store
@@ -9,7 +10,13 @@ const Logout = () => {
   // Function to handle logout action
   const handleLogout = (e) => {
     e.preventDefault(); // Prevent default form submission behavior
-    dispatch(logout()); // Dispatching logout action
+    dispatch(logout(
+      user = [],
+      isLoggedIn = false,
+      token = null,
+      currentUser = [],
+      watchlist =  null
+    )); // Dispatching logout action
   };
   
   // Rendering logout button and user information

@@ -37,7 +37,10 @@ const Watchlist = () => {
 
     // Call getStocks when the component mounts and whenever watchlist changes
     sampleArtist();
-    getStocks();
+    if(watchlist) {
+      console.log("inside watchlist found")
+      getStocks();
+    }
   }, [watchlist]); // Dependency array ensures the effect is triggered when watchlist changes
 
   const sampleArtist = async () => {
@@ -100,7 +103,8 @@ const Watchlist = () => {
 
       const createWatchlist = await axios(createWatchlistConfig);
       const watchlistResp = createWatchlist.watchlist;
-      setUserWatchlist(watchlist);
+      console.log("watchlist resp: ", watchlistResp);
+      setWatchlist([]);
 
       dispatch(
         setUserWatchlist({
@@ -214,13 +218,15 @@ const Watchlist = () => {
 
   return (
     <div className="todo-list">
-      {user.watchlist ? (
+      {watchlist ? (
         <div>
           <WatchlistedStocks
             stockDetailedList={stockDetailedList}
             deleteStock={deleteFromWatchlist}
           />
+          <button onClick={() => addToWatchlist()}>Add</button>
         </div>
+        
       ) : (
         <div>
           <p>You do not have a Watchlist yet!</p>
@@ -229,7 +235,6 @@ const Watchlist = () => {
       )}
       <div>
         {/* <input value={stock} onChange={(e) => setStock(e.target.value)} /> */}
-        <button onClick={() => addToWatchlist()}>Add</button>
       </div>
     </div>
   );
