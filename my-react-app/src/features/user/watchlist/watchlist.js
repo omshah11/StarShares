@@ -121,6 +121,41 @@ const Watchlist = () => {
     }
   };
 
+  const deleteWatchlist = async () => {
+    const userId = user.user.id;
+    try {
+      const deleteWatchlistConfig = {
+        method: "post",
+        url: "http://localhost:5000/api/deleteWatchlist",
+        data: {
+          userId,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const deleteWatchlist = await axios(deleteWatchlistConfig);
+      const watchlistResp = deleteWatchlist;
+      setWatchlist(null);
+
+      dispatch(
+        setUserWatchlist({
+          watchlist: null,
+        })
+      );
+    } catch (error) {
+      // if (error.response.status === 201) {
+      //   const watchlistResp = error.response.data.watchlist;
+      //   setWatchlist(watchlistResp);
+      // } else {
+      //   console.error(error);
+      // }
+
+      console.error(error);
+    }
+  };
+
   const addToWatchlist = async () => {
     //sampleArtist();
     console.log("detailed stock list: ", stockDetailedList);
@@ -225,6 +260,7 @@ const Watchlist = () => {
             deleteStock={deleteFromWatchlist}
           />
           <button onClick={() => addToWatchlist()}>Add</button>
+          <button onClick={() => deleteWatchlist()}>Delete this Watchlist</button>
         </div>
         
       ) : (
