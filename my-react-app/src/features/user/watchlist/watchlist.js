@@ -13,7 +13,6 @@ const Watchlist = () => {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
   const [watchlist, setWatchlist] = useState(user.watchlist);
-  console.log("watchlist: ", watchlist);
   const [stockDetailedList, setStockDetailedList] = useState([]);
   const [stock, setStock] = useState("");
   const [accessToken, setAccessToken] = useState("");
@@ -36,9 +35,8 @@ const Watchlist = () => {
       .then((data) => setAccessToken(data.access_token));
 
     // Call getStocks when the component mounts and whenever watchlist changes
-    sampleArtist();
-    if(watchlist) {
-      console.log("inside watchlist found")
+    if (watchlist) {
+      sampleArtist();
       getStocks();
     }
   }, [watchlist]); // Dependency array ensures the effect is triggered when watchlist changes
@@ -52,12 +50,11 @@ const Watchlist = () => {
       },
     };
     let artistID = await fetch(
-      "https://api.spotify.com/v1/search?q=" + "Arijit" + "&type=album,artist",
+      "https://api.spotify.com/v1/search?q=" + "Future" + "&type=album,artist",
       searchParameters
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log("data received: ", data);
         setItems(data.artists.items);
       });
   };
@@ -103,7 +100,6 @@ const Watchlist = () => {
 
       const createWatchlist = await axios(createWatchlistConfig);
       const watchlistResp = createWatchlist.watchlist;
-      console.log("watchlist resp: ", watchlistResp);
       setWatchlist([]);
 
       dispatch(
@@ -145,23 +141,11 @@ const Watchlist = () => {
         })
       );
     } catch (error) {
-      // if (error.response.status === 201) {
-      //   const watchlistResp = error.response.data.watchlist;
-      //   setWatchlist(watchlistResp);
-      // } else {
-      //   console.error(error);
-      // }
-
       console.error(error);
     }
   };
 
   const addToWatchlist = async () => {
-    //sampleArtist();
-    console.log("detailed stock list: ", stockDetailedList);
-    //let updatedItems = await sampleArtist();
-    console.log("exited sample artist function");
-    console.log("item : ", items);
     let artistStock = items[0];
     const userId = user.user.id;
     let stockId = "";
@@ -182,7 +166,6 @@ const Watchlist = () => {
       };
 
       const addStockToDBresponse = await axios(addStockToDB);
-      console.log(addStockToDBresponse);
       stockId = addStockToDBresponse.data.stock._id;
     } catch (error) {
       if (error.response.status === 400) {
@@ -191,9 +174,6 @@ const Watchlist = () => {
         console.error(error);
       }
     }
-
-    console.log("user Id: ", userId);
-    console.log("stock Id: ", stockId);
 
     try {
       const addStockToWatchlist = {
@@ -207,8 +187,6 @@ const Watchlist = () => {
           "Content-Type": "application/json",
         },
       };
-
-      // Send the signup request
       const response = await axios(addStockToWatchlist);
       setWatchlist([...watchlist, stockId]); // Spread the previous watchlist and add the new stock
 
@@ -236,8 +214,6 @@ const Watchlist = () => {
           "Content-Type": "application/json",
         },
       };
-
-      // Send the signup request
       const response = await axios(deleteFromWatchlist);
       setWatchlist(watchlist.filter((stock) => stock !== stockId));
 
@@ -259,19 +235,28 @@ const Watchlist = () => {
             stockDetailedList={stockDetailedList}
             deleteStock={deleteFromWatchlist}
           />
-          <button onClick={() => addToWatchlist()}>Add</button>
-          <button onClick={() => deleteWatchlist()}>Delete this Watchlist</button>
+          <div class="flex justify-between">
+            <button
+              className="self-start px-10 py-3 text-lg font-medium rounded-3xl bgcolorSS whiteSS"
+              onClick={() => addToWatchlist()}
+            >
+              Add Artist Stock
+            </button>
+            <button
+              className="self-start px-10 py-3 text-lg font-medium rounded-3xl bgcolorSS whiteSS"
+              onClick={() => deleteWatchlist()}
+            >
+              Delete this Watchlist
+            </button>
+          </div>
         </div>
-        
       ) : (
         <div>
           <p>You do not have a Watchlist yet!</p>
           <button onClick={() => createWatchlist()}>Create</button>
         </div>
       )}
-      <div>
-        {/* <input value={stock} onChange={(e) => setStock(e.target.value)} /> */}
-      </div>
+      <div></div>
     </div>
   );
 };

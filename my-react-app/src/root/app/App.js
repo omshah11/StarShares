@@ -22,9 +22,7 @@ const App = () => {
   useEffect(() => {
     // Check if token exists in local storage or cookies
     const storedToken = localStorage.getItem("token");
-    console.log(storedToken);
     if (storedToken) {
-      console.log(storedToken);
       retrieveUser(storedToken);
     }
   }, []);

@@ -5,7 +5,6 @@ import { logout, selectToken, selectUser } from '../userSlice'
 
 const LandingPage = () => {
   const user = useSelector(selectUser);
-  console.log("landing page: ", user);
   const userDetails = user.user;
   const dispatch = useDispatch();
   const navigate = useNavigate();
