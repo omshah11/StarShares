@@ -5,7 +5,7 @@ import { selectRecentlyViewedArtists } from '../userSlice'; // Import selectors 
 const CLIENT_ID =                                                                         "2f6e085b55bc4ede9131e2d7d7739c30";
 const CLIENT_SECRET =                                                                      "88eeb98034e5422099cce4f6467a3d51";
 
-const fetchArtistDetails = async (artistID, accessToken) => {
+export const fetchArtistDetails = async (artistID, accessToken) => {
   const artistResponse = await fetch(`https://api.spotify.com/v1/artists/${artistID}`, {
     headers: {
       'Authorization': 'Bearer ' + accessToken
@@ -15,7 +15,7 @@ const fetchArtistDetails = async (artistID, accessToken) => {
   return artistData;
 }
 
-const fetchAccessToken = async () => {
+export const fetchAccessToken = async (CLIENT_ID, CLIENT_SECRET) => {
   const response = await fetch('https://accounts.spotify.com/api/token', {
     method: 'POST',
     headers: {
@@ -36,7 +36,7 @@ const RecentlyViewedArtist = () => {
     console.log("this is recently:" + recentlyViewedArtists);
     // fetch recentlyviewedartists from db
     if (recentlyViewedArtists) {
-      fetchAccessToken().then(async accessToken => {
+      fetchAccessToken(CLIENT_ID, CLIENT_SECRET).then(async accessToken => {
         console.log(accessToken);
         const detailsPromises = recentlyViewedArtists.map(artistID => fetchArtistDetails(artistID, accessToken));
         const artistDetails = await Promise.all(detailsPromises);
@@ -85,3 +85,5 @@ const RecentlyViewedArtist = () => {
 };
 
 export default RecentlyViewedArtist;
+
+
