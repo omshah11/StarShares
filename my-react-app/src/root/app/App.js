@@ -12,19 +12,23 @@ import SignUp from "../../features/signup/signup";
 import ArtistPage from '../../features/artist/ArtistPage';
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "../../features/user/userSlice";
-import { login, logout } from "../../features/user//userSlice";
+import { login, logout } from "../../features/user/userSlice";
 import "../../index.css"; // import Tailwind CSS main file 
+import { fetchRecentlyViewedArtists } from '../../features/user/actions'; // Import the fetchRecentlyViewedArtists action
 
 const App = () => {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
 
   useEffect(() => {
+    // Dispatch fetchRecentlyViewedArtists only when the component mounts
+    dispatch(fetchRecentlyViewedArtists());
     // Check if token exists in local storage or cookies
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       retrieveUser(storedToken);
     }
+    
   }, []);
 
   const retrieveUser = async (userToken) => {
@@ -48,7 +52,7 @@ const App = () => {
       const lastName = response.data.user.lastName;
       const email = response.data.user.email;
       const password = response.data.user.password;
-
+      const userId = response.data.user._id;
       // Assuming 'loggedIn' is derived from the userState or another logic
       const loggedIn = true;
 
@@ -56,6 +60,7 @@ const App = () => {
       dispatch(
         login({
           user: {
+            userId: userId,
             firstName: firstName,
             lastName: lastName,
             email: email,
@@ -71,6 +76,7 @@ const App = () => {
         // Token is expired, handle it silently
         dispatch(
           logout({
+            userId: null,
             user: {},
             isLoggedIn: false,
             token: null,
@@ -81,6 +87,7 @@ const App = () => {
       }
     }
   };
+
 
   return (
     <Router>

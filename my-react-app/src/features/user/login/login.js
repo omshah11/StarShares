@@ -36,14 +36,15 @@ const Login = () => {
       const token = response.data.token;
       const firstName = response.data.user.firstName;
       const lastName = response.data.user.lastName
-  
+      const userId = response.data.user._id;
       // Assuming 'loggedIn' is derived from the userState or another logic
       const loggedIn = true;
-  
+
       // Dispatching the login action with separate properties for user and isLoggedIn
       dispatch(
         login({
           user: {
+            userId: userId,
             firstName: firstName,
             lastName: lastName,
             email: email,
@@ -58,10 +59,12 @@ const Login = () => {
       dispatch(
         setCurrentUser({
           user: {
+            userId: userId,
             firstName: firstName,
             lastName: lastName,
             email: email,
             password: password,
+            token: token
           },
         })
       );
@@ -69,7 +72,7 @@ const Login = () => {
     } catch (error) {
       // Handle error, log it, or show a user-friendly message
       console.error("Error during login:", error);
-      // Kanayo Anyakpor Worked On Styling Components.
+    
     }
   };
 
@@ -78,7 +81,7 @@ const Login = () => {
     
 
       <div className=" hidden lg:block w-full md:w-1/2 xl:w-2/3 h-screen">
-      <img className="ml-auto  object-left object-cover w-full h-full" src={Loginimg}/>
+      <img className="ml-auto object-left object-cover w-full h-full" src={Loginimg}/>
       </div>
 
     <div className="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12
