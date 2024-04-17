@@ -14,7 +14,6 @@ const Watchlist = () => {
   const dispatch = useDispatch();
   const [watchlist, setWatchlist] = useState(user.watchlist);
   const [stockDetailedList, setStockDetailedList] = useState([]);
-  const [stock, setStock] = useState("");
   const [accessToken, setAccessToken] = useState("");
   const [items, setItems] = useState([]);
 
