@@ -6,7 +6,8 @@ export const userSlice = createSlice({
     initialState: { // Initial state of the slice
         user: {}, // User data
         isLoggedIn: false, // Boolean indicating whether the user is logged in or not
-        token: null // User token
+        token: null, // User token
+        watchlist: null
     },
     reducers: {
         // Reducer function for handling user login
@@ -18,12 +19,13 @@ export const userSlice = createSlice({
             localStorage.setItem('token', action.payload.token);
         },
         // Reducer function for handling user logout
-        logout: (state) => {
+        logout: (state, action) => {
 
-            state.user = null
-            state.isLoggedIn = false
-            state.token = null
-            state.currentUser = null
+            state.user = action.payload.user;
+            state.isLoggedIn = action.payload.isLoggedIn;
+            state.token = action.payload.token;
+            state.currentUser = action.payload.currentUser;
+            state.watchlist = action.payload.watchlist;
 
             localStorage.removeItem('token');
         },
@@ -31,11 +33,15 @@ export const userSlice = createSlice({
         setCurrentUser: (state, action) => {
             state.currentUser = action.payload.user; // Set current user
         },
+        // Reducer function for setting user watchlist
+        setUserWatchlist: (state, action) => {
+            state.watchlist = action.payload.watchlist
+        }
     },
 });
 
 // Export actions for user login, logout, and setting current user
-export const { login, logout, setCurrentUser } = userSlice.actions;
+export const { login, logout, setCurrentUser, setUserWatchlist } = userSlice.actions;
 
 
 export const selectUser = (state) => state.user;

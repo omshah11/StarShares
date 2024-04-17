@@ -45,10 +45,12 @@ const App = () => {
       // Send the login request
       const response = await axios(configuration);
 
+      const userId = response.data.user._id;
       const firstName = response.data.user.firstName;
       const lastName = response.data.user.lastName;
       const email = response.data.user.email;
       const password = response.data.user.password;
+      const watchlist = response.data.user.watchlist;
 
       // Assuming 'loggedIn' is derived from the userState or another logic
       const loggedIn = true;
@@ -57,13 +59,15 @@ const App = () => {
       dispatch(
         login({
           user: {
+            id: userId,
             firstName: firstName,
             lastName: lastName,
             email: email,
-            password: password,
+            password: password
           },
           isLoggedIn: loggedIn,
           token: userToken, // Include the token in the login action
+          watchlist: watchlist,
         })
       );
     } catch (error) {
