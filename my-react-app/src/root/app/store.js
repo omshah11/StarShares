@@ -4,10 +4,12 @@ import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import counterReducer from '../../features/counter/counterSlice';
 import userReducer from '../../features/user/userSlice';
+import searchReducer from '../../features/user/search/searchSlice'
 
 const rootReducer = combineReducers({
   user: userReducer,
   counter: counterReducer,
+  searchQuery: searchReducer
   // Add other reducers as needed
 });
 
