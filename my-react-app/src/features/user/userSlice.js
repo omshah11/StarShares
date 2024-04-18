@@ -4,7 +4,7 @@ import { fetchRecentlyViewedArtists, addRecentlyViewedArtist, removeRecentlyView
 export const userSlice = createSlice({
     name: 'user',
     initialState: {
-        id: null,
+        userId: null,
         user: {},
         isLoggedIn: false,
         token: null,

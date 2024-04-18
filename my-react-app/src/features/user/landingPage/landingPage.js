@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout, selectToken, selectUser, selectRecentlyViewedArtists } from '../userSlice'
+import RecentlyViewedArtist from './RecentlyViewedArtist';
 import Logo from '../../../Imgs/starsharesLogo.png';
 
 const LandingPage = () => {
@@ -51,7 +52,7 @@ const LandingPage = () => {
       </div>
       <div>
         <h1 className='text-4xl font-semibold text-[#37515F] my-24'>Recently Viewed Artists</h1>
-        IMPLEMENT WHEN SEARCH IS PULLED
+        <RecentlyViewedArtist/>
       </div>
 
       <div>

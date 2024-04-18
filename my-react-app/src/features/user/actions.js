@@ -29,10 +29,10 @@ export const addRecentlyViewedArtist = createAsyncThunk(
 export const removeRecentlyViewedArtist = createAsyncThunk(
   'user/removeRecentlyViewedArtist',
   async (_, { getState }) => {
-    const userID = getUserIdFromState(getState()); // Modify this function to get userId from the state
+    const userId = getUserIdFromState(getState()); // Modify this function to get userId from the state
     const token = selectToken(getState());
     await axios.delete('/recently-viewed-artists', {
-      data: { userID },
+      data: { userId },
       headers: { Authorization: `Bearer ${token}` },
     });
   }

@@ -51,7 +51,7 @@ const Login = () => {
       dispatch(
         login({
           user: {
-            id: userId,
+            userid: userId,
             firstName: firstName,
             lastName: lastName,
             email: email,
