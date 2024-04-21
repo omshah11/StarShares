@@ -199,12 +199,6 @@ const Watchlist = () => {
           <div class="flex justify-between">
             <button
               className="self-start px-10 py-3 text-lg font-medium rounded-3xl bgcolorSS whiteSS"
-              onClick={() => addToWatchlist()}
-            >
-              Add Artist Stock
-            </button>
-            <button
-              className="self-start px-10 py-3 text-lg font-medium rounded-3xl bgcolorSS whiteSS"
               onClick={() => deleteWatchlist()}
             >
               Delete this Watchlist
