@@ -6,6 +6,7 @@ export const fetchRecentlyViewedArtists = createAsyncThunk(
   'user/fetchRecentlyViewedArtists',
   async (_, { getState }) => {
     const userId = getUserIdFromState(getState()); // Modify this function to get userId from the state
+    console.log('userId:', userId)
     const token = selectToken(getState());
     const response = await axios.get(`http://localhost:5000/api/recently-viewed-artists?userId=${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -17,14 +18,27 @@ export const fetchRecentlyViewedArtists = createAsyncThunk(
 export const addRecentlyViewedArtist = createAsyncThunk(
   'user/addRecentlyViewedArtist',
   async (artistId, { getState }) => {
-    const userId = getUserIdFromState(getState()); // Modify this function to get userId from the state
+    // Get the user ID and token from the Redux state
+    const userId = getUserIdFromState(getState()) 
+    console.log('userId:', userId)
     const token = selectToken(getState());
-    await axios.post('/recently-viewed-artists', { userId, artistId }, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return artistId;
+
+    try {
+      // Make the axios post request to add the recently viewed artist
+      await axios.post(`http://localhost:5000/api/recently-viewed-artists?userId=${userId}&artistId=${artistId}`, null, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
+      // Return the artistId
+      return artistId;
+    } catch (error) {
+      // Handle any errors
+      console.error('Error adding recently viewed artist:', error);
+      throw error; // Rethrow the error to be caught by the component
+    }
   }
 );
+
 
 export const removeRecentlyViewedArtist = createAsyncThunk(
   'user/removeRecentlyViewedArtist',

@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectUser, setUserWatchlist } from "../user/userSlice";
 import { fetchAccessToken } from "../user/landingPage/RecentlyViewedArtist";
 import { fetchArtistDetails } from "../user/landingPage/RecentlyViewedArtist";
+import { addRecentlyViewedArtist } from "../user/actions";
+
 import axios from "axios";
 
 const ArtistPage = () => {
@@ -11,11 +13,15 @@ const ArtistPage = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [watchlist, setWatchlist] = useState(user.watchlist);
+  const userId = user.userid;
   const queryParams = new URLSearchParams(location.search);
+
   const name = queryParams.get("name");
   const id = queryParams.get("id");
+
   const CLIENT_ID = "2f6e085b55bc4ede9131e2d7d7739c30";
   const CLIENT_SECRET = "88eeb98034e5422099cce4f6467a3d51";
+
   const [stockId, setStockId] = useState("");
   const [addedToWatchlist, setAddedToWatchlist] = useState(false);
   const [artistImage, setArtistImage] = useState(null);
@@ -42,6 +48,15 @@ const ArtistPage = () => {
     getArtistStockId(name);
     fetchData();
   }, [id, watchlist]);
+
+  useEffect(() => {
+    console.log(id);
+    if (id) {
+      dispatch(addRecentlyViewedArtist(id));
+    }
+  }, [id, dispatch]);
+  
+  
 
   const fetchArtistTopTracks = async (artistID, accessToken) => {
     const artistResponse = await fetch(
