@@ -72,6 +72,11 @@ const ArtistPage = () => {
   };
 
   const playSnippet = (previewUrl) => {
+    if (previewUrl === null) {
+      alert("Preview not available");
+      return;
+    }
+
     if (!isPlaying) {
       const audio = new Audio(previewUrl);
       setIsPlaying(true);
