@@ -240,8 +240,6 @@ const ArtistPage = () => {
                       >
                         Buy
                       </button>
-                    </div>
-                    <div className="py-6 px-3 mt-32 sm:mt-0">
                       <button
                         style={{ backgroundColor: "#F00000" }}
                         className="bg-green-500 active:bg-green-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
@@ -251,7 +249,7 @@ const ArtistPage = () => {
                       </button>
                       {addedToWatchlist ? (
                         <button
-                          style={{ backgroundColor: "#F00000" }}
+                          style={{ backgroundColor: "#0F0F0F" }}
                           className="bg-green-500 active:bg-green-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                           type="button"
                           onClick={() => deleteFromWatchlist(stockId)}
@@ -260,7 +258,7 @@ const ArtistPage = () => {
                         </button>
                       ) : (
                         <button
-                          style={{ backgroundColor: "#00F000" }}
+                          style={{ backgroundColor: "#0F0F0F" }}
                           className="bg-green-500 active:bg-green-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                           type="button"
                           onClick={() => addToWatchlist(name, artistImage)}
