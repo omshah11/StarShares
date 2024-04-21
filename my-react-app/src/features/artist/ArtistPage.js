@@ -5,7 +5,6 @@ import { selectUser, setUserWatchlist } from "../user/userSlice";
 import { fetchAccessToken } from "../user/landingPage/RecentlyViewedArtist";
 import { fetchArtistDetails } from "../user/landingPage/RecentlyViewedArtist";
 import axios from "axios";
-import Watchlist from "../user/watchlist/watchlist";
 
 const ArtistPage = () => {
   const user = useSelector(selectUser);
@@ -14,11 +13,11 @@ const ArtistPage = () => {
   const [watchlist, setWatchlist] = useState(user.watchlist);
   const queryParams = new URLSearchParams(location.search);
   const name = queryParams.get("name");
-  console.log("name: ", name);
   const id = queryParams.get("id");
   const CLIENT_ID = "2f6e085b55bc4ede9131e2d7d7739c30";
   const CLIENT_SECRET = "88eeb98034e5422099cce4f6467a3d51";
-
+  const [stockId, setStockId] = useState("");
+  const [addedToWatchlist, setAddedToWatchlist] = useState(false);
   const [artistImage, setArtistImage] = useState(null);
   const [artistGenre, setArtistGenre] = useState(null);
   const [topTracks, setTopTracks] = useState([]);
@@ -40,9 +39,9 @@ const ArtistPage = () => {
         console.error("Error fetching artist details:", error);
       }
     };
-
+    getArtistStockId(name);
     fetchData();
-  }, [id]);
+  }, [id, watchlist]);
 
   const fetchArtistTopTracks = async (artistID, accessToken) => {
     const artistResponse = await fetch(
@@ -69,16 +68,31 @@ const ArtistPage = () => {
     }
   };
 
+  const getArtistStockId = async (artistName) => {
+    try {
+      const getStockId = {
+        method: "get",
+        url: "http://localhost:5000/api/getStockByName",
+        params: {
+          artistName,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const getStockIdResponse = await axios(getStockId);
+      setStockId(getStockIdResponse.data.stock._id);
+      const isArtistInWatchlist = watchlist.includes(getStockIdResponse.data.stock._id);
+      setAddedToWatchlist(isArtistInWatchlist);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   const addToWatchlist = async (artistName, artistImage) => {
-    console.log("reached inside addToWatchlist");
-    console.log("artist name: ", artistName);
-    console.log("artist image: ", artistImage);
-    //let artistStock = items[0];
-    console.log("user: ", user);
     const userId = user.user.userid;
     let stockId = "";
-    // const artistName = artistStock.name;
-    // const artistImage = artistStock.images[0];
 
     try {
       const addStockToDB = {
@@ -104,9 +118,6 @@ const ArtistPage = () => {
       }
     }
 
-    console.log("Stock id: ", stockId);
-    console.log("userId: ", userId);
-
     try {
       const addStockToWatchlist = {
         method: "post",
@@ -125,6 +136,35 @@ const ArtistPage = () => {
       dispatch(
         setUserWatchlist({
           watchlist: [...watchlist, stockId],
+        })
+      );
+    } catch (error) {
+      console.error(error);
+    }
+
+    setAddedToWatchlist(true);
+  };
+
+  const deleteFromWatchlist = async (stockId) => {
+    const userId = user.user.userid;
+    try {
+      const deleteFromWatchlist = {
+        method: "post",
+        url: "http://localhost:5000/api/deleteFromWatchlist",
+        data: {
+          userId,
+          stockId,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const response = await axios(deleteFromWatchlist);
+      setWatchlist(prevWatchlist => prevWatchlist.filter(stock => stock !== stockId));
+
+      dispatch(
+        setUserWatchlist({
+          watchlist: watchlist.filter(stock => stock !== stockId),
         })
       );
     } catch (error) {
@@ -209,7 +249,25 @@ const ArtistPage = () => {
                       >
                         Sell
                       </button>
-                      <button onClick={() => addToWatchlist(name, artistImage)}>Add to Watchlist</button>
+                      {addedToWatchlist ? (
+                        <button
+                          style={{ backgroundColor: "#F00000" }}
+                          className="bg-green-500 active:bg-green-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
+                          type="button"
+                          onClick={() => deleteFromWatchlist(stockId)}
+                        >
+                          Delete from Watchlist
+                        </button>
+                      ) : (
+                        <button
+                          style={{ backgroundColor: "#00F000" }}
+                          className="bg-green-500 active:bg-green-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
+                          type="button"
+                          onClick={() => addToWatchlist(name, artistImage)}
+                        >
+                          Add to Watchlist
+                        </button>
+                      )}
                     </div>
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:order-1">

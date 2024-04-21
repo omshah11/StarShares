@@ -111,15 +111,8 @@ const Watchlist = () => {
   };
 
   const addToWatchlist = async (artistName, artistImage) => {
-    console.log("reached inside addToWatchlist");
-    console.log("artist name: ", artistName);
-    console.log("artist image: ", artistImage);
-    //let artistStock = items[0];
-    console.log("user: ", user);
     const userId = user.user.userid;
     let stockId = "";
-    // const artistName = artistStock.name;
-    // const artistImage = artistStock.images[0];
 
     try {
       const addStockToDB = {
@@ -144,9 +137,6 @@ const Watchlist = () => {
       }
     }
 
-    console.log("Stock id: ", stockId);
-    console.log("userId: ", userId);
-
     try {
       const addStockToWatchlist = {
         method: "post",
@@ -161,7 +151,6 @@ const Watchlist = () => {
       };
       const response = await axios(addStockToWatchlist);
       setWatchlist([...watchlist, stockId]); // Spread the previous watchlist and add the new stock
-      console.log("watchlist: ", watchlist);
       dispatch(
         setUserWatchlist({
           watchlist: [...watchlist, stockId],
@@ -173,7 +162,6 @@ const Watchlist = () => {
   };
 
   const deleteFromWatchlist = async (stockId) => {
-    console.log("stock: ", stockId);
     const userId = user.user.userid;
     try {
       const deleteFromWatchlist = {
@@ -189,8 +177,6 @@ const Watchlist = () => {
       };
       const response = await axios(deleteFromWatchlist);
       setWatchlist(prevWatchlist => prevWatchlist.filter(stock => stock !== stockId));
-
-      console.log("watchlist: ", watchlist);
 
       dispatch(
         setUserWatchlist({
