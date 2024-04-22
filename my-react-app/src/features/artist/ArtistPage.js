@@ -111,7 +111,7 @@ const ArtistPage = () => {
   }
 
   const addToWatchlist = async (artistName, artistImage) => {
-    const userId = user.user.userid;
+    const userId = user.user.userId;
     let stockId = "";
 
     try {
@@ -137,7 +137,6 @@ const ArtistPage = () => {
         console.error(error);
       }
     }
-
     try {
       const addStockToWatchlist = {
         method: "post",
@@ -166,7 +165,7 @@ const ArtistPage = () => {
   };
 
   const deleteFromWatchlist = async (stockId) => {
-    const userId = user.user.userid;
+    const userId = user.user.userId;
     try {
       const deleteFromWatchlist = {
         method: "post",
