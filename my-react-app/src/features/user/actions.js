@@ -6,7 +6,6 @@ export const fetchRecentlyViewedArtists = createAsyncThunk(
   'user/fetchRecentlyViewedArtists',
   async (_, { getState }) => {
     const userId = getUserIdFromState(getState()); // Modify this function to get userId from the state
-    console.log('userId:', userId)
     const token = selectToken(getState());
     const response = await axios.get(`http://localhost:5000/api/recently-viewed-artists?userId=${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -20,7 +19,6 @@ export const addRecentlyViewedArtist = createAsyncThunk(
   async (artistId, { getState }) => {
     // Get the user ID and token from the Redux state
     const userId = getUserIdFromState(getState()) 
-    console.log('userId:', userId)
     const token = selectToken(getState());
 
     try {
