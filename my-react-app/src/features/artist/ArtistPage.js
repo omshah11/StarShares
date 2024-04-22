@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectUser, setUserWatchlist } from "../user/userSlice";
 import { fetchAccessToken } from "../user/landingPage/RecentlyViewedArtist";
 import { fetchArtistDetails } from "../user/landingPage/RecentlyViewedArtist";
+import { addRecentlyViewedArtist } from "../user/actions";
+
 import axios from "axios";
 
 const ArtistPage = () => {
@@ -11,11 +13,15 @@ const ArtistPage = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [watchlist, setWatchlist] = useState(user.watchlist);
+  const userId = user.userid;
   const queryParams = new URLSearchParams(location.search);
+
   const name = queryParams.get("name");
   const id = queryParams.get("id");
+
   const CLIENT_ID = "2f6e085b55bc4ede9131e2d7d7739c30";
   const CLIENT_SECRET = "88eeb98034e5422099cce4f6467a3d51";
+
   const [stockId, setStockId] = useState("");
   const [addedToWatchlist, setAddedToWatchlist] = useState(false);
   const [artistImage, setArtistImage] = useState(null);
@@ -43,6 +49,15 @@ const ArtistPage = () => {
     fetchData();
   }, [id, watchlist]);
 
+  useEffect(() => {
+    console.log(id);
+    if (id) {
+      dispatch(addRecentlyViewedArtist(id));
+    }
+  }, [id, dispatch]);
+  
+  
+
   const fetchArtistTopTracks = async (artistID, accessToken) => {
     const artistResponse = await fetch(
       `https://api.spotify.com/v1/artists/${artistID}/top-tracks?country=US`,
@@ -57,6 +72,11 @@ const ArtistPage = () => {
   };
 
   const playSnippet = (previewUrl) => {
+    if (previewUrl === null) {
+      alert("Preview not available");
+      return;
+    }
+
     if (!isPlaying) {
       const audio = new Audio(previewUrl);
       setIsPlaying(true);
@@ -240,8 +260,6 @@ const ArtistPage = () => {
                       >
                         Buy
                       </button>
-                    </div>
-                    <div className="py-6 px-3 mt-32 sm:mt-0">
                       <button
                         style={{ backgroundColor: "#F00000" }}
                         className="bg-green-500 active:bg-green-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
@@ -251,7 +269,7 @@ const ArtistPage = () => {
                       </button>
                       {addedToWatchlist ? (
                         <button
-                          style={{ backgroundColor: "#F00000" }}
+                          style={{ backgroundColor: "#0F0F0F" }}
                           className="bg-green-500 active:bg-green-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                           type="button"
                           onClick={() => deleteFromWatchlist(stockId)}
@@ -260,7 +278,7 @@ const ArtistPage = () => {
                         </button>
                       ) : (
                         <button
-                          style={{ backgroundColor: "#00F000" }}
+                          style={{ backgroundColor: "#0F0F0F" }}
                           className="bg-green-500 active:bg-green-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                           type="button"
                           onClick={() => addToWatchlist(name, artistImage)}
