@@ -162,7 +162,7 @@ const Watchlist = () => {
   };
 
   const deleteFromWatchlist = async (stockId) => {
-    const userId = user.user.userid;
+    const userId = user.user.userId;
     try {
       const deleteFromWatchlist = {
         method: "post",
