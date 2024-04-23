@@ -108,13 +108,17 @@ const SearchPage = () => {
     
   }
 
+  function msToMinutesAndSeconds(durationInMs) {
+    const minutes = Math.floor(durationInMs / 60000); // 1 minute = 60000 milliseconds
+    const seconds = ((durationInMs % 60000) / 1000).toFixed(0); // Remaining milliseconds after minutes converted to seconds
+    return `${minutes}:${(seconds < 10 ? '0' : '')}${seconds}`; // Format seconds with leading zero if less than 10
+  }
+
   const handleFilterChange = (filterName) => {
     setFilters(prevFilters => ({
       ...prevFilters,
       [filterName]: !prevFilters[filterName]
     }));
-    // search(searchInput)
-    // console.log(filters)
   }
 
   const handleCardClick = (track) => {
@@ -206,6 +210,30 @@ const SearchPage = () => {
                         )}
                       </div>
                       <div className="right">
+                        Album: {selectedCard.album.name}<br></br>
+                        Track number: {selectedCard.track_number}<br></br>
+                        Release date: {selectedCard.album.release_date}<br></br>
+                        Run time: {msToMinutesAndSeconds(selectedCard.duration_ms)}
+                        {selectedCard.artists.map((artist) => (
+                        <Button
+                          key={artist.id}
+                          variant="outline-primary"
+                          className="stockBtn"
+                          onClick={() => handleStockBtn(artist.name, artist.id)}
+                        >
+                          {artist.name}
+                        </Button>
+                      ))}
+                      </div>
+                    </>
+                  ) : selectedCard.type === 'album' ? (
+                    <>
+                      <div className="left">
+                        {selectedCard && selectedCard.images && selectedCard.images.length > 0 && (
+                          <img src={selectedCard.images[0].url} alt={selectedCard.name} style={{ width: '100%', height: 'auto' }} />
+                        )}
+                      </div>
+                      <div className="right">
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
                         {/* <p>{selectedCard.artists.map(artist => artist.name).join(', ')}</p> */}
                         {/* <Button className="stockBtn">Artist Page</Button> */}
@@ -236,31 +264,7 @@ const SearchPage = () => {
                   )}
                   </>
                 )}
-                {/* {selectedCard.type === 'track' ? (
-                  <>
-                    <div className="left">
-                      {selectedCard && selectedCard.album.images && selectedCard.album.images.length > 0 && (
-                        <img src={selectedCard.album.images[0].url} alt={selectedCard.name} style={{ width: '100%', height: 'auto' }} />
-                      )}
-                    </div>
-                    <div className="right">
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-                      <Button className="stockBtn">Artist Page</Button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="left">
-                      {selectedCard && selectedCard.images && selectedCard.images.length > 0 && (
-                        <img src={selectedCard.images[0].url} alt={selectedCard.name} style={{ width: '100%', height: 'auto' }} />
-                      )}
-                    </div>
-                    <div className="right">
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-                      <Button className="stockBtn" onClick={handleStockBtn(selectedCard.name)}>{selectedCard.name}</Button>
-                    </div>
-                  </>
-                )} */}
+               
               </Modal.Body>
             </div>
           </div>
