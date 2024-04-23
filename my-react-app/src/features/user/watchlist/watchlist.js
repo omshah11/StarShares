@@ -18,45 +18,11 @@ const Watchlist = () => {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    var authParameters = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body:
-        "grant_type=client_credentials&client_id=" +
-        CLIENT_ID +
-        "&client_secret=" +
-        CLIENT_SECRET,
-    };
-    fetch("https://accounts.spotify.com/api/token", authParameters)
-      .then((result) => result.json())
-      .then((data) => setAccessToken(data.access_token));
-
     // Call getStocks when the component mounts and whenever watchlist changes
     if (watchlist) {
-      sampleArtist();
       getStocks();
     }
   }, [watchlist]); // Dependency array ensures the effect is triggered when watchlist changes
-
-  const sampleArtist = async () => {
-    let searchParameters = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + accessToken,
-      },
-    };
-    let artistID = await fetch(
-      "https://api.spotify.com/v1/search?q=" + "Future" + "&type=album,artist",
-      searchParameters
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setItems(data.artists.items);
-      });
-  };
 
   const getStocks = async () => {
     setStockDetailedList([]);
@@ -144,12 +110,9 @@ const Watchlist = () => {
     }
   };
 
-  const addToWatchlist = async () => {
-    let artistStock = items[0];
-    const userId = user.user.id;
+  const addToWatchlist = async (artistName, artistImage) => {
+    const userId = user.user.userid;
     let stockId = "";
-    const artistName = artistStock.name;
-    const artistImage = artistStock.images[0];
 
     try {
       const addStockToDB = {
@@ -188,7 +151,6 @@ const Watchlist = () => {
       };
       const response = await axios(addStockToWatchlist);
       setWatchlist([...watchlist, stockId]); // Spread the previous watchlist and add the new stock
-
       dispatch(
         setUserWatchlist({
           watchlist: [...watchlist, stockId],
@@ -200,7 +162,7 @@ const Watchlist = () => {
   };
 
   const deleteFromWatchlist = async (stockId) => {
-    const userId = user.user.id;
+    const userId = user.user.userId;
     try {
       const deleteFromWatchlist = {
         method: "post",
@@ -214,11 +176,11 @@ const Watchlist = () => {
         },
       };
       const response = await axios(deleteFromWatchlist);
-      setWatchlist(watchlist.filter((stock) => stock !== stockId));
+      setWatchlist(prevWatchlist => prevWatchlist.filter(stock => stock !== stockId));
 
       dispatch(
         setUserWatchlist({
-          watchlist: watchlist,
+          watchlist: watchlist.filter(stock => stock !== stockId),
         })
       );
     } catch (error) {
@@ -235,12 +197,6 @@ const Watchlist = () => {
             deleteStock={deleteFromWatchlist}
           />
           <div class="flex justify-between">
-            <button
-              className="self-start px-10 py-3 text-lg font-medium rounded-3xl bgcolorSS whiteSS"
-              onClick={() => addToWatchlist()}
-            >
-              Add Artist Stock
-            </button>
             <button
               className="self-start px-10 py-3 text-lg font-medium rounded-3xl bgcolorSS whiteSS"
               onClick={() => deleteWatchlist()}
