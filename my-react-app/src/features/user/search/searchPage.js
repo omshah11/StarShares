@@ -214,7 +214,7 @@ const SearchPage = () => {
                           key={artist.id}
                           variant="outline-primary"
                           className="stockBtn"
-                          // onClick={() => handleArtistClick(artist)}
+                          onClick={() => handleStockBtn(artist.name, artist.id)}
                         >
                           {artist.name}
                         </Button>
