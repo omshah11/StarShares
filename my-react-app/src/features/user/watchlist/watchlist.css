@@ -1,0 +1,8 @@
+.todo-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+   }
+   .todo-item p {
+    color: white;
+   }
