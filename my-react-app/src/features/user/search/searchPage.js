@@ -17,7 +17,6 @@ const SearchPage = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const location = useLocation();
   const dispatch = useDispatch();
-  const currentDate = Date.now();
   const navigate = useNavigate();
   const [filters, setFilters] = useState({
     artist: true,
@@ -139,7 +138,51 @@ const SearchPage = () => {
 
   const fb = () => {
     search(searchInput)
+    handleSearchSubmit()
+    fetchArtistDescription(searchResults[0].id)
+    console.log("bruh")
+    // console.log(artistDescription)
   }
+
+  const [artistDescription, setArtistDescription] = useState('');
+  const fetchArtistDescription = async (artistId) => {
+    try {
+      const response = await fetch(
+        `https://api.genius.com/artists/${artistId}?access_token=g8J7SWDhjrS2W1eVOmZSubSEtv2HJyBzRT1OEHR_NWOoj8tbu739v7u2RtN6dsJV`
+      );
+      if (!response.ok) {
+        throw new Error('Failed to fetch artist description');
+      }
+      const data = await response.json();
+      // setArtistDescription(data.response.artist.description.plain);
+      setArtistDescription(data.response.artist.description.dom.children);
+      console.log(artistDescription)
+    } catch (error) {
+      console.error('Error fetching artist description:', error);
+    }
+  };
+
+  const [searchResults, setSearchResults] = useState([]);
+  const handleSearchSubmit = async (event) => {
+    // event.preventDefault();
+    try {
+      const response = await fetch(
+        `https://api.genius.com/search?q=${encodeURIComponent(searchInput)}&access_token=g8J7SWDhjrS2W1eVOmZSubSEtv2HJyBzRT1OEHR_NWOoj8tbu739v7u2RtN6dsJV`
+      );
+      if (!response.ok) {
+        throw new Error('Failed to search for artists');
+      }
+      const data = await response.json(); 
+      setSearchResults(data.response.hits.map(hit => ({
+        id: hit.result.primary_artist.id,
+        name: hit.result.primary_artist.name
+      })));
+      console.log("heya")
+      console.log(searchResults.id)
+    } catch (error) {
+      console.error('Error searching for artists:', error);
+    }
+  };
 
   return (
     <div className="page">
