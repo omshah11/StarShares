@@ -122,6 +122,8 @@ const SearchPage = () => {
 
   const handleCardClick = (track) => {
     setSelectedCard(track);
+    handleSearchSubmit(track.name)
+    fetchArtistDescription(searchResults[0].id)
     setShowModal(true);
     setScrollPosition(window.scrollY);
   };
@@ -138,8 +140,8 @@ const SearchPage = () => {
 
   const fb = () => {
     search(searchInput)
-    handleSearchSubmit()
-    fetchArtistDescription(searchResults[0].id)
+    // handleSearchSubmit()
+    // fetchArtistDescription(searchResults[0].id)
     console.log("bruh")
     // console.log(artistDescription)
   }
@@ -155,8 +157,8 @@ const SearchPage = () => {
       }
       const data = await response.json();
       // setArtistDescription(data.response.artist.description.plain);
-      setArtistDescription(data.response.artist.description.dom.children);
-      console.log(artistDescription)
+      setArtistDescription(data.response.artist.description.dom.children[0].children[0]);
+      // console.log(artistDescription[0].children[0])
     } catch (error) {
       console.error('Error fetching artist description:', error);
     }
@@ -167,7 +169,7 @@ const SearchPage = () => {
     // event.preventDefault();
     try {
       const response = await fetch(
-        `https://api.genius.com/search?q=${encodeURIComponent(searchInput)}&access_token=g8J7SWDhjrS2W1eVOmZSubSEtv2HJyBzRT1OEHR_NWOoj8tbu739v7u2RtN6dsJV`
+        `https://api.genius.com/search?q=${encodeURIComponent(event)}&access_token=g8J7SWDhjrS2W1eVOmZSubSEtv2HJyBzRT1OEHR_NWOoj8tbu739v7u2RtN6dsJV`
       );
       if (!response.ok) {
         throw new Error('Failed to search for artists');
@@ -300,7 +302,8 @@ const SearchPage = () => {
                         )}
                       </div>
                       <div className="right">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                        {/* <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p> */}
+                        <p>{artistDescription}</p>
                         <Button className="stockBtn" onClick={() => handleStockBtn(selectedCard.name, selectedCard.id)}>{selectedCard.name}</Button>
                       </div>
                     </>
