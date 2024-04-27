@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser, setUserWatchlist } from "../user/userSlice";
+import { selectUser, setUserWatchlist, selectUserId } from "../user/userSlice";
 import { fetchAccessToken } from "../user/landingPage/RecentlyViewedArtist";
 import { fetchArtistDetails } from "../user/landingPage/RecentlyViewedArtist";
 import { addRecentlyViewedArtist } from "../user/actions";
+import BuyModal from "./BuyModal";
+import SellModal from "./SellModal";
 
 import axios from "axios";
 
@@ -13,7 +15,7 @@ const ArtistPage = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [watchlist, setWatchlist] = useState(user.watchlist);
-  const userId = user.userid;
+  const userId = user.userId;
   const queryParams = new URLSearchParams(location.search);
 
   const name = queryParams.get("name");
@@ -29,6 +31,10 @@ const ArtistPage = () => {
   const [topTracks, setTopTracks] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [artistFollowers, setArtistFollowers] = useState(null);
+  const [showBuyModal, setShowBuyModal] = useState(false);
+  const [showSellModal, setShowSellModal] = useState(false);
+  const [buyQuantity, setBuyQuantity] = useState(0);
+  const [sellQuantity, setSellQuantity] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -111,7 +117,7 @@ const ArtistPage = () => {
   }
 
   const addToWatchlist = async (artistName, artistImage) => {
-    const userId = user.user.userId;
+    const userId = user.userId;
     let stockId = "";
 
     try {
@@ -165,7 +171,7 @@ const ArtistPage = () => {
   };
 
   const deleteFromWatchlist = async (stockId) => {
-    const userId = user.user.userId;
+    const userId = user.userId;
     try {
       const deleteFromWatchlist = {
         method: "post",
@@ -189,6 +195,22 @@ const ArtistPage = () => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const openBuyModal = () => {
+    setShowBuyModal(true);
+  };
+
+  const closeBuyModal = () => {
+    setShowBuyModal(false);
+  };
+
+  const openSellModal = () => {
+    setShowSellModal(true);
+  };
+
+  const closeSellModal = () => {
+    setShowSellModal(false);
   };
 
   return (
@@ -256,6 +278,7 @@ const ArtistPage = () => {
                         style={{ backgroundColor: "#00F000" }}
                         className="bg-green-500 active:bg-green-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                         type="button"
+                        onClick={openBuyModal}
                       >
                         Buy
                       </button>
@@ -263,6 +286,7 @@ const ArtistPage = () => {
                         style={{ backgroundColor: "#F00000" }}
                         className="bg-green-500 active:bg-green-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                         type="button"
+                        onClick={openSellModal}
                       >
                         Sell
                       </button>
@@ -307,10 +331,15 @@ const ArtistPage = () => {
                   </div>
                 </div>
                 <div className="text-center mt-12">
+
                   <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
                     {name}
                   </h3>
+
                   <div className="text-left mb-2 text-blueGray-600 mt-10">
+                    <p className="mx-4 text-xl mb-2">Performance</p>
+                    {/* Insert Artist Graph here*/}
+
                     <p className="mx-4 text-xl mb-2">Top Tracks</p>
                     <div className="mx-10 grid grid-cols-5  justify-center">
                       {topTracks.map((track, index) => (
@@ -385,6 +414,24 @@ const ArtistPage = () => {
             </div>
           </footer>
         </section>
+        <BuyModal
+        showModal={showBuyModal}
+        closeModal={closeBuyModal}
+        setQuantity={setBuyQuantity}
+        userId={userId}
+        stockId={stockId}
+        artistImage={artistImage}
+        artistName={name}
+      />
+        <SellModal
+        showModal={showSellModal}
+        closeModal={closeSellModal}
+        setQuantity={setSellQuantity}
+        userId={userId}
+        stockId={stockId}
+        artistImage={artistImage}
+        artistName={name}
+      />
       </main>
     </div>
   );
