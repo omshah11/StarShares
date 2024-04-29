@@ -55,6 +55,7 @@ const BuyModal = ({ showModal, closeModal, userId, stockId, artistImage, artistN
             );
             console.log("Buy successful:", response.data);
             closeModal();
+            alert(`You have successfully bought ${quantity} shares of ${artistName}!`);
         } catch (error) {
             console.log({
                 userId: userId,

@@ -18,6 +18,7 @@ const SellModal = ({ showModal, closeModal, userId, stockId, artistImage, artist
             );
             console.log("Sell successful:", response.data);
             closeModal();
+            alert(`You have successfully sold ${quantity} shares of ${artistName}!`);
         } catch (error) {
             console.error("Error selling:", error);
             // Handle error
