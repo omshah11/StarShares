@@ -11,6 +11,8 @@ const CLIENT_SECRET = "88eeb98034e5422099cce4f6467a3d51";
 const SearchPage = () => {
   const [searchInput, setSearchInput] = useState("");
   const [accessToken, setAccessToken] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [artistDescription, setArtistDescription] = useState('');
   const [results, setResults] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
@@ -119,11 +121,35 @@ const SearchPage = () => {
       [filterName]: !prevFilters[filterName]
     }));
   }
-
-  const handleCardClick = (track) => {
+  const handleCardClick = async (track) => {
+    console.log(track.type)
+    if(track.type == "artist"){
+      try {
+        // Fetch the artist ID from the Genius API
+        const response = await fetch(
+          `https://api.genius.com/search?q=${encodeURIComponent(track.name)}&access_token=g8J7SWDhjrS2W1eVOmZSubSEtv2HJyBzRT1OEHR_NWOoj8tbu739v7u2RtN6dsJV`
+        );
+        if (!response.ok) {
+          throw new Error('Failed to search for artist ID');
+        }
+        const data = await response.json();
+        const hit = data.response.hits.find(hit => hit.result.primary_artist.name === track.name);
+        if (!hit) {
+          throw new Error('Artist not found in search results');
+        }
+        const artistId = hit.result.primary_artist.id;
+  
+        await fetchArtistDescription(artistId, 200);
+    
+        setSelectedCard(track);
+        setShowModal(true);
+        setScrollPosition(window.scrollY);
+      } catch (error) {
+        console.error('Error fetching artist ID:', error);
+        // Handle error if necessary
+      }
+    }
     setSelectedCard(track);
-    handleSearchSubmit(track.name)
-    fetchArtistDescription(searchResults[0].id)
     setShowModal(true);
     setScrollPosition(window.scrollY);
   };
@@ -140,15 +166,15 @@ const SearchPage = () => {
 
   const fb = () => {
     search(searchInput)
-    // handleSearchSubmit()
-    // fetchArtistDescription(searchResults[0].id)
-    console.log("bruh")
-    // console.log(artistDescription)
   }
 
-  const [artistDescription, setArtistDescription] = useState('');
-  const fetchArtistDescription = async (artistId) => {
+  const fetchArtistDescription = async (artistId, wordLimit) => {
     try {
+      if (!artistId) {
+        setArtistDescription("Unable to fetch artist description");
+        return;
+      }
+      
       const response = await fetch(
         `https://api.genius.com/artists/${artistId}?access_token=g8J7SWDhjrS2W1eVOmZSubSEtv2HJyBzRT1OEHR_NWOoj8tbu739v7u2RtN6dsJV`
       );
@@ -156,33 +182,31 @@ const SearchPage = () => {
         throw new Error('Failed to fetch artist description');
       }
       const data = await response.json();
-      // setArtistDescription(data.response.artist.description.plain);
-      setArtistDescription(data.response.artist.description.dom.children[0].children[0]);
-      // console.log(artistDescription[0].children[0])
+      const descriptionDOM = data.response.artist.description.dom;
+
+      const extractTextContent = (element) => {
+          if (typeof element === 'string') {
+              return element;
+          }
+          if (element.children && Array.isArray(element.children)) {
+              return element.children.map(child => extractTextContent(child)).join('');
+          }
+          return '';
+      };
+
+      const combinedDescription = descriptionDOM.children
+          .filter(child => child.tag === 'p')
+          .map(paragraph => extractTextContent(paragraph))
+          .join(' '); 
+
+      const words = combinedDescription.split(/\s+/);
+      const truncatedDescription = words.slice(0, wordLimit).join(' ');
+
+      setArtistDescription(truncatedDescription+"...");
+
     } catch (error) {
       console.error('Error fetching artist description:', error);
-    }
-  };
-
-  const [searchResults, setSearchResults] = useState([]);
-  const handleSearchSubmit = async (event) => {
-    // event.preventDefault();
-    try {
-      const response = await fetch(
-        `https://api.genius.com/search?q=${encodeURIComponent(event)}&access_token=g8J7SWDhjrS2W1eVOmZSubSEtv2HJyBzRT1OEHR_NWOoj8tbu739v7u2RtN6dsJV`
-      );
-      if (!response.ok) {
-        throw new Error('Failed to search for artists');
-      }
-      const data = await response.json(); 
-      setSearchResults(data.response.hits.map(hit => ({
-        id: hit.result.primary_artist.id,
-        name: hit.result.primary_artist.name
-      })));
-      console.log("heya")
-      console.log(searchResults.id)
-    } catch (error) {
-      console.error('Error searching for artists:', error);
+      setArtistDescription("Unable to fetch artist description");
     }
   };
 
@@ -279,9 +303,9 @@ const SearchPage = () => {
                         )}
                       </div>
                       <div className="right">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-                        {/* <p>{selectedCard.artists.map(artist => artist.name).join(', ')}</p> */}
-                        {/* <Button className="stockBtn">Artist Page</Button> */}
+                        Album Type: {selectedCard.album_type}<br></br>
+                        Total Tracks: {selectedCard.total_tracks}<br></br>
+                        Release date: {selectedCard.release_date}<br></br>
                         {selectedCard.artists.map((artist) => (
                         <Button
                           key={artist.id}
