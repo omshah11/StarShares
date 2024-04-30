@@ -14,6 +14,7 @@ const SearchPage = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [artistDescription, setArtistDescription] = useState('');
   const [results, setResults] = useState([]);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -121,6 +122,7 @@ const SearchPage = () => {
       [filterName]: !prevFilters[filterName]
     }));
   }
+
   const handleCardClick = async (track) => {
     console.log(track.type)
     if(track.type == "artist"){
@@ -135,7 +137,8 @@ const SearchPage = () => {
         const data = await response.json();
         const hit = data.response.hits.find(hit => hit.result.primary_artist.name === track.name);
         if (!hit) {
-          throw new Error('Artist not found in search results');
+          // throw new Error('Artist not found in search results');
+          setArtistDescription("Unable to fetch Genuis artist description");
         }
         const artistId = hit.result.primary_artist.id;
   
@@ -210,6 +213,23 @@ const SearchPage = () => {
     }
   };
 
+  const playSnippet = (previewUrl) => {
+    if (previewUrl === null) {
+      alert("Preview not available");
+      return;
+    }
+
+    if (!isPlaying) {
+      const audio = new Audio(previewUrl);
+      setIsPlaying(true);
+      audio.play();
+      setTimeout(() => {
+        audio.pause();
+        setIsPlaying(false);
+      }, 15000); // Pause after 15 seconds
+    }
+  };
+
   return (
     <div className="page">
       <div className="header">
@@ -279,10 +299,23 @@ const SearchPage = () => {
                         )}
                       </div>
                       <div className="right">
+                        {selectedCard.preview_url && (
+                          <img
+                            src={'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/YouTube_Diamond_Play_Button.png/1200px-YouTube_Diamond_Play_Button.png'}
+                            style={{
+                              maxWidth: "100%",
+                              height: "auto",
+                              maxHeight: "30px",
+                              margin: "8px",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => playSnippet(selectedCard.preview_url)}
+                          />
+                        )}
                         Album: {selectedCard.album.name}<br></br>
                         Track number: {selectedCard.track_number}<br></br>
                         Release date: {selectedCard.album.release_date}<br></br>
-                        Run time: {msToMinutesAndSeconds(selectedCard.duration_ms)}
+                        Run time: {msToMinutesAndSeconds(selectedCard.duration_ms)}<br></br>
                         {selectedCard.artists.map((artist) => (
                         <Button
                           key={artist.id}
