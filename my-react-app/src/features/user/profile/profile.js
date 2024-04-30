@@ -6,8 +6,10 @@ import './profile.css'; // Your main CSS file
 import { useSelector } from 'react-redux';
 import { selectUser } from '../userSlice';
 import defaultImage from './default.png'; // import the default image
-//import recentlyPlayedButton from './recentlyPlayedButton'; // Assuming you have a RecentlyPlayedButton component
-import DummyPlayButton from './DummyButton';
+import RecentlyPlayedButton from './recentlyPlayedButton';
+import NewsCard from './newsCard';
+import TransactionsCard from './transactionCard';
+
 const Profile = () => {
   const userDetails = useSelector(selectUser).user;
   const user = useState({
@@ -29,19 +31,16 @@ const Profile = () => {
         <ProfileCard user={user} />
         <BiographyCard initialBiography={userBiography} onSave={handleBiographySave} />
         <div className="transactions-container"> 
-          <h2>Recent Transactions</h2>
+          <TransactionsCard/>
         </div>
       </div>
       <div className="profile-container-2">
         <div className="play-container">
           <h2>Play Recently Listened</h2>
-          <DummyPlayButton/>
+          <RecentlyPlayedButton/>
         </div>
         <div className="news-container">
-          <h2>News</h2>
-          <p>Lorem Ipsum</p>
-          <p>Lorem Ipsum</p>
-          <p>Lorem Ipsum</p>
+          <NewsCard/>
         </div>
       </div>
     </div>

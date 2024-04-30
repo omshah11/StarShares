@@ -5,8 +5,8 @@ import "./profile.css";
 import defaultImage from './default.png'; // import the default image
 
 const ProfileCard = () => {
-  const [backgroundColor, setBackgroundColor] = useState('#f9f9f9'); // Initial color
-  const [borderColor, setBorderColor] = useState('#ccc'); // Initial color
+  const [backgroundColor, setBackgroundColor] = useState('#556771'); // Initial color
+  const [borderColor, setBorderColor] = useState('#000'); // Initial color
   const [coloring, setColoring] = useState(false);
 
   const userDetails = useSelector(selectUser).user;
@@ -71,8 +71,8 @@ const ProfileCard = () => {
           </div>
         )}
         <div>
-          <button onClick={handleEdit}>{editing ? 'Save' : 'Edit Profile'}</button>
-          <button style={{marginLeft: '2%'}} onClick={handleColor}> {coloring ? 'Save' : 'Change Color'}</button>
+          <button className='profile-edit' onClick={handleEdit}>{editing ? 'Save Profile' : 'Edit Profile'}</button>
+          <button className='backcolor-edit' style={{marginLeft: '2%'}} onClick={handleColor}> {coloring ? 'Save Profile' : 'Change Color'}</button>
         </div>
       </div>
     </div>
