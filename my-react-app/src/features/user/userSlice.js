@@ -11,7 +11,8 @@ export const userSlice = createSlice({
         recentlyViewedArtists: [],
         loading: false,
         error: null,
-        watchlist: null
+        watchlist: null,
+        balance: null
     },
     reducers: {
         login: (state, action) => {
@@ -19,6 +20,7 @@ export const userSlice = createSlice({
             state.isLoggedIn = action.payload.isLoggedIn;
             state.token = action.payload.token;
             state.userId = action.payload.user.userId;
+            state.balance = action.payload.balance;
             localStorage.setItem('token', action.payload.token);
         },
         // Reducer function for handling user logout
