@@ -50,7 +50,7 @@ const Watchlist = () => {
   };
 
   const createWatchlist = async () => {
-    const userId = user.user.id;
+    const userId = user.user.userId;
     try {
       const createWatchlistConfig = {
         method: "post",
