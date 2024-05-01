@@ -15,15 +15,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "../../features/user/userSlice";
 import { login, logout } from "../../features/user/userSlice";
 import "../../index.css"; // import Tailwind CSS main file 
-import { fetchRecentlyViewedArtists } from '../../features/user/actions'; // Import the fetchRecentlyViewedArtists action
-
 const App = () => {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Dispatch fetchRecentlyViewedArtists only when the component mounts
-    dispatch(fetchRecentlyViewedArtists());
     // Check if token exists in local storage or cookies
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
