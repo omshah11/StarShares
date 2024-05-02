@@ -1,5 +1,6 @@
 // WatchlistedStocks.js
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import Watchlist from "./watchlist";
 
 const WatchlistedStocks = ({ stockDetailedList, deleteStock }) => {
@@ -27,12 +28,6 @@ const WatchlistedStocks = ({ stockDetailedList, deleteStock }) => {
                     >
                       Price
                     </th>
-                    <th
-                      className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
-                      colSpan="3"
-                    >
-                      Average Cost
-                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -51,9 +46,7 @@ const WatchlistedStocks = ({ stockDetailedList, deleteStock }) => {
                             />
                           </div>
                           <div className="ml-3">
-                            <p className="text-gray-900 whitespace-no-wrap">
-                              {artist.data.stock.artistName}
-                            </p>
+                            <Link className="text-gray-900 whitespace-no-wrap" to={`/artist?name=${artist.data.stock.artistName}&id=${artist.data.stock.spotifyId}`}>{artist.data.stock.artistName}</Link>
                           </div>
                         </div>
                       </td>
@@ -70,21 +63,6 @@ const WatchlistedStocks = ({ stockDetailedList, deleteStock }) => {
                         colSpan="3"
                       >
                         <div>
-                          <span
-                            className={`relative inline-block px-3 py-1 font-semibold leading-tight ${
-                              artist.gains >= 0
-                                ? "text-green-900"
-                                : "text-red-900"
-                            }`}
-                          >
-                            <span
-                              aria-hidden
-                              className="absolute inset-0 bg-green-200 opacity-50 rounded-full"
-                            ></span>
-                            <span className="relative">
-                              {artist.gains >= 0 ? "Positive" : "Negative"}
-                            </span>
-                          </span>
                           <button
                             class="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-900 hover:bg-gray-900/10 active:bg-gray-900/20"
                             type="button"
