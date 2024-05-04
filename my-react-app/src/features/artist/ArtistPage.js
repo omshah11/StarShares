@@ -52,7 +52,6 @@ const ArtistPage = () => {
   }, [id, watchlist]);
 
   useEffect(() => {
-    console.log(id);
     if (id) {
       dispatch(addRecentlyViewedArtist(id));
     }
