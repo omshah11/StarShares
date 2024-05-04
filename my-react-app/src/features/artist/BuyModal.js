@@ -4,69 +4,79 @@ import axios from "axios";
 const BuyModal = ({ showModal, closeModal, userId, stockId, artistImage, artistName }) => {
     const [quantity, setQuantity] = useState(0);
 
-    const handleBuy = async (userId, stockId, artistImage, artistName) => {
-        let newStockId;
-        try {
-            // Attempt to add the stock
-            const addStock = await axios.post(
-                "http://localhost:5000/api/addStock",
-                {
-                    artistName: artistName,
-                    artistImage: artistImage,
-                    // can define cost to be a call to the algorithm
-                }
-            );
-    
-            // Log the result of adding the stock
-            console.log("Stock added to DB:", addStock.data);
-    
-            // Extract the newly added stock ID from the response
-            newStockId = addStock.data.stock._id;
-    
-            // Update stockId with newStockId
-            stockId = newStockId;
-    
-            // Add the newly added stock to the user's portfolio
-            const addToPortfolio = await axios.post(
-                "http://localhost:5000/api/addStockToPortfolio",
-                {
-                    userId: userId,
-                    stockId: newStockId,
-                }
-            );
-    
-            // Log the result of adding the stock to the portfolio
-            console.log("Stock added to Portfolio:", addToPortfolio.data);
-        } catch (error) {
-            // Log the error if adding the stock fails
-            console.error("Error adding stock:", error);
-        }
-    
-        // Proceed with adding the transaction
-        try {
-            const response = await axios.post(
-                "http://localhost:5000/api/addTransactionToPortfolio",
-                {
-                    userId: userId,
-                    stockId: stockId,
-                    transactionType: "buy",
-                    quantity: quantity
-                }
-            );
-            console.log("Buy successful:", response.data);
-            closeModal();
-            alert(`You have successfully bought ${quantity} shares of ${artistName}!`);
-        } catch (error) {
-            console.log({
-                userId: userId,
-                stockId: stockId,
-                transactionType: "buy",
-                quantity: quantity
-            })
-            console.error("Error buying:", error);
-            // Handle error
-        }
-    };
+    const handleBuy = async (userId, stockId, artistImage, artistName, quantity) => {
+      let newStockId;
+  
+      try {
+          // Attempt to add the stock
+          const addStock = await axios.post(
+              "http://localhost:5000/api/addStock",
+              {
+                  artistName: artistName,
+                  artistImage: artistImage,
+                  // You can define cost to be a call to the algorithm
+              }
+          );
+  
+          // Log the result of adding the stock
+          console.log("Stock added to DB:", addStock.data);
+  
+          // Extract the newly added stock ID from the response
+          newStockId = addStock.data.stock?._id;
+  
+          if (!newStockId) {
+              throw new Error("Failed to retrieve newly added stock ID");
+          }
+  
+          // Update stockId with newStockId
+          stockId = newStockId;
+      } catch (error) {
+          // Log the error if adding the stock fails
+          console.error("Error adding stock:", error);
+      }
+  
+      try {
+          // Add the newly added stock to the user's portfolio
+          const addToPortfolio = await axios.post(
+              "http://localhost:5000/api/addStockToPortfolio",
+              {
+                  userId: userId,
+                  stockId: stockId,
+                  quantity: 0
+              }
+          );
+  
+          // Log the result of adding the stock to the portfolio
+          console.log("Stock added to Portfolio:", addToPortfolio.data);
+      } catch (error) {
+          // Log the error if adding the stock to the portfolio fails
+          console.error("Error adding stock to portfolio:", error);
+          // Handle error
+      }
+  
+      try {
+          // Proceed with adding the transaction
+          const response = await axios.post(
+              "http://localhost:5000/api/addTransactionToPortfolio",
+              {
+                  userId: userId,
+                  stockId: stockId,
+                  transactionType: "buy",
+                  quantity: quantity
+              }
+          );
+  
+          console.log("Buy successful:", response.data);
+          closeModal();
+          alert(`You have successfully bought ${quantity} shares of ${artistName}!`);
+      } catch (error) {
+          // Log the error if adding the transaction fails
+          console.error("Error buying:", error);
+          // Handle error
+          return;
+      }
+  };
+  
     
     
   return (
@@ -101,7 +111,7 @@ const BuyModal = ({ showModal, closeModal, userId, stockId, artistImage, artistN
                 <button
                   type="button"
                   className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
-                  onClick={() => handleBuy(userId, stockId, artistImage, artistName)}
+                  onClick={() => handleBuy(userId, stockId, artistImage, artistName, quantity)}
                 >
                   Buy
                 </button>
