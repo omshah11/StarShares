@@ -35,6 +35,7 @@ const ArtistPage = () => {
   const [artistValue, setArtistValue] = useState(0);
   const [monthlyListeners, setMonthlyListeners] = useState(0);
   const [worldRank, setWorldRank] = useState(0);
+  const [stockTransactionCount, setStockTransactionCount] = useState(0);
 
   const [stats, setStats] = useState(0);
 
@@ -43,6 +44,9 @@ const ArtistPage = () => {
       try {
         const accessToken = await fetchAccessToken(CLIENT_ID, CLIENT_SECRET);
         const artistDetails = await fetchArtistDetails(id, accessToken);
+        // getArtistStock(name);
+        // const transactionCount = await getArtistStockTransactionCount(stockId)
+        console.log(stockTransactionCount);
         //const monthlyListeners = fetchStats(id);
         console.log("Artist details: ", artistDetails);
         setArtistImage(artistDetails.images[0].url);
@@ -52,12 +56,13 @@ const ArtistPage = () => {
 
         const topTracksData = await fetchArtistTopTracks(id, accessToken);
         setTopTracks(topTracksData.tracks);
-        setArtistValueFunction(artistDetails.popularity, artistDetails.followers.total);
+        setArtistValueFunction(artistDetails.popularity, artistDetails.followers.total, stockTransactionCount);
       } catch (error) {
         console.error("Error fetching artist details:", error);
       }
     };
     getArtistStock(name);
+    // getArtistStockTransactionCount(stockId)
     //console.log("prev artist data: ", prevArtistStockData)
     // const prevArtistPopularity = prevArtistStockData.data.stock.artistPopularity;
     // if (82 !== artistPopularity) {
@@ -111,10 +116,10 @@ const ArtistPage = () => {
     return topTracks;
   };
 
-  const setArtistValueFunction = (artistPopularity, artistFollowers, monthlyListeners) => {
+  const setArtistValueFunction = (artistPopularity, artistFollowers, transactionCount) => {
     console.log("prev artist popularity: ", prevArtistPopularity);
     console.log("artist popularity: ", artistPopularity);
-    setArtistValue(stockPriceAlgorithm(artistPopularity, artistFollowers, monthlyListeners));
+    setArtistValue(stockPriceAlgorithm(artistPopularity, artistFollowers, transactionCount));
   }
 
   const playSnippet = (previewUrl) => {
@@ -133,6 +138,7 @@ const ArtistPage = () => {
       }, 15000); // Pause after 15 seconds
     }
   };
+
 
   const getArtistStock = async (artistName) => {
     try {
@@ -155,6 +161,30 @@ const ArtistPage = () => {
       setAddedToWatchlist(isArtistInWatchlist);
 
       return getStockIdResponse.data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const getArtistStockTransactionCount = async (stockId) => {
+    try {
+      const getCount = {
+        method: "get",
+        url: "http://localhost:5000/api/getStockTradeCount",
+        params: {
+          stockId,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+      const getArtistStockTransactionCount = await axios(getCount);
+      console.log(getArtistStockTransactionCount)
+      const artistStockTransactionCount = getArtistStockTransactionCount.data.stockTradeCount;
+      console.log(artistStockTransactionCount)
+      setStockTransactionCount(artistStockTransactionCount)
+
+      return artistStockTransactionCount;
     } catch (error) {
       console.error(error);
     }
