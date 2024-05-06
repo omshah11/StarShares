@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const BuyModal = ({ showModal, closeModal, userId, stockId, artistImage, artistName }) => {
+const BuyModal = ({ showModal, closeModal, userId, stockId, artistImage, artistName, spotifyId }) => {
     const [quantity, setQuantity] = useState(0);
 
-    const handleBuy = async (userId, stockId, artistImage, artistName, quantity) => {
+    const handleBuy = async (userId, stockId, artistImage, artistName, quantity, spotifyId) => {
       let newStockId;
   
       try {
@@ -14,6 +14,8 @@ const BuyModal = ({ showModal, closeModal, userId, stockId, artistImage, artistN
               {
                   artistName: artistName,
                   artistImage: artistImage,
+                  spotifyId: spotifyId,
+
                   // You can define cost to be a call to the algorithm
               }
           );
@@ -71,6 +73,12 @@ const BuyModal = ({ showModal, closeModal, userId, stockId, artistImage, artistN
           alert(`You have successfully bought ${quantity} shares of ${artistName}!`);
       } catch (error) {
           // Log the error if adding the transaction fails
+          console.log({
+            userId: userId,
+            stockId: stockId,
+            transactionType: "buy",
+            quantity: quantity
+        })
           console.error("Error buying:", error);
           // Handle error
           return;
@@ -111,7 +119,7 @@ const BuyModal = ({ showModal, closeModal, userId, stockId, artistImage, artistN
                 <button
                   type="button"
                   className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
-                  onClick={() => handleBuy(userId, stockId, artistImage, artistName, quantity)}
+                  onClick={() => handleBuy(userId, stockId, artistImage, artistName, quantity, spotifyId)}
                 >
                   Buy
                 </button>

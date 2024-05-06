@@ -424,6 +424,7 @@ const ArtistPage = () => {
         stockId={stockId}
         artistImage={artistImage}
         artistName={name}
+        spotifyId={spotifyId}
       />
         <SellModal
         showModal={showSellModal}
@@ -433,6 +434,7 @@ const ArtistPage = () => {
         stockId={stockId}
         artistImage={artistImage}
         artistName={name}
+        spotifyId={spotifyId}
       />
       </main>
     </div>

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const SellModal = ({ showModal, closeModal, userId, stockId, artistImage, artistName }) => {
+const SellModal = ({ showModal, closeModal, userId, stockId, artistImage, artistName, spotifyId }) => {
     const [quantity, setQuantity] = useState(0);
 
-    const handleSell = async (userId, stockId, artistImage, artistName) => {
+    const handleSell = async (userId, stockId, artistImage, artistName, spotifyId) => {
         try {
             // Proceed with adding the transaction
             const response = await axios.post(
@@ -57,7 +57,7 @@ const SellModal = ({ showModal, closeModal, userId, stockId, artistImage, artist
                             <button
                                 type="button"
                                 className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
-                                onClick={() => handleSell(userId, stockId, artistImage, artistName)}
+                                onClick={() => handleSell(userId, stockId, artistImage, artistName, spotifyId)}
                             >
                                 Sell
                             </button>
