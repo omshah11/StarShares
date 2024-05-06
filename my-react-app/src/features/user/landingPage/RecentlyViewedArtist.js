@@ -66,31 +66,39 @@ const RecentlyViewedArtist = () => {
       {artistDetailsList.map(artistDetails => (
         <div key={artistDetails.id} className="card-container">
           <div className="block rounded-lg bg-white shadow-secondary-1 dark:bg-surface-dark">
-            <a href={artistDetails.external_urls.spotify}>
-              <div
-                className="rounded-t-lg"
-                style={{
-                  height: '400px',
-                  backgroundImage: `url(${artistDetails.images[0]?.url})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                }}
-              ></div>
-            </a>
+            {artistDetails && artistDetails.external_urls && (
+              <a href={artistDetails.external_urls.spotify}>
+                <div
+                  className="rounded-t-lg"
+                  style={{
+                    height: '400px',
+                    backgroundImage: `url(${artistDetails.images[0]?.url})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }}
+                ></div>
+              </a>
+            )}
 
             <div className="p-6 text-surface dark:text-white">
-              <h5 className="mb-2 text-xl font-medium leading-tight">{artistDetails.name}</h5>
-              <p className="mb-4 text-base text-black">
-                Some quick example text to build on the card title and make up the
-                bulk of the card's content.
-              </p>
-              <button
-                type="button"
-                className="text-black bg-green-300 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal  shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
-                data-twe-ripple-init
-                data-twe-ripple-color="light" onClick={() => window.open(artistDetails.external_urls.spotify, '_blank')}>
-                Spotify
-              </button>
+              {artistDetails && (
+                <>
+                  <h5 className="mb-2 text-xl font-medium leading-tight">{artistDetails.name}</h5>
+                  <p className="mb-4 text-base text-black">
+                    Some quick example text to build on the card title and make up the
+                    bulk of the card's content.
+                  </p>
+                </>
+              )}
+              {artistDetails && artistDetails.external_urls && (
+                <button
+                  type="button"
+                  className="text-black bg-green-300 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal  shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
+                  data-twe-ripple-init
+                  data-twe-ripple-color="light" onClick={() => window.open(artistDetails.external_urls.spotify, '_blank')}>
+                  Spotify
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -101,5 +109,3 @@ const RecentlyViewedArtist = () => {
 };
 
 export default RecentlyViewedArtist;
-
-
