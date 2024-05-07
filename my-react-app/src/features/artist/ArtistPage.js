@@ -40,38 +40,8 @@ const ArtistPage = () => {
   const [stats, setStats] = useState(0);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const accessToken = await fetchAccessToken(CLIENT_ID, CLIENT_SECRET);
-        const artistDetails = await fetchArtistDetails(id, accessToken);
-        // getArtistStock(name);
-        // const transactionCount = await getArtistStockTransactionCount(stockId)
-        console.log(stockTransactionCount);
-        //const monthlyListeners = fetchStats(id);
-        console.log("Artist details: ", artistDetails);
-        setArtistImage(artistDetails.images[0].url);
-        setArtistGenre(artistDetails.genres[0]);
-        setArtistPopularity(artistDetails.popularity);
-        setArtistFollowers(artistDetails.followers.total);
-
-        const topTracksData = await fetchArtistTopTracks(id, accessToken);
-        setTopTracks(topTracksData.tracks);
-        setArtistValueFunction(artistDetails.popularity, artistDetails.followers.total, stockTransactionCount);
-      } catch (error) {
-        console.error("Error fetching artist details:", error);
-      }
-    };
     getArtistStock(name);
-    // getArtistStockTransactionCount(stockId)
-    //console.log("prev artist data: ", prevArtistStockData)
-    // const prevArtistPopularity = prevArtistStockData.data.stock.artistPopularity;
-    // if (82 !== artistPopularity) {
-    //   //call stock algorithm to calculate new artist stock price
-    //   //call update artist stock endpoint to update artist stock with new popularity and price
-    //   stockPriceAlgorithm(artistPopularity, artistFollowers);
-    // }
-    //fetchStats(id);
-    fetchData(monthlyListeners);
+    fetchData();
   }, [id, watchlist]);
 
   useEffect(() => {
@@ -80,6 +50,28 @@ const ArtistPage = () => {
       dispatch(addRecentlyViewedArtist(id));
     }
   }, [id, dispatch]);
+
+  const fetchData = async () => {
+    try {
+      const accessToken = await fetchAccessToken(CLIENT_ID, CLIENT_SECRET);
+      const artistDetails = await fetchArtistDetails(id, accessToken);
+      // getArtistStock(name);
+      // const transactionCount = await getArtistStockTransactionCount(stockId)
+      console.log(stockTransactionCount);
+      //const monthlyListeners = fetchStats(id);
+      console.log("Artist details: ", artistDetails);
+      setArtistImage(artistDetails.images[0].url);
+      setArtistGenre(artistDetails.genres[0]);
+      setArtistPopularity(artistDetails.popularity);
+      setArtistFollowers(artistDetails.followers.total);
+
+      const topTracksData = await fetchArtistTopTracks(id, accessToken);
+      setTopTracks(topTracksData.tracks);
+      setArtistValueFunction(artistDetails.popularity, artistDetails.followers.total, stockTransactionCount);
+    } catch (error) {
+      console.error("Error fetching artist details:", error);
+    }
+  };
 
   const fetchStats = async (artistID) => {
     const options = {
@@ -119,6 +111,7 @@ const ArtistPage = () => {
   const setArtistValueFunction = (artistPopularity, artistFollowers, transactionCount) => {
     console.log("prev artist popularity: ", prevArtistPopularity);
     console.log("artist popularity: ", artistPopularity);
+    console.log("stock trade count: ", transactionCount);
     setArtistValue(stockPriceAlgorithm(artistPopularity, artistFollowers, transactionCount));
   }
 
@@ -159,7 +152,7 @@ const ArtistPage = () => {
       setprevArtistPopularity(getStockIdResponse.data.stock.artistPopularity);
       const isArtistInWatchlist = watchlist.includes(getStockIdResponse.data.stock._id);
       setAddedToWatchlist(isArtistInWatchlist);
-
+      getArtistStockTransactionCount(getStockIdResponse.data.stock._id);
       return getStockIdResponse.data;
     } catch (error) {
       console.error(error);
@@ -167,6 +160,7 @@ const ArtistPage = () => {
   }
 
   const getArtistStockTransactionCount = async (stockId) => {
+    console.log("stock id inside tradeCount: ", stockId);
     try {
       const getCount = {
         method: "get",
