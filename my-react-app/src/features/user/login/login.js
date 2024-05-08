@@ -102,6 +102,28 @@ const Login = () => {
         console.error("Error fetching watchlist:", error);
       }
 
+      // create User Portfolio
+
+      try {
+        // Attempt to add the stock
+        const createPortfolio = await axios.post(
+            "http://localhost:5000/api/createPortfolio",
+            {
+                userId: userId
+            }
+        );
+
+        // Log the result of creating a Portfolio
+        console.log("User portfolio created:", createPortfolio.data);
+
+    } catch (error) {
+      console.log(error);
+      if (error.response.data.status === 409) {
+        console.log("Portfolio already exists");
+      }
+      
+    }
+
       // Redirect to home page after successful login
       navigate("/home");
     } catch (error) {
