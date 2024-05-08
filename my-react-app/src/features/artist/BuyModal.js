@@ -53,6 +53,7 @@ const BuyModal = ({ showModal, closeModal, userId, stockId, artistImage, artistN
       } catch (error) {
           // Log the error if adding the stock to the portfolio fails
           console.error("Error adding stock to portfolio:", error);
+
           // Handle error
       }
   
