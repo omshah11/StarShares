@@ -10,6 +10,7 @@ const LandingPage = () => {
   const userDetails = user.user;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  console.log("user: ", user);
 
   const handleLogout = (e) => {
     e.preventDefault();
