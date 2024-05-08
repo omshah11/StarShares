@@ -1,20 +1,50 @@
 /* profile.css */
 :root {
-  --main-background-color: #556771; /* Default color */
+  --main-background-color: #e3e8f0;
   --main-border-color: #000;
 }
 
-.profile-container{
-  max-width: 1920px;
-  max-height: 1080px;
-  align-items: center;
+.profile-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 100vh;
+  background-color: #e3e8f0;
   overflow: visible;
   overflow-wrap: normal;
+}
+
+.left-container,
+.right-container {
+  width: calc(50% - 4%); 
+  max-width: calc(50% - 4%); 
+}
+
+.left-container {
+  margin-top: 2%;
+  margin-left: 2%;
+}
+
+.right-container {
+  margin-top: 2%;
+  padding-right: 20px;
+}
+
+/* Adjust the styles for the play and news containers */
+.play-container,
+.news-container {
+  width: 100%;
+  height: 100%;
+  max-height: calc(100% - 2%); /* Adjust to leave space for margins */
 }
 
 .h2 {
   font-weight: bold; /* Make the text bold */
   font-family: Arial, sans-serif; /* Use Arial font */
+}
+
+.profile-bio-container {
+  display: flex;
 }
 
 .profile-container-1{
@@ -37,16 +67,16 @@
 }
 
 .news-container {
-  font-weight: bold; /* Make the text bold */
-  font-family: Arial, sans-serif; /* Use Arial font */
-  width: 640px; /* Set the width of the profile container to 90% of its parent container */
-  height: 170px;
-  max-height: 500px; /* Set a maximum width for the profile container */
-  max-width: 640px; /* Set a maximum width for the profile container */
+  font-weight: bold; 
+  font-family: Arial, sans-serif; 
+  /* width: 640px; */
+  /* height: 170px; */
+  max-height: 500px;
+  /* max-width: 640px;  */
   margin-left: 2%;
   background-color: var(--main-background-color);
   padding: 20px;
-  border: 2px solid var(--main-border-color);
+  /* border: 2px solid var(--main-border-color); */
   border-radius: 8px;
   overflow: auto;
   overflow-x: hidden;
@@ -54,65 +84,64 @@
 }
 
 .news-container h3 {
-  color: pink
+  color: #256364
 }
 
 .news-container a {
-  color: cyan
+  color: #1a0dab
 }
 
 .news-container p {
   font-weight: 400;
+  color: #5f6368;
 }
 
 .transactions-container {
-  font-weight: bold; /* Make the text bold */
-  font-family: Arial, sans-serif; /* Use Arial font */
-  width: 90%; /* Set the width of the profile container to 90% of its parent container */
-  height: 270px;
-  max-height: 500px; /* Set a maximum width for the profile container */
-  max-width: 480px; /* Set a maximum width for the profile container */
+  font-weight: bold; 
+  width: 100%;
+  margin-top: 2%; 
   margin-left: 2%;
   background-color: var(--main-background-color);
   padding: 20px;
-  border: 2px solid var(--main-border-color);
   border-radius: 8px;
   overflow: auto;
   overflow-x: hidden;
 }
 
 .play-container{
-  font-weight: bold; /* Make the text bold */
-  font-family: Arial, sans-serif; /* Use Arial font */
+  font-weight: bold;
+  font-family: Arial, sans-serif;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   overflow-wrap: normal;
-  max-width: 400px;
   background-color: var(--main-background-color);
   padding: 20px;
-  border: 2px solid var(--main-border-color);
   border-radius: 8px;
+}
+
+.profile-card,
+.biography-card {
+  width: 50%; /* Each card takes up half of the container */
 }
 
 /* profile.css */
 .profile-card {
-  height: 25%;
-  font-weight: bold; /* Make the text bold */
-  font-family: Arial, sans-serif; /* Use Arial font */
-  width: 90%; /* Set the width of the profile container to 90% of its parent container */
-  max-height: auto; /* Set a maximum width for the profile container */
-  max-width: 600px; /* Set a maximum width for the profile container */
+  /* height: 25%; */
+  font-weight: bold; 
+  font-family: Arial, sans-serif;
+  width: 90%; 
+  /* max-width: 600px;  */
   background-color: var(--main-background-color);
   padding: 20px;
-  border: 2px solid var(--main-border-color);
+  /* border: 2px solid var(--main-border-color); */
   border-radius: 8px;
   overflow-x: auto;
 }
 
 .profile-card button{
-  border: 2px solid var(--main-border-color);
-  border-radius: 8px;
+  /* border: 2px solid var(--main-border-color); */
+  /* border-radius: 8px; */
   font-size: small;
   padding-left: 2px;
   padding-right: 2px;
@@ -132,10 +161,8 @@
 }
 
 .profile-card img {
-  /* Set the maximum width and height for the profile image */
-  max-width: 100px; /* Change this value to your desired width */
-  max-height: 100px; /* Change this value to your desired height */
-  /* Ensure the image maintains its aspect ratio */
+  max-width: 100px; 
+  max-height: 100px; 
   width: auto;
   height: auto;
 }
@@ -144,12 +171,12 @@
 .biography-card {
   background-color: var(--main-background-color);
   position: relative;
-  width: 300px;
+  width: 450px;
   height: 270px;
-  max-width: 300px;
-  max-height: 270px;
+  /* max-width: 300px; */
+  /* max-height: 270px; */
   padding: 20px;
-  border: 2px solid var(--main-border-color);
+  border: 1px solid var(--main-border-color);
   border-radius: 8px;
   overflow: auto;
   overflow-x: hidden; /* Make the text bold */
@@ -164,7 +191,7 @@
   background-color: #1db954;
   color: #fff;
   border: 2px solid #000000;
-  border-radius: 8px;
+  /* border-radius: 8px; */
   padding: 2px 20px;
   margin-top: 2%;
   margin-left: 1%;
@@ -176,9 +203,11 @@
 .connection{
   background-color: #1db954;
   color: #fff;
-  border: 2px solid #000000;
+  /* border: 2px solid #000000; */
   border-radius: 8px;
   padding: 2px 10px;
+  width: 300px;
+  height: 40px;
   margin-top: 2%;
   margin-left: 1%;
   font-size: 16px;
@@ -200,10 +229,10 @@ button {
 }
 
 .profile-edit {
-  background-color: #1db954;
+  /* background-color: #253741; */
   color: #fff;
-  border: 2px solid #000000;
-  border-radius: 8px;
+  
+  width: 100%;
   padding: 2px 20px;
   margin-top: 2%;
   margin-left: 1%;
@@ -217,10 +246,11 @@ button {
 }
 
 .backcolor-edit {
-  background-color: #1db954;
+  /* background-color: #1db954; */
+  width: 100%;
   color: #fff;
-  border: 2px solid #000000;
-  border-radius: 8px;
+  /* border: 2px solid #000000; */
+  /* border-radius: 8px; */
   padding: 2px 20px;
   margin-top: 2%;
   margin-left: 1%;
@@ -236,11 +266,13 @@ button {
 .play-button {
   background-color: #1db954;
   color: #fff;
-  border: 2px solid #000000;
+  /* border: 2px solid #000000; */
   border-radius: 8px;
   padding: 5px 10px;
   margin-top: 5%;
   margin-left: 1%;
+  width: 300px;
+  height: 40px;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -254,12 +286,15 @@ button {
 /* Create the triangle (play icon) */
 .play-button::before {
   content: '';
-  position: flex;
-  transform: translate(-50%, -50%) rotate(90deg);
-  rotate: 90;
+  position: relative;
+  display: inline-block;
+  width: 0;
+  height: 0;
+  transform: rotate(270deg);
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
   border-top: 14px solid #fff;
+  margin-left: 10px; /* Adjust spacing between text and button */
 }
 
 
