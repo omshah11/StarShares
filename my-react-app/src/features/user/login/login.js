@@ -6,11 +6,12 @@ import {
   selectUser,
   setCurrentUser,
   setUserWatchlist,
+  setOwnedStocksList
 } from "../userSlice";
-import {Link} from 'react-router-dom';
+import { Link } from "react-router-dom";
 import axios from "axios";
 import "../../../index.css";
-import Loginimg from "../../../Imgs/landing.jpg"
+import Loginimg from "../../../Imgs/landing.jpg";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -34,7 +35,7 @@ const Login = () => {
           "Content-Type": "application/json",
         },
       };
-  
+
       // Assuming 'loggedIn' is derived from the userState or another logic
       const loggedIn = true;
 
@@ -71,7 +72,7 @@ const Login = () => {
             lastName: lastName,
             email: email,
             password: password,
-            token: token
+            token: token,
           },
         })
       );
@@ -82,7 +83,7 @@ const Login = () => {
           method: "get",
           url: "http://localhost:5000/api/getWatchlist",
           params: {
-            userId
+            userId,
           },
           headers: {
             "Content-Type": "application/json",
@@ -91,7 +92,7 @@ const Login = () => {
 
         const watchlistResponse = await axios(getWatchlist);
         // Server returns a token successfully
-        
+
         const watchlist = watchlistResponse.data.watchlist.stocks;
         dispatch(
           setUserWatchlist({
@@ -102,65 +103,111 @@ const Login = () => {
         console.error("Error fetching watchlist:", error);
       }
 
+      // create User Portfolio
+
+      try {
+        // Attempt to add the stock
+        const createPortfolio = await axios.post(
+          "http://localhost:5000/api/createPortfolio",
+          {
+            userId: userId,
+          }
+        );
+
+        // Log the result of creating a Portfolio
+        console.log("User portfolio created:", createPortfolio.data);
+      } catch (error) {
+        console.log(error);
+        if (error.response.data.status === 409) {
+          console.log("Portfolio already exists");
+        }
+      }
+
+      try {
+        const encodedUserId = encodeURIComponent(userId); // URL encode the userId
+        const response = await axios.get(
+          `http://localhost:5000/api/getOwnedStocks?userId=${encodedUserId}`
+        );
+        const ownedStockList = response.data.stocks;
+        dispatch(
+          setOwnedStocksList({
+            ownedStockList: ownedStockList,
+          })
+        );
+        //setOwnedStocks(response.data.stocks);
+      } catch (error) {
+        console.error("Error fetching owned stocks:", error);
+      }
+
       // Redirect to home page after successful login
       navigate("/home");
     } catch (error) {
       // Handle error, log it, or show a user-friendly message
       console.error("Error during login:", error);
-    
     }
   };
 
   return (
     <section className="flex flex-col md:flex-row h-screen items-center bgcolorSS">
-    
-
       <div className=" hidden lg:block w-full md:w-1/2 xl:w-2/3 h-screen">
-      <img className="ml-auto object-left object-cover w-full h-full" src={Loginimg } alt="login"/>
+        <img
+          className="ml-auto object-left object-cover w-full h-full"
+          src={Loginimg}
+          alt="login"
+        />
       </div>
 
-    <div className="bg-white w-full md:max-w-md lg:max-w-full md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12
-        flex items-center justify-center">
+      <div
+        className="bg-white w-full md:max-w-md lg:max-w-full md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12
+        flex items-center justify-center"
+      >
+        <div className="w-full h-100">
+          <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">
+            Log in to your account
+          </h1>
 
-    <div className="w-full h-100">
-
-      <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">Log in to your account</h1>
-
-      <form className=" flex flex-col mt-6" onSubmit={(e) => handleSubmit(e)}>
-        <div>
-        <label class="block text-gray-700">Email Address</label>
-        <input
-          type="email"
-          placeholder="Enter Email Address"
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
-        />
-        </div>
-        <div className="mt-4">
-        <label class="block text-gray-700">Password</label>
-        <input
-          type="password"
-          placeholder="Enter Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
-        />
-        </div>
-        <button
-          type="submit"
-          className="w-full block bgcolorSS2 hover:bgcolorSS focus:bgcolorSS text-white font-semibold rounded-lg
+          <form
+            className=" flex flex-col mt-6"
+            onSubmit={(e) => handleSubmit(e)}
+          >
+            <div>
+              <label class="block text-gray-700">Email Address</label>
+              <input
+                type="email"
+                placeholder="Enter Email Address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+              />
+            </div>
+            <div className="mt-4">
+              <label class="block text-gray-700">Password</label>
+              <input
+                type="password"
+                placeholder="Enter Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full block bgcolorSS2 hover:bgcolorSS focus:bgcolorSS text-white font-semibold rounded-lg
           px-4 py-3 mt-6"
-        >
-          Submit
-        </button>
-      </form>
-      <p className="text-black mt-8">Not On StarShares? <span className="underline font-semibold"><Link to="/">Create an Account</Link></span></p>
-    </div>
-    </div>
+            >
+              Submit
+            </button>
+          </form>
+          <p className="text-black mt-8">
+            Not On StarShares?{" "}
+            <span className="underline font-semibold">
+              <Link to="/">Create an Account</Link>
+            </span>
+          </p>
+        </div>
+      </div>
     </section>
   );
 };
 
 export default Login;
-

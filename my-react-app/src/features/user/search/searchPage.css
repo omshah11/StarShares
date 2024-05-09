@@ -126,11 +126,16 @@
   border-radius: 5px;
   /* display:block; */
   max-width: 80%; /* Adjust maximum width as needed */
+  max-height: 80%;
   z-index: 1000; /* Ensure the modal appears above other content */
 }
 
 .modal-header{
   display:flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #ccc;
 }
 
 /* Modal title */
@@ -147,11 +152,23 @@
     padding: 10px;
   }
 }
+.modal-body img {
+  min-width: 200px; /* Set minimum width as needed */
+  min-height: 200px; /* Set minimum height as needed */
+  max-width: 100%; /* Set maximum width to 100% of modal body */
+  max-height: 300px; /* Set maximum height as needed */
+  display: block; /* Ensure image is treated as a block element */
+  margin: auto; /* Center the image horizontally */
+}
 
 /* Modal footer */
 .modal-footer {
   /* justify-content: center; */
   border-top: none;
+  display: flex;
+  justify-content: flex-end;
+  padding: 15px;
+  border-top: 1px solid #ccc; 
 }
 
 /* Close button */

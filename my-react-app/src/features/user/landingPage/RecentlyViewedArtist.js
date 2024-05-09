@@ -106,5 +106,3 @@ const RecentlyViewedArtist = () => {
 };
 
 export default RecentlyViewedArtist;
-
-
