@@ -53,7 +53,7 @@ const ArtistPage = () => {
         console.error("Error fetching artist details:", error);
       }
     };
-    getArtistStockId(name);
+    // getArtistStockId(name);
     fetchData();
   }, [id, watchlist]);
 
@@ -85,27 +85,27 @@ const ArtistPage = () => {
     }
   };
 
-  const fetchStats = async (artistID) => {
-    const options = {
-      method: 'GET',
-      url: `https://spotify-statistics-and-stream-count.p.rapidapi.com/artist/${artistID}`,
-      headers: {
-        'X-RapidAPI-Key': '1c62b0f6e7msh2aff4d73906d018p12bc62jsnc6052f06d1c7',
-        'X-RapidAPI-Host': 'spotify-statistics-and-stream-count.p.rapidapi.com'
-      }
-    };
+  // const fetchStats = async (artistID) => {
+  //   const options = {
+  //     method: 'GET',
+  //     url: `https://spotify-statistics-and-stream-count.p.rapidapi.com/artist/${artistID}`,
+  //     headers: {
+  //       'X-RapidAPI-Key': '1c62b0f6e7msh2aff4d73906d018p12bc62jsnc6052f06d1c7',
+  //       'X-RapidAPI-Host': 'spotify-statistics-and-stream-count.p.rapidapi.com'
+  //     }
+  //   };
 
-    try {
-      const response = await axios.request(options);
-      console.log("trial response data: ", response);
-      setStats(response.data);
-      setMonthlyListeners(response.data.monthlyListeners);
-      setWorldRank(response.data.worldRank);
-      return response.data.monthlyListeners;
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //   try {
+  //     const response = await axios.request(options);
+  //     console.log("trial response data: ", response);
+  //     setStats(response.data);
+  //     setMonthlyListeners(response.data.monthlyListeners);
+  //     setWorldRank(response.data.worldRank);
+  //     return response.data.monthlyListeners;
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
   
   const fetchArtistTopTracks = async (artistID, accessToken) => {
     const artistResponse = await fetch(
@@ -207,11 +207,8 @@ const ArtistPage = () => {
         data: {
           artistName,
           artistImage,
-<<<<<<< HEAD
           artistPopularity,
-=======
           spotifyId,
->>>>>>> main
         },
         headers: {
           "Content-Type": "application/json",
