@@ -15,13 +15,13 @@ const WatchlistedStockCard = ({ artist, deleteStock }) => {
                             backgroundPosition: 'center',
                         }}
                     ></div>
-                    <div className="p-3 text-3xl text-surface">
+                    <div className="p-2 text-3xl text-surface">
                         <h5 className="mb-2 text-xl text-center font-medium leading-tight">{artist.data.stock.artistName}</h5>
-                        <p className="justify-center text-center text-2xl mb-4 text-base text-black">{artist.data.stock.cost}</p>
-                        <div className="flex justify-center"> {/* Center the delete button */}
+                        <p className="justify-center text-center text-2xl mb-4 text-base text-green-700">${artist.data.stock.cost}</p>
+                        <div className="flex justify-center"> 
                             <button
                                 type="button"
-                                className="text-black bg-red-300 inline-block rounded px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal  shadow-primary-3 transition duration-150 ease-in-out hover:shadow-primary-2 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:shadow-primary-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
+                                className="text-black bg-red-300 inline-block rounded px-3 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal  shadow-primary-3 transition duration-150 ease-in-out hover:shadow-primary-2 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:shadow-primary-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
                                 data-twe-ripple-init
                                 data-twe-ripple-color="light"
                                 onClick={() => deleteStock(artist.data.stock._id)}
