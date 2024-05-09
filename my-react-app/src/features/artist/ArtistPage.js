@@ -56,6 +56,7 @@ const ArtistPage = () => {
 
         const topTracksData = await fetchArtistTopTracks(id, accessToken);
         setTopTracks(topTracksData.tracks);
+        setArtistValueFunction(artistDetails.popularity, artistDetails.followers.total, stockTransactionCount);
       } catch (error) {
         console.error("Error fetching artist details:", error);
       }
@@ -129,7 +130,6 @@ const ArtistPage = () => {
   };
 
   const setArtistValueFunction = (artistPopularity, artistFollowers, transactionCount) => {
-    console.log("prev artist popularity: ", prevArtistPopularity);
     console.log("artist popularity: ", artistPopularity);
     console.log("stock trade count: ", transactionCount);
     setArtistValue(stockPriceAlgorithm(artistPopularity, artistFollowers, transactionCount));
@@ -460,7 +460,7 @@ const ArtistPage = () => {
                     {artistValue}
                   </h3>
                   <div className="text-left mb-2 text-blueGray-600 mt-10">
-                    <p className="mx-4 text-xl mb-2">Performance</p>
+                    {/* <p className="mx-4 text-xl mb-2">Performance</p> */}
                     {/* Insert Artist Graph here*/}
 
                     <p className="mx-4 text-xl mb-2">Top Tracks</p>
