@@ -230,7 +230,7 @@ const Watchlist = () => {
   return (
     <div className="todo-list">
       {watchlist ? (
-        <div className="bg-slate-300 px-24">
+        <div>
           <WatchlistedStocks
             stockDetailedList={stockDetailedList}
             deleteStock={deleteFromWatchlist}
