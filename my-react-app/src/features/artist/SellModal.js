@@ -16,14 +16,26 @@ const SellModal = ({ showModal, closeModal, userId, stockId, artistImage, artist
                     quantity: quantity
                 }
             );
+        
             console.log("Sell successful:", response.data);
             closeModal();
             alert(`You have successfully sold ${quantity} shares of ${artistName}!`);
         } catch (error) {
             console.error("Error selling:", error);
+        
             // Handle error
+            if (error.response.data.status === 404) {
+                alert("You don't own this stock!");
+            } else if (error.response.data.status === 406){
+                alert("Insufficient Stock To Sell!");
+            }
+            else{
+                console.error("Unhandled error:", error);
+                alert("Something Went Wrong!");
+            }
+            closeModal();
         }
-    };
+    }        
 
     return (
         <div className={showModal ? "block" : "hidden"}>

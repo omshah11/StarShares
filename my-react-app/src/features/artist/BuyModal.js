@@ -108,11 +108,20 @@ const BuyModal = ({
         transactionType: "buy",
         quantity: quantity,
       });
-      console.error("Error buying:", error);
       // Handle error
+      if (error.response.data.status === 406) {
+        alert("Insufficient Stock");
+      } else if (error.response.data.status === 402) {
+        alert("Insufficient Funds");
+      } else {
+        // Handle other errors
+        console.error("Unhandled error:", error);
+
+      }
+      closeModal();
       return;
-    }
-  };
+      }
+    };
 
   const getOwnedStockList = async () => {
     try {

@@ -31,18 +31,23 @@ const StockCard = ({ stock }) => {
 
 const OwnedStocks = () => {
   const [ownedStocks, setOwnedStocks] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
   const user = useSelector(selectUser);
-  console.log("user inside owned stocks: ", user);
-  const userId = user.userId;
+  const userId = user.user.userId;
 
   useEffect(() => {
     const fetchOwnedStocks = async () => {
       try {
-        const encodedUserId = encodeURIComponent(userId); // URL encode the userId
+        const encodedUserId = encodeURIComponent(userId);
+        console.log(userId);
+        console.log(encodedUserId);
         const response = await axios.get(`http://localhost:5000/api/getOwnedStocks?userId=${encodedUserId}`);
         setOwnedStocks(response.data.stocks);
       } catch (error) {
         console.error('Error fetching owned stocks:', error);
+        // Display error message to the user
+      } finally {
+        setLoading(false); // Update loading state when done
       }
     };
 
@@ -56,11 +61,15 @@ const OwnedStocks = () => {
           <p className="text-xl pb-3 flex items-center font-semibold my-2">
             <i className="fas fa-list mr-3"></i> Owned Shares
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {ownedStocks.map((stock, index) => (
-              <StockCard key={index} stock={stock} />
-            ))}
-          </div>
+          {loading ? (
+            <p>Loading...</p> 
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {ownedStocks.map((stock, index) => (
+                <StockCard key={index} stock={stock} />
+              ))}
+            </div>
+          )}
           <p className="pt-1 text-gray-600">
             Source: <a className="underline" href="https://tailwindcomponents.com/component/table-responsive-with-filters">https://tailwindcomponents.com/component/table-responsive-with-filters</a>
           </p>
@@ -69,5 +78,6 @@ const OwnedStocks = () => {
     </div>
   );
 };
+
 
 export default OwnedStocks;
