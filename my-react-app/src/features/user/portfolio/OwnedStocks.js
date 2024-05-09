@@ -6,7 +6,7 @@ import { selectUser } from '../userSlice';
 const OwnedStocks = () => {
   const [ownedStocks, setOwnedStocks] = useState([]);
   const user = useSelector(selectUser);
-  const userId = user.user.id;
+  const userId = user.user.userId;
 
 
   useEffect(() => {

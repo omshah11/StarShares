@@ -16,7 +16,7 @@ const ArtistPage = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [watchlist, setWatchlist] = useState(user.watchlist);
-  const userId = user.user.id;
+  const userId = user.user.userId;
   const queryParams = new URLSearchParams(location.search);
 
   const name = queryParams.get("name");
