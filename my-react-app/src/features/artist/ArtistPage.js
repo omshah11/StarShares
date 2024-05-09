@@ -16,7 +16,7 @@ const ArtistPage = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [watchlist, setWatchlist] = useState(user.watchlist);
-  const userId = user.userId;
+  const userId = user.user.id;
   const queryParams = new URLSearchParams(location.search);
 
   const name = queryParams.get("name");
@@ -60,7 +60,7 @@ const ArtistPage = () => {
         console.error("Error fetching artist details:", error);
       }
     };
-    // getArtistStockId(name);
+    getArtistStock(name);
     fetchData();
     getOwnedStockList();
   }, [id, watchlist]);
