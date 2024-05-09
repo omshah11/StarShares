@@ -207,11 +207,8 @@ const ArtistPage = () => {
         data: {
           artistName,
           artistImage,
-<<<<<<< HEAD
           artistPopularity,
-=======
           spotifyId,
->>>>>>> main
         },
         headers: {
           "Content-Type": "application/json",
