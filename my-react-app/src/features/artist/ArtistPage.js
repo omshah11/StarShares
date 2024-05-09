@@ -5,6 +5,7 @@ import { selectUser, setUserWatchlist } from "../user/userSlice";
 import { fetchAccessToken } from "../user/landingPage/RecentlyViewedArtist";
 import { fetchArtistDetails } from "../user/landingPage/RecentlyViewedArtist";
 import { addRecentlyViewedArtist } from "../user/actions";
+import stockPriceAlgorithm from "../../algorithm/stockPriceAlgorithm";
 
 import axios from "axios";
 
@@ -26,9 +27,14 @@ const ArtistPage = () => {
   const [addedToWatchlist, setAddedToWatchlist] = useState(false);
   const [artistImage, setArtistImage] = useState(null);
   const [artistGenre, setArtistGenre] = useState(null);
+  const [artistPopularity, setArtistPopularity] = useState(0);
+  const [prevArtistPopularity, setprevArtistPopularity] = useState(0);
   const [topTracks, setTopTracks] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [artistFollowers, setArtistFollowers] = useState(null);
+  const [artistValue, setArtistValue] = useState(0);
+  const [stockTransactionCount, setStockTransactionCount] = useState(0);
+  const [stats, setStats] = useState(0);
   const [spotifyId, setSpotifyId] = useState(null);
 
   useEffect(() => {
@@ -56,9 +62,51 @@ const ArtistPage = () => {
       dispatch(addRecentlyViewedArtist(id));
     }
   }, [id, dispatch]);
-  
-  
 
+  const fetchData = async () => {
+    try {
+      const accessToken = await fetchAccessToken(CLIENT_ID, CLIENT_SECRET);
+      const artistDetails = await fetchArtistDetails(id, accessToken);
+      // getArtistStock(name);
+      // const transactionCount = await getArtistStockTransactionCount(stockId)
+      console.log(stockTransactionCount);
+      //const monthlyListeners = fetchStats(id);
+      console.log("Artist details: ", artistDetails);
+      setArtistImage(artistDetails.images[0].url);
+      setArtistGenre(artistDetails.genres[0]);
+      setArtistPopularity(artistDetails.popularity);
+      setArtistFollowers(artistDetails.followers.total);
+
+      const topTracksData = await fetchArtistTopTracks(id, accessToken);
+      setTopTracks(topTracksData.tracks);
+      setArtistValueFunction(artistDetails.popularity, artistDetails.followers.total, stockTransactionCount);
+    } catch (error) {
+      console.error("Error fetching artist details:", error);
+    }
+  };
+
+  const fetchStats = async (artistID) => {
+    const options = {
+      method: 'GET',
+      url: `https://spotify-statistics-and-stream-count.p.rapidapi.com/artist/${artistID}`,
+      headers: {
+        'X-RapidAPI-Key': '1c62b0f6e7msh2aff4d73906d018p12bc62jsnc6052f06d1c7',
+        'X-RapidAPI-Host': 'spotify-statistics-and-stream-count.p.rapidapi.com'
+      }
+    };
+
+    try {
+      const response = await axios.request(options);
+      console.log("trial response data: ", response);
+      setStats(response.data);
+      setMonthlyListeners(response.data.monthlyListeners);
+      setWorldRank(response.data.worldRank);
+      return response.data.monthlyListeners;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
   const fetchArtistTopTracks = async (artistID, accessToken) => {
     const artistResponse = await fetch(
       `https://api.spotify.com/v1/artists/${artistID}/top-tracks?country=US`,
@@ -71,6 +119,13 @@ const ArtistPage = () => {
     const topTracks = await artistResponse.json();
     return topTracks;
   };
+
+  const setArtistValueFunction = (artistPopularity, artistFollowers, transactionCount) => {
+    console.log("prev artist popularity: ", prevArtistPopularity);
+    console.log("artist popularity: ", artistPopularity);
+    console.log("stock trade count: ", transactionCount);
+    setArtistValue(stockPriceAlgorithm(artistPopularity, artistFollowers, transactionCount));
+  }
 
   const playSnippet = (previewUrl) => {
     if (previewUrl === null) {
@@ -89,9 +144,10 @@ const ArtistPage = () => {
     }
   };
 
-  const getArtistStockId = async (artistName) => {
+
+  const getArtistStock = async (artistName) => {
     try {
-      const getStockId = {
+      const getStock = {
         method: "get",
         url: "http://localhost:5000/api/getStockByName",
         params: {
@@ -102,10 +158,39 @@ const ArtistPage = () => {
         },
       };
 
-      const getStockIdResponse = await axios(getStockId);
+      const getStockIdResponse = await axios(getStock);
+      console.log("saved artist stock data: ", getStockIdResponse);
       setStockId(getStockIdResponse.data.stock._id);
+      setprevArtistPopularity(getStockIdResponse.data.stock.artistPopularity);
       const isArtistInWatchlist = watchlist.includes(getStockIdResponse.data.stock._id);
       setAddedToWatchlist(isArtistInWatchlist);
+      getArtistStockTransactionCount(getStockIdResponse.data.stock._id);
+      return getStockIdResponse.data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const getArtistStockTransactionCount = async (stockId) => {
+    console.log("stock id inside tradeCount: ", stockId);
+    try {
+      const getCount = {
+        method: "get",
+        url: "http://localhost:5000/api/getStockTradeCount",
+        params: {
+          stockId,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+      const getArtistStockTransactionCount = await axios(getCount);
+      console.log(getArtistStockTransactionCount)
+      const artistStockTransactionCount = getArtistStockTransactionCount.data.stockTradeCount;
+      console.log(artistStockTransactionCount)
+      setStockTransactionCount(artistStockTransactionCount)
+
+      return artistStockTransactionCount;
     } catch (error) {
       console.error(error);
     }
@@ -122,7 +207,11 @@ const ArtistPage = () => {
         data: {
           artistName,
           artistImage,
+<<<<<<< HEAD
+          artistPopularity,
+=======
           spotifyId,
+>>>>>>> main
         },
         headers: {
           "Content-Type": "application/json",
@@ -305,12 +394,31 @@ const ArtistPage = () => {
                           Followers
                         </span>
                       </div>
+                      {/* <div className="lg:mr-4 p-3 text-center">
+                        <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
+                          {monthlyListeners}
+                        </span>
+                        <span className="text-sm text-blueGray-400">
+                          Monthly Listeners
+                        </span>
+                      </div>
+                      <div className="lg:mr-4 p-3 text-center">
+                        <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
+                          {worldRank}
+                        </span>
+                        <span className="text-sm text-blueGray-400">
+                          World Rank
+                        </span>
+                      </div> */}
                     </div>
                   </div>
                 </div>
                 <div className="text-center mt-12">
                   <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
                     {name}
+                  </h3>
+                  <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
+                    {artistValue}
                   </h3>
                   <div className="text-left mb-2 text-blueGray-600 mt-10">
                     <p className="mx-4 text-xl mb-2">Top Tracks</p>
