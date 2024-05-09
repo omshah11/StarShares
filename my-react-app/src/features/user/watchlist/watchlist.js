@@ -77,7 +77,7 @@ const Watchlist = () => {
 
       dispatch(
         setUserWatchlist({
-          watchlist: watchlistResp,
+          watchlist: [],
         })
       );
     } catch (error) {
@@ -91,7 +91,7 @@ const Watchlist = () => {
   };
 
   const deleteWatchlist = async () => {
-    const userId = user.user.id;
+    const userId = user.user.userId;
     try {
       const deleteWatchlistConfig = {
         method: "post",
@@ -170,7 +170,8 @@ const Watchlist = () => {
   };
 
   const deleteFromWatchlist = async (stockId) => {
-    const userId = user.user.userId;
+    
+    const userId = user.user.id;
     try {
       const deleteFromWatchlist = {
         method: "post",
@@ -205,7 +206,7 @@ const Watchlist = () => {
   return (
     <div className="todo-list">
       {watchlist ? (
-        <div>
+        <div className="bg-slate-300 px-24">
           <WatchlistedStocks
             stockDetailedList={stockDetailedList}
             deleteStock={deleteFromWatchlist}
