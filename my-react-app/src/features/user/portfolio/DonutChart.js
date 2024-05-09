@@ -1,10 +1,10 @@
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 
-const DonutChart = ({ portfolioData }) => {
+const DonutChart = ({ ownedStockList }) => {
   // Extracting stock names and values from portfolioData
-  const labels = portfolioData.map(stock => stock.name);
-  const dataValues = portfolioData.map(stock => stock.value);
+  const labels = ownedStockList.map(stock => stock.artistName);
+  const dataValues = ownedStockList.map(stock => stock.cost);
 
   const data = {
     labels: labels,

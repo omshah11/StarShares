@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser, setUserWatchlist, selectUserId } from "../user/userSlice";
+import { selectUser, setUserWatchlist, selectUserId, setOwnedStocksList } from "../user/userSlice";
 import { fetchAccessToken } from "../user/landingPage/RecentlyViewedArtist";
 import { fetchArtistDetails } from "../user/landingPage/RecentlyViewedArtist";
 import { addRecentlyViewedArtist } from "../user/actions";
@@ -26,6 +26,7 @@ const ArtistPage = () => {
 
   const [stockId, setStockId] = useState("");
   const [addedToWatchlist, setAddedToWatchlist] = useState(false);
+  const [ownedStockList, setOwnedStockList] = useState(user.ownedStockList);
   const [artistImage, setArtistImage] = useState(null);
   const [artistGenre, setArtistGenre] = useState(null);
   const [topTracks, setTopTracks] = useState([]);
@@ -55,6 +56,7 @@ const ArtistPage = () => {
     };
     getArtistStockId(name);
     fetchData();
+    getOwnedStockList();
   }, [id, watchlist]);
 
   useEffect(() => {
@@ -114,6 +116,21 @@ const ArtistPage = () => {
       setAddedToWatchlist(isArtistInWatchlist);
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  const getOwnedStockList = async () => {
+    try {
+      const encodedUserId = encodeURIComponent(userId); // URL encode the userId
+      const response = await axios.get(`http://localhost:5000/api/getOwnedStocks?userId=${encodedUserId}`);
+      setOwnedStockList(response.data.stocks);
+      dispatch(
+        setOwnedStocksList({
+          ownedStockList: ownedStockList,
+        })
+      );
+    } catch (error) {
+      console.error('Error fetching owned stocks:', error);
     }
   }
 
