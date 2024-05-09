@@ -13,9 +13,8 @@ import SearchPage from '../../features/user/search/searchPage';
 import ArtistPage from '../../features/artist/ArtistPage';
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "../../features/user/userSlice";
-import { login, logout } from "../../features/user//userSlice";
+import { login, logout } from "../../features/user/userSlice";
 import "../../index.css"; // import Tailwind CSS main file 
-
 const App = () => {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
@@ -26,6 +25,7 @@ const App = () => {
     if (storedToken) {
       retrieveUser(storedToken);
     }
+    
   }, []);
 
   const retrieveUser = async (userToken) => {
@@ -76,6 +76,7 @@ const App = () => {
         // Token is expired, handle it silently
         dispatch(
           logout({
+            userId: null,
             user: {},
             isLoggedIn: false,
             token: null,
@@ -86,6 +87,7 @@ const App = () => {
       }
     }
   };
+
 
   return (
     <Router>
