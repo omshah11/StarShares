@@ -33,19 +33,31 @@ const ArtistPage = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [artistFollowers, setArtistFollowers] = useState(null);
   const [artistValue, setArtistValue] = useState(0);
-  const [monthlyListeners, setMonthlyListeners] = useState(0);
-  const [worldRank, setWorldRank] = useState(0);
   const [stockTransactionCount, setStockTransactionCount] = useState(0);
-
   const [stats, setStats] = useState(0);
+  const [spotifyId, setSpotifyId] = useState(null);
 
   useEffect(() => {
-    getArtistStock(name);
+    const fetchData = async () => {
+      try {
+        const accessToken = await fetchAccessToken(CLIENT_ID, CLIENT_SECRET);
+        const artistDetails = await fetchArtistDetails(id, accessToken);
+        setSpotifyId(artistDetails.id);
+        setArtistImage(artistDetails.images[0].url);
+        setArtistGenre(artistDetails.genres[0]);
+        setArtistFollowers(artistDetails.followers.total);
+
+        const topTracksData = await fetchArtistTopTracks(id, accessToken);
+        setTopTracks(topTracksData.tracks);
+      } catch (error) {
+        console.error("Error fetching artist details:", error);
+      }
+    };
+    getArtistStockId(name);
     fetchData();
   }, [id, watchlist]);
 
   useEffect(() => {
-    console.log(id);
     if (id) {
       dispatch(addRecentlyViewedArtist(id));
     }
@@ -184,7 +196,7 @@ const ArtistPage = () => {
     }
   }
 
-  const addToWatchlist = async (artistName, artistImage) => {
+  const addToWatchlist = async (artistName, artistImage, spotifyId) => {
     const userId = user.user.userId;
     let stockId = "";
 
@@ -195,7 +207,11 @@ const ArtistPage = () => {
         data: {
           artistName,
           artistImage,
+<<<<<<< HEAD
           artistPopularity,
+=======
+          spotifyId,
+>>>>>>> main
         },
         headers: {
           "Content-Type": "application/json",
@@ -355,7 +371,7 @@ const ArtistPage = () => {
                           style={{ backgroundColor: "#0F0F0F" }}
                           className="bg-green-500 active:bg-green-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                           type="button"
-                          onClick={() => addToWatchlist(name, artistImage)}
+                          onClick={() => addToWatchlist(name, artistImage, spotifyId)}
                         >
                           Add to Watchlist
                         </button>
