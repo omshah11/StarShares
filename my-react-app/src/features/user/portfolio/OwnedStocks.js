@@ -2,12 +2,38 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../userSlice';
+import { useNavigate} from 'react-router-dom';
+
+const StockCard = ({ stock }) => {
+  const navigate = useNavigate();
+
+  const handleStockBtn = () => {
+    console.log('Stock button clicked');
+    // Navigate to the artist page
+    navigate(`/artist?name=${stock.artistName}&id=${stock.spotifyId}`);
+  };
+  return (
+    <div className="block rounded-lg shadow-secondary-1 bg-white">
+      <div className="rounded-t-lg" onClick={handleStockBtn} style={{ cursor: 'pointer' }}>
+      <img
+          src={stock.artistImage}
+          alt={stock.artistName}
+          style={{ width: '100%', height: '350px', objectFit: 'cover', borderTopLeftRadius: '0.5rem', borderTopRightRadius: '0.5rem' }}
+        />
+        </div>
+      <div className="p-3 text-3xl text-surface">
+        <h5 className="mb-2 text-xl text-center font-medium leading-tight">{stock.artistName}</h5>
+        {/* Add other stock information here */}
+      </div>
+    </div>
+  );
+};
 
 const OwnedStocks = () => {
   const [ownedStocks, setOwnedStocks] = useState([]);
   const user = useSelector(selectUser);
-  const userId = user.user.userId;
-
+  console.log("user inside owned stocks: ", user);
+  const userId = user.userId;
 
   useEffect(() => {
     const fetchOwnedStocks = async () => {
@@ -30,34 +56,10 @@ const OwnedStocks = () => {
           <p className="text-xl pb-3 flex items-center font-semibold my-2">
             <i className="fas fa-list mr-3"></i> Owned Shares
           </p>
-          <div className="bg-white overflow-auto">
-            <table className="min-w-full leading-normal">
-              <thead>
-                <tr>
-                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Artist
-                  </th>
-                  {/* Add other table headers here */}
-                </tr>
-              </thead>
-              <tbody>
-                {ownedStocks.map((stock, index) => (
-                  <tr key={index}>
-                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 w-10 h-10">
-                          <img className="w-full h-full rounded-full" src={stock.artistImage} alt={stock.artistName} />
-                        </div>
-                        <div className="ml-3">
-                          <p className="text-gray-900 whitespace-no-wrap">{stock.artistName}</p>
-                        </div>
-                      </div>
-                    </td>
-                    {/* Add other table data here */}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {ownedStocks.map((stock, index) => (
+              <StockCard key={index} stock={stock} />
+            ))}
           </div>
           <p className="pt-1 text-gray-600">
             Source: <a className="underline" href="https://tailwindcomponents.com/component/table-responsive-with-filters">https://tailwindcomponents.com/component/table-responsive-with-filters</a>
