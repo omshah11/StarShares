@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import OwnedStocks from './OwnedStocks';
 import DonutChart from './DonutChart';
 import LineChart from './LineChart';
@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux';
 import {selectUser} from '../userSlice';
 
 const Portfolio = () => {
+    const user = useSelector(selectUser);
+    const [ownedStocksList, setOwnedStocksList] = useState(user.ownedStockList);
     const chartData = [30, 40, 35, 50, 49, 60, 70, 91, 125];
     const options = {
         chart: {
@@ -24,7 +26,6 @@ const Portfolio = () => {
             }
         ]
     };
-    const user = useSelector(selectUser);
     const userDetails = user.user;
     return (
         <div className=' justify-center px-64 flex flex-col h-full w-full bg-slate-200'>
@@ -38,7 +39,7 @@ const Portfolio = () => {
                 </div>
                 </div>
                 <div className=" mx-5 justify-center items-center w-1/2">
-                    <DonutChart className="" scale="200px"/>
+                    <DonutChart ownedStockList = {ownedStocksList} className="" scale="200px"/>
                 </div>
             </div>
             </div>
