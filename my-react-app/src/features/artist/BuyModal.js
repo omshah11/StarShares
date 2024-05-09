@@ -108,7 +108,6 @@ const BuyModal = ({
         transactionType: "buy",
         quantity: quantity,
       });
-      console.error("Error buying:", error);
       // Handle error
       if (error.response.data.status === 406) {
         alert("Insufficient Stock");
@@ -117,13 +116,12 @@ const BuyModal = ({
       } else {
         // Handle other errors
         console.error("Unhandled error:", error);
-      }
 
+      }
       closeModal();
-    }
       return;
-    }
-  };
+      }
+    };
 
   const getOwnedStockList = async () => {
     try {
@@ -138,7 +136,8 @@ const BuyModal = ({
     } catch (error) {
       console.error('Error fetching owned stocks:', error);
     }
-  
+  }
+
   return (
     <div className={showModal ? "block" : "hidden"}>
       <div className="fixed z-10 inset-0 overflow-y-auto">
