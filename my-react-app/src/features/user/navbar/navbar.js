@@ -1,16 +1,23 @@
-// Import necessary dependencies
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
 import './navbar.css';
 import SearchBar from '../search/searchbar';
+import { selectUser } from '../userSlice';
 
 // Functional component for the Navbar
 const Navbar = () => {
+  const user = useSelector(selectUser);
+  console.log("navbar: ", user);
+  const [userBalance, setUserBalance] = useState(user.balance);
   return (
     <nav className="bgcolorSS2 flex justify-between items-center px-4 py-2 text-white">
       {/* Brand name on the top left */}
       <div className="brand text-lg font-bold">
         <Link to="/home">Star Shares</Link>
+      </div>
+      <div>
+        <p className="mr-4 text-white">{userBalance}</p>
       </div>
 
       {/* Andy's original code */}

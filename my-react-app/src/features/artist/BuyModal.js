@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser, setOwnedStocksList } from "../user/userSlice";
+import { selectUser, setOwnedStocksList, setUserBalance } from "../user/userSlice";
 import axios from "axios";
 
 const BuyModal = ({
@@ -19,7 +19,7 @@ const BuyModal = ({
 
   useEffect(() => {
     getOwnedStockList();
-  }, []);
+  }, [dispatch]);
 
   const handleBuy = async (
     userId,
@@ -91,11 +91,17 @@ const BuyModal = ({
       );
 
       console.log("Buy successful:", response.data);
+      console.log("response: ", response);
       // dispatch(
       //   setOwnedStocksList({
       //     ownedStockList: ownedStockList,
       //   })
       // );
+      dispatch(
+        setUserBalance({
+          balance: response.data.balance,
+        })
+      )
       closeModal();
       alert(
         `You have successfully bought ${quantity} shares of ${artistName}!`

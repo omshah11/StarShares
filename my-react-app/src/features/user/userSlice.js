@@ -12,6 +12,7 @@ export const userSlice = createSlice({
         loading: false,
         error: null,
         watchlist: null,
+        balance: null,
         ownedStockList: null
     },
     reducers: {
@@ -20,6 +21,7 @@ export const userSlice = createSlice({
             state.isLoggedIn = action.payload.isLoggedIn;
             state.token = action.payload.token;
             state.userId = action.payload.user.userId;
+            state.balance = action.payload.balance;
             localStorage.setItem('token', action.payload.token);
         },
         // Reducer function for handling user logout
@@ -43,6 +45,9 @@ export const userSlice = createSlice({
         },
         setOwnedStocksList: (state, action) => {
             state.ownedStockList = action.payload.ownedStockList;
+        },
+        setUserBalance: (state, action) => {
+            state.balance = action.payload.balance;
         }
     },
     extraReducers: (builder) => {
@@ -70,7 +75,7 @@ export const userSlice = createSlice({
 });
 
 // Export actions for user login, logout, and setting current user
-export const { login, logout, setCurrentUser, setUserWatchlist, setOwnedStocksList } = userSlice.actions;
+export const { login, logout, setCurrentUser, setUserWatchlist, setOwnedStocksList, setUserBalance } = userSlice.actions;
 
 
 export const selectUser = (state) => state.user;

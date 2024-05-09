@@ -42,11 +42,14 @@ const Login = () => {
       // Send the login request
       const userResponse = await axios(getUser);
 
+      console.log("user upon login: ", userResponse);
+
       // Assuming your server returns a token upon successful login
       const token = userResponse.data.token;
       const userId = userResponse.data.user._id;
       const firstName = userResponse.data.user.firstName;
       const lastName = userResponse.data.user.lastName;
+      const balance = userResponse.data.user.balance;
 
       // Dispatching the login action with separate properties for user and isLoggedIn
       dispatch(
@@ -59,7 +62,8 @@ const Login = () => {
             password: password,
           },
           isLoggedIn: loggedIn,
-          token: token, // Include the token in the login action
+          token: token,
+          balance: balance,
         })
       );
 
@@ -73,6 +77,7 @@ const Login = () => {
             email: email,
             password: password,
             token: token,
+            balance: balance
           },
         })
       );
