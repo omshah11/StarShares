@@ -60,12 +60,13 @@ const App = () => {
       dispatch(
         login({
           user: {
-            id: userId,
+            userId: userId,
             firstName: firstName,
             lastName: lastName,
             email: email,
             password: password
           },
+          userId: userId,
           isLoggedIn: loggedIn,
           token: userToken, // Include the token in the login action
           watchlist: watchlist,

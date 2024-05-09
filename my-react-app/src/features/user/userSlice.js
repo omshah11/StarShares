@@ -12,7 +12,8 @@ export const userSlice = createSlice({
         loading: false,
         error: null,
         watchlist: null,
-        balance: null
+        balance: null,
+        ownedStockList: null
     },
     reducers: {
         login: (state, action) => {
@@ -41,6 +42,9 @@ export const userSlice = createSlice({
         // Reducer function for setting user watchlist
         setUserWatchlist: (state, action) => {
             state.watchlist = action.payload.watchlist
+        },
+        setOwnedStocksList: (state, action) => {
+            state.ownedStockList = action.payload.ownedStockList;
         }
     },
     extraReducers: (builder) => {
@@ -68,7 +72,7 @@ export const userSlice = createSlice({
 });
 
 // Export actions for user login, logout, and setting current user
-export const { login, logout, setCurrentUser, setUserWatchlist } = userSlice.actions;
+export const { login, logout, setCurrentUser, setUserWatchlist, setOwnedStocksList } = userSlice.actions;
 
 
 export const selectUser = (state) => state.user;

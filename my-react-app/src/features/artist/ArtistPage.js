@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser, setUserWatchlist } from "../user/userSlice";
+import { selectUser, setUserWatchlist, selectUserId, setOwnedStocksList } from "../user/userSlice";
 import { fetchAccessToken } from "../user/landingPage/RecentlyViewedArtist";
 import { fetchArtistDetails } from "../user/landingPage/RecentlyViewedArtist";
 import { addRecentlyViewedArtist } from "../user/actions";
+import BuyModal from "./BuyModal";
+import SellModal from "./SellModal";
 import stockPriceAlgorithm from "../../algorithm/stockPriceAlgorithm";
 
 import axios from "axios";
@@ -14,7 +16,7 @@ const ArtistPage = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [watchlist, setWatchlist] = useState(user.watchlist);
-  const userId = user.userid;
+  const userId = user.user.userId;
   const queryParams = new URLSearchParams(location.search);
 
   const name = queryParams.get("name");
@@ -25,6 +27,7 @@ const ArtistPage = () => {
 
   const [stockId, setStockId] = useState("");
   const [addedToWatchlist, setAddedToWatchlist] = useState(false);
+  const [ownedStockList, setOwnedStockList] = useState(user.ownedStockList);
   const [artistImage, setArtistImage] = useState(null);
   const [artistGenre, setArtistGenre] = useState(null);
   const [artistPopularity, setArtistPopularity] = useState(0);
@@ -33,70 +36,85 @@ const ArtistPage = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [artistFollowers, setArtistFollowers] = useState(null);
   const [artistValue, setArtistValue] = useState(0);
-  const [monthlyListeners, setMonthlyListeners] = useState(0);
-  const [worldRank, setWorldRank] = useState(0);
-
+  const [stockTransactionCount, setStockTransactionCount] = useState(0);
   const [stats, setStats] = useState(0);
+  const [spotifyId, setSpotifyId] = useState(null);
+  const [showBuyModal, setShowBuyModal] = useState(false);
+  const [showSellModal, setShowSellModal] = useState(false);
+  const [buyQuantity, setBuyQuantity] = useState(0);
+  const [sellQuantity, setSellQuantity] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const accessToken = await fetchAccessToken(CLIENT_ID, CLIENT_SECRET);
         const artistDetails = await fetchArtistDetails(id, accessToken);
-        //const monthlyListeners = fetchStats(id);
-        console.log("Artist details: ", artistDetails);
+        setSpotifyId(artistDetails.id);
         setArtistImage(artistDetails.images[0].url);
         setArtistGenre(artistDetails.genres[0]);
-        setArtistPopularity(artistDetails.popularity);
         setArtistFollowers(artistDetails.followers.total);
 
         const topTracksData = await fetchArtistTopTracks(id, accessToken);
         setTopTracks(topTracksData.tracks);
-        setArtistValueFunction(artistDetails.popularity, artistDetails.followers.total);
+        setArtistValueFunction(artistDetails.popularity, artistDetails.followers.total, stockTransactionCount);
       } catch (error) {
         console.error("Error fetching artist details:", error);
       }
     };
     getArtistStock(name);
-    //console.log("prev artist data: ", prevArtistStockData)
-    // const prevArtistPopularity = prevArtistStockData.data.stock.artistPopularity;
-    // if (82 !== artistPopularity) {
-    //   //call stock algorithm to calculate new artist stock price
-    //   //call update artist stock endpoint to update artist stock with new popularity and price
-    //   stockPriceAlgorithm(artistPopularity, artistFollowers);
-    // }
-    //fetchStats(id);
-    fetchData(monthlyListeners);
+    fetchData();
+    getOwnedStockList();
   }, [id, watchlist]);
 
   useEffect(() => {
-    console.log(id);
     if (id) {
       dispatch(addRecentlyViewedArtist(id));
     }
   }, [id, dispatch]);
 
-  const fetchStats = async (artistID) => {
-    const options = {
-      method: 'GET',
-      url: `https://spotify-statistics-and-stream-count.p.rapidapi.com/artist/${artistID}`,
-      headers: {
-        'X-RapidAPI-Key': '1c62b0f6e7msh2aff4d73906d018p12bc62jsnc6052f06d1c7',
-        'X-RapidAPI-Host': 'spotify-statistics-and-stream-count.p.rapidapi.com'
-      }
-    };
-
+  const fetchData = async () => {
     try {
-      const response = await axios.request(options);
-      console.log("trial response data: ", response);
-      setStats(response.data);
-      setMonthlyListeners(response.data.monthlyListeners);
-      setWorldRank(response.data.worldRank);
-      return response.data.monthlyListeners;
+      const accessToken = await fetchAccessToken(CLIENT_ID, CLIENT_SECRET);
+      const artistDetails = await fetchArtistDetails(id, accessToken);
+      // getArtistStock(name);
+      // const transactionCount = await getArtistStockTransactionCount(stockId)
+      console.log(stockTransactionCount);
+      //const monthlyListeners = fetchStats(id);
+      console.log("Artist details: ", artistDetails);
+      setArtistImage(artistDetails.images[0].url);
+      setArtistGenre(artistDetails.genres[0]);
+      setArtistPopularity(artistDetails.popularity);
+      setArtistFollowers(artistDetails.followers.total);
+
+      const topTracksData = await fetchArtistTopTracks(id, accessToken);
+      setTopTracks(topTracksData.tracks);
+      setArtistValueFunction(artistDetails.popularity, artistDetails.followers.total, stockTransactionCount);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching artist details:", error);
     }
   };
+
+  // const fetchStats = async (artistID) => {
+  //   const options = {
+  //     method: 'GET',
+  //     url: `https://spotify-statistics-and-stream-count.p.rapidapi.com/artist/${artistID}`,
+  //     headers: {
+  //       'X-RapidAPI-Key': '1c62b0f6e7msh2aff4d73906d018p12bc62jsnc6052f06d1c7',
+  //       'X-RapidAPI-Host': 'spotify-statistics-and-stream-count.p.rapidapi.com'
+  //     }
+  //   };
+
+  //   try {
+  //     const response = await axios.request(options);
+  //     console.log("trial response data: ", response);
+  //     setStats(response.data);
+  //     setMonthlyListeners(response.data.monthlyListeners);
+  //     setWorldRank(response.data.worldRank);
+  //     return response.data.monthlyListeners;
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
   
   const fetchArtistTopTracks = async (artistID, accessToken) => {
     const artistResponse = await fetch(
@@ -111,10 +129,10 @@ const ArtistPage = () => {
     return topTracks;
   };
 
-  const setArtistValueFunction = (artistPopularity, artistFollowers, monthlyListeners) => {
-    console.log("prev artist popularity: ", prevArtistPopularity);
+  const setArtistValueFunction = (artistPopularity, artistFollowers, transactionCount) => {
     console.log("artist popularity: ", artistPopularity);
-    setArtistValue(stockPriceAlgorithm(artistPopularity, artistFollowers, monthlyListeners));
+    console.log("stock trade count: ", transactionCount);
+    setArtistValue(stockPriceAlgorithm(artistPopularity, artistFollowers, transactionCount));
   }
 
   const playSnippet = (previewUrl) => {
@@ -133,6 +151,7 @@ const ArtistPage = () => {
       }, 15000); // Pause after 15 seconds
     }
   };
+
 
   const getArtistStock = async (artistName) => {
     try {
@@ -153,14 +172,54 @@ const ArtistPage = () => {
       setprevArtistPopularity(getStockIdResponse.data.stock.artistPopularity);
       const isArtistInWatchlist = watchlist.includes(getStockIdResponse.data.stock._id);
       setAddedToWatchlist(isArtistInWatchlist);
-
+      getArtistStockTransactionCount(getStockIdResponse.data.stock._id);
       return getStockIdResponse.data;
     } catch (error) {
       console.error(error);
     }
   }
 
-  const addToWatchlist = async (artistName, artistImage) => {
+  const getArtistStockTransactionCount = async (stockId) => {
+    console.log("stock id inside tradeCount: ", stockId);
+    try {
+      const getCount = {
+        method: "get",
+        url: "http://localhost:5000/api/getStockTradeCount",
+        params: {
+          stockId,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+      const getArtistStockTransactionCount = await axios(getCount);
+      console.log(getArtistStockTransactionCount)
+      const artistStockTransactionCount = getArtistStockTransactionCount.data.stockTradeCount;
+      console.log(artistStockTransactionCount)
+      setStockTransactionCount(artistStockTransactionCount)
+
+      return artistStockTransactionCount;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const getOwnedStockList = async () => {
+    try {
+      const encodedUserId = encodeURIComponent(userId); // URL encode the userId
+      const response = await axios.get(`http://localhost:5000/api/getOwnedStocks?userId=${encodedUserId}`);
+      setOwnedStockList(response.data.stocks);
+      dispatch(
+        setOwnedStocksList({
+          ownedStockList: ownedStockList,
+        })
+      );
+    } catch (error) {
+      console.error('Error fetching owned stocks:', error);
+    }
+  }
+
+  const addToWatchlist = async (artistName, artistImage, spotifyId) => {
     const userId = user.user.userId;
     let stockId = "";
 
@@ -172,6 +231,7 @@ const ArtistPage = () => {
           artistName,
           artistImage,
           artistPopularity,
+          spotifyId,
         },
         headers: {
           "Content-Type": "application/json",
@@ -216,7 +276,7 @@ const ArtistPage = () => {
   };
 
   const deleteFromWatchlist = async (stockId) => {
-    const userId = user.user.userId;
+    const userId = user.userId;
     try {
       const deleteFromWatchlist = {
         method: "post",
@@ -240,6 +300,22 @@ const ArtistPage = () => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const openBuyModal = () => {
+    setShowBuyModal(true);
+  };
+
+  const closeBuyModal = () => {
+    setShowBuyModal(false);
+  };
+
+  const openSellModal = () => {
+    setShowSellModal(true);
+  };
+
+  const closeSellModal = () => {
+    setShowSellModal(false);
   };
 
   return (
@@ -307,6 +383,7 @@ const ArtistPage = () => {
                         style={{ backgroundColor: "#00F000" }}
                         className="bg-green-500 active:bg-green-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                         type="button"
+                        onClick={openBuyModal}
                       >
                         Buy
                       </button>
@@ -314,6 +391,7 @@ const ArtistPage = () => {
                         style={{ backgroundColor: "#F00000" }}
                         className="bg-green-500 active:bg-green-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                         type="button"
+                        onClick={openSellModal}
                       >
                         Sell
                       </button>
@@ -331,7 +409,7 @@ const ArtistPage = () => {
                           style={{ backgroundColor: "#0F0F0F" }}
                           className="bg-green-500 active:bg-green-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                           type="button"
-                          onClick={() => addToWatchlist(name, artistImage)}
+                          onClick={() => addToWatchlist(name, artistImage, spotifyId)}
                         >
                           Add to Watchlist
                         </button>
@@ -374,6 +452,7 @@ const ArtistPage = () => {
                   </div>
                 </div>
                 <div className="text-center mt-12">
+
                   <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
                     {name}
                   </h3>
@@ -381,6 +460,9 @@ const ArtistPage = () => {
                     {artistValue}
                   </h3>
                   <div className="text-left mb-2 text-blueGray-600 mt-10">
+                    {/* <p className="mx-4 text-xl mb-2">Performance</p> */}
+                    {/* Insert Artist Graph here*/}
+
                     <p className="mx-4 text-xl mb-2">Top Tracks</p>
                     <div className="mx-10 grid grid-cols-5  justify-center">
                       {topTracks.map((track, index) => (
@@ -455,6 +537,26 @@ const ArtistPage = () => {
             </div>
           </footer>
         </section>
+        <BuyModal
+        showModal={showBuyModal}
+        closeModal={closeBuyModal}
+        setQuantity={setBuyQuantity}
+        userId={userId}
+        stockId={stockId}
+        artistImage={artistImage}
+        artistName={name}
+        spotifyId={spotifyId}
+      />
+        <SellModal
+        showModal={showSellModal}
+        closeModal={closeSellModal}
+        setQuantity={setSellQuantity}
+        userId={userId}
+        stockId={stockId}
+        artistImage={artistImage}
+        artistName={name}
+        spotifyId={spotifyId}
+      />
       </main>
     </div>
   );

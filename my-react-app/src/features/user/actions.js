@@ -23,7 +23,7 @@ export const addRecentlyViewedArtist = createAsyncThunk(
 
     try {
       // Make the axios post request to add the recently viewed artist
-      await axios.post(`http://localhost:5000/api/recently-viewed-artists?userId=${userId}&artistId=${artistId}`, null, {
+      await axios.post(`http://localhost:5000/api/recently-viewed-artists?userId=${userId}&artistId=${artistId}`, {userId:userId, artistId: artistId}, {
         headers: { Authorization: `Bearer ${token}` },
       });
       

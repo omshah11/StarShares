@@ -6,6 +6,7 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import WatchlistedStocks from "./WatchlistedStocks";
+import { fetchArtistDetails, fetchAccessToken } from "../landingPage/RecentlyViewedArtist";
 import "./watchlist.css";
 
 const CLIENT_ID = "2f6e085b55bc4ede9131e2d7d7739c30";
@@ -19,7 +20,6 @@ const Watchlist = () => {
   const [watchlist, setWatchlist] = useState(user.watchlist);
   const [stockDetailedList, setStockDetailedList] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [accessToken, setAccessToken] = useState("");
   const [items, setItems] = useState([]);
 
   useEffect(() => {
@@ -30,6 +30,7 @@ const Watchlist = () => {
   }, [watchlist]); // Dependency array ensures the effect is triggered when watchlist changes
 
   const getStocks = async () => {
+    const accessToken = await fetchAccessToken(CLIENT_ID, CLIENT_SECRET);
     setStockDetailedList([]);
     for (let i = 0; i < watchlist.length; i++) {
       const currentStockId = watchlist[i];
@@ -47,6 +48,8 @@ const Watchlist = () => {
 
       try {
         const stockDetails = await axios(getStock);
+        const artistDetails = await fetchArtistDetails(stockDetails.data.stock.spotifyId, accessToken);
+        // add stock algorith changes to display artist stock price in the watchlist.
         setStockDetailedList((prevList) => [...prevList, stockDetails]);
       } catch (error) {
         console.error("Error fetching stock details:", error);
@@ -74,7 +77,7 @@ const Watchlist = () => {
 
       dispatch(
         setUserWatchlist({
-          watchlist: watchlistResp,
+          watchlist: [],
         })
       );
     } catch (error) {
@@ -167,7 +170,8 @@ const Watchlist = () => {
   };
 
   const deleteFromWatchlist = async (stockId) => {
-    const userId = user.user.userId;
+    
+    const userId = user.user.id;
     try {
       const deleteFromWatchlist = {
         method: "post",
@@ -202,7 +206,7 @@ const Watchlist = () => {
   return (
     <div className="todo-list">
       {watchlist ? (
-        <div>
+        <div className="bg-slate-300 px-24">
           <WatchlistedStocks
             stockDetailedList={stockDetailedList}
             deleteStock={deleteFromWatchlist}

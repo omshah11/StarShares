@@ -27,17 +27,19 @@ const Profile = () => {
   };
   return (
     <div className="profile-container" >
-      <div className="profile-container-1">
-        <ProfileCard user={user} />
-        <BiographyCard initialBiography={userBiography} onSave={handleBiographySave} />
-        <div className="transactions-container"> 
-          <TransactionsCard/>
+      <div className="left-container">
+        <div className="profile-container-1">
+          <ProfileCard user={user} />
+          <BiographyCard initialBiography={userBiography} onSave={handleBiographySave} />
         </div>
-      </div>
-      <div className="profile-container-2">
         <div className="play-container">
           <h2>Play Recently Listened</h2>
           <RecentlyPlayedButton/>
+        </div>
+      </div>
+      <div className="right-container">
+        <div className="transactions-container"> 
+          <TransactionsCard/>
         </div>
         <div className="news-container">
           <NewsCard/>
