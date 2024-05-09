@@ -45,6 +45,9 @@ export const userSlice = createSlice({
         },
         setOwnedStocksList: (state, action) => {
             state.ownedStockList = action.payload.ownedStockList;
+        },
+        setUserBalance: (state, action) => {
+            state.balance = action.payload.balance;
         }
     },
     extraReducers: (builder) => {
@@ -72,7 +75,7 @@ export const userSlice = createSlice({
 });
 
 // Export actions for user login, logout, and setting current user
-export const { login, logout, setCurrentUser, setUserWatchlist, setOwnedStocksList } = userSlice.actions;
+export const { login, logout, setCurrentUser, setUserWatchlist, setOwnedStocksList, setUserBalance } = userSlice.actions;
 
 
 export const selectUser = (state) => state.user;
