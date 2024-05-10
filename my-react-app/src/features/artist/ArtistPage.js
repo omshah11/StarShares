@@ -43,6 +43,7 @@ const ArtistPage = () => {
   const [showSellModal, setShowSellModal] = useState(false);
   const [buyQuantity, setBuyQuantity] = useState(0);
   const [sellQuantity, setSellQuantity] = useState(0);
+  const [artistDescription, setArtistDescription] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,6 +65,7 @@ const ArtistPage = () => {
     getArtistStock(name);
     fetchData();
     getOwnedStockList();
+    handleCardClick(name)
   }, [id, watchlist]);
 
   useEffect(() => {
@@ -302,6 +304,75 @@ const ArtistPage = () => {
     }
   };
 
+  const handleCardClick = async (track) => {
+      try {
+        // Fetch the artist ID from the Genius API
+        const response = await fetch(
+          `https://api.genius.com/search?q=${encodeURIComponent(track)}&access_token=g8J7SWDhjrS2W1eVOmZSubSEtv2HJyBzRT1OEHR_NWOoj8tbu739v7u2RtN6dsJV`
+        );
+        if (!response.ok) {
+          throw new Error('Failed to search for artist ID');
+        }
+        const data = await response.json();
+        const hit = data.response.hits.find(hit => hit.result.primary_artist.name === track);
+        console.log(hit)
+        if (!hit) {
+          // throw new Error('Artist not found in search results');
+          setArtistDescription("Unable to fetch Genuis artist description");
+        }
+        const artistId = hit.result.primary_artist.id;
+        console.log("yuhhhhhhhhh" + artistId)
+  
+        await fetchArtistDescription(artistId, 200);
+    
+      } catch (error) {
+        console.error('Error fetching artist ID:', error);
+        // Handle error if necessary
+      }
+  };
+
+  const fetchArtistDescription = async (artistId, wordLimit) => {
+    try {
+      if (!artistId) {
+        setArtistDescription("Unable to fetch artist description");
+        return;
+      }
+      
+      const response = await fetch(
+        `https://api.genius.com/artists/${artistId}?access_token=g8J7SWDhjrS2W1eVOmZSubSEtv2HJyBzRT1OEHR_NWOoj8tbu739v7u2RtN6dsJV`
+      );
+      if (!response.ok) {
+        throw new Error('Failed to fetch artist description');
+      }
+      const data = await response.json();
+      const descriptionDOM = data.response.artist.description.dom;
+
+      const extractTextContent = (element) => {
+          if (typeof element === 'string') {
+              return element;
+          }
+          if (element.children && Array.isArray(element.children)) {
+              return element.children.map(child => extractTextContent(child)).join('');
+          }
+          return '';
+      };
+
+      const combinedDescription = descriptionDOM.children
+          .filter(child => child.tag === 'p')
+          .map(paragraph => extractTextContent(paragraph))
+          .join(' '); 
+
+      const words = combinedDescription.split(/\s+/);
+      const truncatedDescription = words.slice(0, wordLimit).join(' ');
+
+      setArtistDescription(truncatedDescription+"...");
+
+    } catch (error) {
+      console.error('Error fetching artist description:', error);
+      setArtistDescription("Unable to fetch artist description");
+    }
+  };
+
   const openBuyModal = () => {
     setShowBuyModal(true);
   };
@@ -490,12 +561,7 @@ const ArtistPage = () => {
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-9/12 px-4">
                       <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
-                        Mariah Carey (born March 27, 1970) is an American
-                        singer, songwriter, actress, record producer and #1 New
-                        York Times bestselling author. Referred to as the
-                        "Songbird Supreme", she is noted for her five-octave
-                        vocal range, melismatic singing style and signature use
-                        of the whistle reg…
+                        {artistDescription}
                       </p>
                       <a href="#pablo" className="font-normal">
                         read more
