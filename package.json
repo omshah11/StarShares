@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "chart.js": "^4.4.2",
-    "ng2-charts": "^6.0.0",
-    "react-chartjs-2": "^5.2.0",
-    "redux-persist": "^6.0.0"
-  }
-}
