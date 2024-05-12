@@ -1,8 +1,12 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser, setOwnedStocksList, setUserBalance } from "../user/userSlice";
 import axios from "axios";
 
-const SellModal = ({ showModal, closeModal, userId, stockId, artistImage, artistName, spotifyId }) => {
+const SellModal = ({ showModal, closeModal, userId, stockId, artistImage, artistName, spotifyId, artistValue }) => {
     const [quantity, setQuantity] = useState(0);
+    const user = useSelector(selectUser);
+  const dispatch = useDispatch();
 
     const handleSell = async (userId, stockId, artistImage, artistName, spotifyId) => {
         try {
@@ -18,8 +22,14 @@ const SellModal = ({ showModal, closeModal, userId, stockId, artistImage, artist
             );
         
             console.log("Sell successful:", response.data);
+            dispatch(
+                setUserBalance({
+                  balance: response.data.balance,
+                })
+              )
             closeModal();
             alert(`You have successfully sold ${quantity} shares of ${artistName}!`);
+            window.location.reload();
         } catch (error) {
             console.error("Error selling:", error);
         

@@ -11,6 +11,7 @@ const BuyModal = ({
   artistImage,
   artistName,
   spotifyId,
+  artistValue
 }) => {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
@@ -18,7 +19,7 @@ const BuyModal = ({
   const [ownedStockList, setOwnedStockList] = useState(user.ownedStockList);
 
   useEffect(() => {
-    getOwnedStockList();
+
   }, [dispatch]);
 
   const handleBuy = async (
@@ -37,7 +38,7 @@ const BuyModal = ({
         artistName: artistName,
         artistImage: artistImage,
         spotifyId: spotifyId,
-
+        artistValue: artistValue
         // You can define cost to be a call to the algorithm
       });
 
@@ -106,6 +107,7 @@ const BuyModal = ({
       alert(
         `You have successfully bought ${quantity} shares of ${artistName}!`
       );
+      window.location.reload();
     } catch (error) {
       // Log the error if adding the transaction fails
       console.log({
@@ -128,21 +130,6 @@ const BuyModal = ({
       return;
       }
     };
-
-  const getOwnedStockList = async () => {
-    try {
-      const encodedUserId = encodeURIComponent(userId); // URL encode the userId
-      const response = await axios.get(`http://localhost:5000/api/getOwnedStocks?userId=${encodedUserId}`);
-      setOwnedStockList(response.data.stocks);
-      dispatch(
-        setOwnedStocksList({
-          ownedStockList: ownedStockList,
-        })
-      );
-    } catch (error) {
-      console.error('Error fetching owned stocks:', error);
-    }
-  }
 
   return (
     <div className={showModal ? "block" : "hidden"}>
