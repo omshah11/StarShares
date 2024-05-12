@@ -7,7 +7,7 @@ export const fetchRecentlyViewedArtists = createAsyncThunk(
   async (_, { getState }) => {
     const userId = getUserIdFromState(getState()); // Modify this function to get userId from the state
     const token = selectToken(getState());
-    const response = await axios.get(`http://localhost:5000/api/recently-viewed-artists?userId=${userId}`, {
+    const response = await axios.get(`https://intense-inlet-40544-607910b59282.herokuapp.com/api/recently-viewed-artists?userId=${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
@@ -23,7 +23,7 @@ export const addRecentlyViewedArtist = createAsyncThunk(
 
     try {
       // Make the axios post request to add the recently viewed artist
-      await axios.post(`http://localhost:5000/api/recently-viewed-artists?userId=${userId}&artistId=${artistId}`, {userId:userId, artistId: artistId}, {
+      await axios.post(`https://intense-inlet-40544-607910b59282.herokuapp.com/api/recently-viewed-artists?userId=${userId}&artistId=${artistId}`, {userId:userId, artistId: artistId}, {
         headers: { Authorization: `Bearer ${token}` },
       });
       

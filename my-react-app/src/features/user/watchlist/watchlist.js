@@ -37,7 +37,7 @@ const Watchlist = () => {
 
       const getStock = {
         method: "get",
-        url: "http://localhost:5000/api/getStock",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/getStock",
         params: {
           stockId: currentStockId,
         },
@@ -62,7 +62,7 @@ const Watchlist = () => {
     try {
       const createWatchlistConfig = {
         method: "post",
-        url: "http://localhost:5000/api/createWatchlist",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/createWatchlist",
         data: {
           userId,
         },
@@ -95,7 +95,7 @@ const Watchlist = () => {
     try {
       const deleteWatchlistConfig = {
         method: "post",
-        url: "http://localhost:5000/api/deleteWatchlist",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/deleteWatchlist",
         data: {
           userId,
         },
@@ -125,7 +125,7 @@ const Watchlist = () => {
     try {
       const addStockToDB = {
         method: "post",
-        url: "http://localhost:5000/api/addStock",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/addStock",
         data: {
           artistName,
           artistImage,
@@ -148,7 +148,7 @@ const Watchlist = () => {
     try {
       const addStockToWatchlist = {
         method: "post",
-        url: "http://localhost:5000/api/addToWatchlist",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/addToWatchlist",
         data: {
           userId,
           stockId,
@@ -175,7 +175,7 @@ const Watchlist = () => {
     try {
       const deleteFromWatchlist = {
         method: "post",
-        url: "http://localhost:5000/api/deleteFromWatchlist",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/deleteFromWatchlist",
         data: {
           userId,
           stockId,

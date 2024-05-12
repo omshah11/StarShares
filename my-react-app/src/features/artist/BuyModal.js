@@ -34,7 +34,7 @@ const BuyModal = ({
 
     try {
       // Attempt to add the stock
-      const addStock = await axios.post("http://localhost:5000/api/addStock", {
+      const addStock = await axios.post("https://intense-inlet-40544-607910b59282.herokuapp.com/api/addStock", {
         artistName: artistName,
         artistImage: artistImage,
         spotifyId: spotifyId,
@@ -62,7 +62,7 @@ const BuyModal = ({
     try {
       // Add the newly added stock to the user's portfolio
       const addToPortfolio = await axios.post(
-        "http://localhost:5000/api/addStockToPortfolio",
+        "https://intense-inlet-40544-607910b59282.herokuapp.com/api/addStockToPortfolio",
         {
           userId: userId,
           stockId: stockId,
@@ -82,7 +82,7 @@ const BuyModal = ({
     try {
       // Proceed with adding the transaction
       const response = await axios.post(
-        "http://localhost:5000/api/addTransactionToPortfolio",
+        "https://intense-inlet-40544-607910b59282.herokuapp.com/api/addTransactionToPortfolio",
         {
           userId: userId,
           stockId: stockId,

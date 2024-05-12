@@ -159,7 +159,7 @@ const ArtistPage = () => {
     try {
       const getStock = {
         method: "get",
-        url: "http://localhost:5000/api/getStockByName",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/getStockByName",
         params: {
           artistName,
         },
@@ -186,7 +186,7 @@ const ArtistPage = () => {
     try {
       const getCount = {
         method: "get",
-        url: "http://localhost:5000/api/getStockTradeCount",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/getStockTradeCount",
         params: {
           stockId,
         },
@@ -209,7 +209,7 @@ const ArtistPage = () => {
   const getOwnedStockList = async () => {
     try {
       const encodedUserId = encodeURIComponent(userId); // URL encode the userId
-      const response = await axios.get(`http://localhost:5000/api/getOwnedStocks?userId=${encodedUserId}`);
+      const response = await axios.get(`https://intense-inlet-40544-607910b59282.herokuapp.com/api/getOwnedStocks?userId=${encodedUserId}`);
       setOwnedStockList(response.data.stocks);
       dispatch(
         setOwnedStocksList({
@@ -228,7 +228,7 @@ const ArtistPage = () => {
     try {
       const addStockToDB = {
         method: "post",
-        url: "http://localhost:5000/api/addStock",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/addStock",
         data: {
           artistName,
           artistImage,
@@ -253,7 +253,7 @@ const ArtistPage = () => {
     try {
       const addStockToWatchlist = {
         method: "post",
-        url: "http://localhost:5000/api/addToWatchlist",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/addToWatchlist",
         data: {
           userId,
           stockId,
@@ -282,7 +282,7 @@ const ArtistPage = () => {
     try {
       const deleteFromWatchlist = {
         method: "post",
-        url: "http://localhost:5000/api/deleteFromWatchlist",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/deleteFromWatchlist",
         data: {
           userId,
           stockId,

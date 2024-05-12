@@ -25,7 +25,7 @@ const Login = () => {
     try {
       const getUser = {
         method: "get", // Assuming you are using a GET request for login
-        url: "http://localhost:5000/api/getUserByEmail",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/getUserByEmail",
         params: {
           // Pass parameters as 'params' instead of 'data'
           email,
@@ -86,7 +86,7 @@ const Login = () => {
       try {
         const getWatchlist = {
           method: "get",
-          url: "http://localhost:5000/api/getWatchlist",
+          url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/getWatchlist",
           params: {
             userId,
           },
@@ -113,7 +113,7 @@ const Login = () => {
       try {
         // Attempt to add the stock
         const createPortfolio = await axios.post(
-          "http://localhost:5000/api/createPortfolio",
+          "https://intense-inlet-40544-607910b59282.herokuapp.com/api/createPortfolio",
           {
             userId: userId,
           }
@@ -131,7 +131,7 @@ const Login = () => {
       try {
         const encodedUserId = encodeURIComponent(userId); // URL encode the userId
         const response = await axios.get(
-          `http://localhost:5000/api/getOwnedStocks?userId=${encodedUserId}`
+          `https://intense-inlet-40544-607910b59282.herokuapp.com/api/getOwnedStocks?userId=${encodedUserId}`
         );
         const ownedStockList = response.data.stocks;
         dispatch(

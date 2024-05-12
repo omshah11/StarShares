@@ -18,7 +18,7 @@ const SignUp = () => {
     try {
       const configuration = {
         method: "post",
-        url: "http://localhost:5000/api/signup",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/signup",
         data: {
           firstName,
           lastName,

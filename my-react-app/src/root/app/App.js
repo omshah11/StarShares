@@ -32,7 +32,7 @@ const App = () => {
     try {
       const configuration = {
         method: "get", // Assuming you are using a GET request for login
-        url: "http://localhost:5000/api/getUserByToken",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/getUserByToken",
         params: {
           // Pass parameters as 'params' instead of 'data'
           userToken,

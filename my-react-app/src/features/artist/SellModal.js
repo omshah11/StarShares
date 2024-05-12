@@ -12,7 +12,7 @@ const SellModal = ({ showModal, closeModal, userId, stockId, artistImage, artist
         try {
             // Proceed with adding the transaction
             const response = await axios.post(
-                "http://localhost:5000/api/addTransactionToPortfolio",
+                "https://intense-inlet-40544-607910b59282.herokuapp.com/api/addTransactionToPortfolio",
                 {
                     userId: userId,
                     stockId: stockId,
