@@ -53,6 +53,8 @@ const App = () => {
       const watchlist = response.data.user.watchlist;
       const balance = response.data.user.balance;
 
+      console.log("balance upon refresh: ", balance);
+
       // Assuming 'loggedIn' is derived from the userState or another logic
       const loggedIn = true;
 
