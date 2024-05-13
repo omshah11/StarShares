@@ -1,13 +1,14 @@
 // BiographyCard.js
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectUser } from '../userSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectUser, updateProfileBio } from '../userSlice';
 
 const BiographyCard = () => {
-  const defaultBio = "This is the Default Bio"; // Default bio text
   const userDetails = useSelector(selectUser).user;
+  const defaultBio = "This is the Default Bio"; // Default bio text
   const [editing, setEditing] = useState(false);
   const [profileBio, setProfileBio] = useState(userDetails.profileBio || defaultBio); // Initialize with user's bio or default
+  const dispatch = useDispatch();
 
   const handleEdit = () => {
     setEditing(true);
@@ -15,7 +16,8 @@ const BiographyCard = () => {
 
   const handleSave = () => {
     setEditing(false);
-    // Save the updated profileBio (you'll need to implement this logic)
+    dispatch(updateProfileBio(profileBio)); // Dispatch action to update profileBio
+    // Now the updated profileBio will be saved in the Redux store
   };
 
   return (

@@ -51,6 +51,7 @@ const App = () => {
       const email = response.data.user.email;
       const password = response.data.user.password;
       const watchlist = response.data.user.watchlist;
+      const profileBio = response.data.profileBio;
 
       // Assuming 'loggedIn' is derived from the userState or another logic
       const loggedIn = true;
@@ -68,6 +69,7 @@ const App = () => {
           isLoggedIn: loggedIn,
           token: userToken, // Include the token in the login action
           watchlist: watchlist,
+          profileBio: profileBio,
         })
       );
     } catch (error) {

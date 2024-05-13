@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const CLIENT_ID = 'YOUR_CLIENT_ID';
-const CLIENT_SECRET = 'YOUR_CLIENT_SECRET';
+const CLIENT_ID = "2f6e085b55bc4ede9131e2d7d7739c30";
+const CLIENT_SECRET = "88eeb98034e5422099cce4f6467a3d51";
 
 async function getAccessToken() {
   try {

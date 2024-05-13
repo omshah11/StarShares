@@ -11,7 +11,9 @@ export const userSlice = createSlice({
         recentlyViewedArtists: [],
         loading: false,
         error: null,
-        watchlist: null
+        watchlist: null,
+        profileBio: "This is the Default Bio",
+        profileImage: ''
     },
     reducers: {
         login: (state, action) => {
@@ -30,6 +32,7 @@ export const userSlice = createSlice({
             state.currentUser = action.payload.currentUser;
             state.watchlist = action.payload.watchlist;
             state.recentlyViewedArtists = action.payload.recentlyViewedArtists;
+            state.profileBio = action.payload.profileBio;
 
             localStorage.removeItem('token');
         },
@@ -39,7 +42,13 @@ export const userSlice = createSlice({
         // Reducer function for setting user watchlist
         setUserWatchlist: (state, action) => {
             state.watchlist = action.payload.watchlist
-        }
+        },
+        updateProfileBio: (state, action) => {
+            state.user.profileBio = action.payload; // Update the profileBio in the state
+        },
+        updateProfile: (state, action) => {
+            state.user = action.payload; // Update the user object with the payload
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -66,7 +75,7 @@ export const userSlice = createSlice({
 });
 
 // Export actions for user login, logout, and setting current user
-export const { login, logout, setCurrentUser, setUserWatchlist } = userSlice.actions;
+export const { login, logout, setCurrentUser, setUserWatchlist, updateProfileBio, updateProfile } = userSlice.actions;
 
 
 export const selectUser = (state) => state.user;
