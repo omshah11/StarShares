@@ -46,22 +46,22 @@ const ArtistPage = () => {
   const [artistDescription, setArtistDescription] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const accessToken = await fetchAccessToken(CLIENT_ID, CLIENT_SECRET);
-        const artistDetails = await fetchArtistDetails(id, accessToken);
-        setSpotifyId(artistDetails.id);
-        setArtistImage(artistDetails.images[0].url);
-        setArtistGenre(artistDetails.genres[0]);
-        setArtistFollowers(artistDetails.followers.total);
+    // const fetchData = async () => {
+    //   try {
+    //     const accessToken = await fetchAccessToken(CLIENT_ID, CLIENT_SECRET);
+    //     const artistDetails = await fetchArtistDetails(id, accessToken);
+    //     setSpotifyId(artistDetails.id);
+    //     setArtistImage(artistDetails.images[0].url);
+    //     setArtistGenre(artistDetails.genres[0]);
+    //     setArtistFollowers(artistDetails.followers.total);
 
-        const topTracksData = await fetchArtistTopTracks(id, accessToken);
-        setTopTracks(topTracksData.tracks);
-        setArtistValueFunction(artistDetails.popularity, artistDetails.followers.total, stockTransactionCount);
-      } catch (error) {
-        console.error("Error fetching artist details:", error);
-      }
-    };
+    //     const topTracksData = await fetchArtistTopTracks(id, accessToken);
+    //     setTopTracks(topTracksData.tracks);
+    //     setArtistValueFunction(artistDetails.popularity, artistDetails.followers.total, stockTransactionCount);
+    //   } catch (error) {
+    //     console.error("Error fetching artist details:", error);
+    //   }
+    // };
     getArtistStock(name);
     fetchData();
     getOwnedStockList();
@@ -78,11 +78,12 @@ const ArtistPage = () => {
     try {
       const accessToken = await fetchAccessToken(CLIENT_ID, CLIENT_SECRET);
       const artistDetails = await fetchArtistDetails(id, accessToken);
+      console.log(artistDetails);
       // getArtistStock(name);
       // const transactionCount = await getArtistStockTransactionCount(stockId)
       console.log(stockTransactionCount);
       //const monthlyListeners = fetchStats(id);
-      console.log("Artist details: ", artistDetails);
+      setSpotifyId(artistDetails.id);
       setArtistImage(artistDetails.images[0].url);
       setArtistGenre(artistDetails.genres[0]);
       setArtistPopularity(artistDetails.popularity);
@@ -224,15 +225,13 @@ const ArtistPage = () => {
   const addToWatchlist = async (artistName, artistImage, spotifyId) => {
     const userId = user.user.userId;
     let stockId = "";
-
     try {
       const addStockToDB = {
         method: "post",
-        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/addStock",
+        url: "http://localhost:5000/api/addStock",
         data: {
           artistName,
           artistImage,
-          artistPopularity,
           spotifyId,
         },
         headers: {
@@ -250,10 +249,12 @@ const ArtistPage = () => {
         console.error(error);
       }
     }
+
+    console.log("wathclist: ", userId, stockId);
     try {
       const addStockToWatchlist = {
         method: "post",
-        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/addToWatchlist",
+        url: "http://localhost:5000/api/addToWatchlist",
         data: {
           userId,
           stockId,
@@ -573,7 +574,7 @@ const ArtistPage = () => {
             </div>
           </div>
 
-          <footer className="relative bg-blueGray-200 pt-8 pb-6 mt-8">
+          {/* <footer className="relative bg-blueGray-200 pt-8 pb-6 mt-8">
             <div className="container mx-auto px-4">
               <div className="flex flex-wrap items-center md:justify-between justify-center">
                 <div className="w-full md:w-6/12 px-4 mx-auto text-center">
@@ -601,7 +602,7 @@ const ArtistPage = () => {
                 </div>
               </div>
             </div>
-          </footer>
+          </footer> */}
         </section>
         <BuyModal
         showModal={showBuyModal}

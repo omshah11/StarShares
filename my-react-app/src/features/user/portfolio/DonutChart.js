@@ -3,14 +3,24 @@ import { Doughnut } from 'react-chartjs-2';
 
 const DonutChart = ({ ownedStockList }) => {
   // Extracting stock names and values from portfolioData
-  const labels = ownedStockList.map(stock => stock.artistName);
-  const dataValues = ownedStockList.map(stock => stock.cost);
+  const labels = ownedStockList.map(stock => ({
+    artistName: stock.artistName,
+    valuation: stock.cost * stock.quantity,
+    quantity: stock.quantity,
+    cost: stock.cost
+  }));
+  const dataValues = ownedStockList.map(stock => ({
+    valuation: stock.cost * stock.quantity,
+    quantity: stock.quantity,
+    cost: stock.cost
+  }));
+  
 
   const data = {
-    labels: labels,
+    labels: labels.map(stock => `${stock.artistName} (Quantity: ${stock.quantity}, Cost: ${stock.cost})`),
     datasets: [
       {
-        data: dataValues,
+        data: dataValues.map(stock => stock.valuation),
         backgroundColor: [
           'rgba(255, 99, 132, 0.5)',
           'rgba(54, 162, 235, 0.5)',
@@ -39,7 +49,7 @@ const DonutChart = ({ ownedStockList }) => {
       <div className='flex flex-col justify-center px-auto'>
         <h2 className='w-full h-full flex justify-center items-center text-xl font-semibold my-4'>Individual Owned Stock Breakdown</h2>
         <div className='min-w-full min-h-full flex flex-grow'>
-          <Doughnut className='flex justify-center mx-5 my-5' data={data} />
+          <Doughnut className='flex justify-center mx-5 my-5' data={data}/>
         </div>
       </div>
     </div>

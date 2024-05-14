@@ -17,7 +17,7 @@ const Navbar = () => {
         <Link to="/home">Star Shares</Link>
       </div>
       <div>
-        <p className="mr-4 text-white">{userBalance}</p>
+        <p className="mr-4 text-white">{userBalance.toFixed(2)}</p>
       </div>
 
       {/* Andy's original code */}

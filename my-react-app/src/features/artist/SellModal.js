@@ -45,6 +45,22 @@ const SellModal = ({ showModal, closeModal, userId, stockId, artistImage, artist
             }
             closeModal();
         }
+
+        try {
+            const encodedUserId = encodeURIComponent(userId); // URL encode the userId
+            const response = await axios.get(
+              `http://localhost:5000/api/getOwnedStocks?userId=${encodedUserId}`
+            );
+            const ownedStockList = response.data.stocks;
+            dispatch(
+              setOwnedStocksList({
+                ownedStockList: ownedStockList,
+              })
+            );
+            //setOwnedStocks(response.data.stocks);
+          } catch (error) {
+            console.error("Error fetching owned stocks:", error);
+          }
     }        
 
     return (

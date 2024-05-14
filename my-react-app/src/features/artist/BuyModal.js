@@ -34,7 +34,7 @@ const BuyModal = ({
 
     try {
       // Attempt to add the stock
-      const addStock = await axios.post("https://intense-inlet-40544-607910b59282.herokuapp.com/api/addStock", {
+      const addStock = await axios.post("http://localhost:5000/api/addStock", {
         artistName: artistName,
         artistImage: artistImage,
         spotifyId: spotifyId,
@@ -62,11 +62,11 @@ const BuyModal = ({
     try {
       // Add the newly added stock to the user's portfolio
       const addToPortfolio = await axios.post(
-        "https://intense-inlet-40544-607910b59282.herokuapp.com/api/addStockToPortfolio",
+        "http://localhost:5000/api/addStockToPortfolio",
         {
           userId: userId,
           stockId: stockId,
-          quantity: 0,
+          quantity: quantity,
         }
       );
 
@@ -82,7 +82,7 @@ const BuyModal = ({
     try {
       // Proceed with adding the transaction
       const response = await axios.post(
-        "https://intense-inlet-40544-607910b59282.herokuapp.com/api/addTransactionToPortfolio",
+        "http://localhost:5000/api/addTransactionToPortfolio",
         {
           userId: userId,
           stockId: stockId,
@@ -128,6 +128,22 @@ const BuyModal = ({
       }
       closeModal();
       return;
+      }
+
+      try {
+        const encodedUserId = encodeURIComponent(userId); // URL encode the userId
+        const response = await axios.get(
+          `http://localhost:5000/api/getOwnedStocks?userId=${encodedUserId}`
+        );
+        const ownedStockList = response.data.stocks;
+        dispatch(
+          setOwnedStocksList({
+            ownedStockList: ownedStockList,
+          })
+        );
+        //setOwnedStocks(response.data.stocks);
+      } catch (error) {
+        console.error("Error fetching owned stocks:", error);
       }
     };
 

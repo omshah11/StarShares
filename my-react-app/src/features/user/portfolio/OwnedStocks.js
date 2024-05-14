@@ -70,9 +70,9 @@ const OwnedStocks = () => {
               ))}
             </div>
           )}
-          <p className="pt-1 text-gray-600">
+          {/* <p className="pt-1 text-gray-600">
             Source: <a className="underline" href="https://tailwindcomponents.com/component/table-responsive-with-filters">https://tailwindcomponents.com/component/table-responsive-with-filters</a>
-          </p>
+          </p> */}
         </div>
       </main>
     </div>
