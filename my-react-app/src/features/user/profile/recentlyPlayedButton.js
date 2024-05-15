@@ -46,6 +46,7 @@ const RecentlyPlayedButton = () => {
     // Play the most recent track using Spotify Web Playback SDK
     if (recentTrack) {
       console.log('Playing:', recentTrack.track.name);
+      
       // Add code to play the track using Spotify Web Playback SDK
     } else {
       console.log('No recent tracks found.');
@@ -54,9 +55,15 @@ const RecentlyPlayedButton = () => {
 
   return (
     <div>
-      <button className="play-button" onClick={handlePlay}> Play Recent Track </button>
-      <button className='connection' onClick={handleButtonClick}>Connect to Spotify</button>
+      <h2>Play Recently Listened</h2>
+      <div>
+        <button className="play-button" onClick={handlePlay}> Play Recent Track </button>
+      </div>
+      <div>
+        <button className='connection' onClick={handleButtonClick}> Connect to Spotify</button>
+      </div>
     </div>
+    
     );
 };
 

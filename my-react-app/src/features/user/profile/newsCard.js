@@ -3,39 +3,58 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const NewsCard = () => {
-  const [articles, setArticles] = useState([]);
+  const [news, setNews] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchArticles = async () => {
+    const fetchNews = async () => {
       try {
-        const apiKey = '9ad02fd22ecf4647ae47a4484b8d8aba'; // Replace with your News API key
-        const response = await axios.get('https://newsapi.org/v2/everything', {
+        const response = await axios.get('https://gnews.io/api/v4/search', {
           params: {
             q: 'music', // Example: Search query for music-related articles
-            apiKey: apiKey,
+            token: '68d7c1a522e4791acd8149f18f1fdfae', // Replace 'YOUR_API_KEY' with your GNews API key
+            lang: 'en', // Language (optional, defaults to English)
+            max: 10, // Maximum number of articles to fetch (optional, defaults to 10)
           },
         });
-        setArticles(response.data.articles);
+        setNews(response.data.articles);
+        setIsLoading(false);
+        setError(null);
       } catch (error) {
-        console.error('Error fetching articles:', error);
+        setError(error.message);
+        setIsLoading(false);  
       }
     };
 
-    fetchArticles();
-  }, []); // Empty dependency array ensures the effect runs only once
+    fetchNews();
+    // You can set up an interval to fetch data periodically
+    const interval = setInterval(fetchNews, 60000); // Refresh every minute
+
+    // Clean up function to clear the interval
+    return () => clearInterval(interval);
+  }, []); // Empty dependency array ensures this effect runs only once on component mount
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="news-card">
       <h2>Recent News Articles</h2>
-      <div className="articles">
-        {articles.map((article, index) => (
-          <div key={index} className="article">
+      <ul className="news">
+        {news.map((article, index) => (
+          <li key={index} className="news">
             <h3>{article.title}</h3>
             <p>{article.description}</p>
             <a href={article.url} target="_blank" rel="noopener noreferrer">Read more</a>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 };

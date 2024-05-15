@@ -30,11 +30,11 @@ const Profile = () => {
       <div className="left-container">
         <div className="profile-container-1">
           <ProfileCard user={user} />
+          <p></p>
           <BiographyCard initialBiography={userBiography} onSave={handleBiographySave} />
-        </div>
-        <div className="play-container">
-          <h2>Play Recently Listened</h2>
-          <RecentlyPlayedButton/>
+          <div className="play-container">
+            <RecentlyPlayedButton/>
+          </div>
         </div>
       </div>
       <div className="right-container">

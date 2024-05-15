@@ -1,14 +1,12 @@
+// ProfileCard.js
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectUser } from '../userSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectUser, updateProfile } from '../userSlice';
 import "./profile.css";
 import defaultImage from './default.png'; // import the default image
 
 const ProfileCard = () => {
-  const [backgroundColor, setBackgroundColor] = useState('#556771'); // Initial color
-  const [borderColor, setBorderColor] = useState('#000'); // Initial color
-  const [coloring, setColoring] = useState(false);
-
+  const [backgroundColor, setBackgroundColor] = useState('#e3e8f0'); // Initial color
   const userDetails = useSelector(selectUser).user;
   const [editing, setEditing] = useState(false);
   const [user, setUser] = useState({
@@ -18,27 +16,17 @@ const ProfileCard = () => {
     password: userDetails.password,
     profileImage: userDetails.profileImage || defaultImage // use the user's profile image or the default image
   });
+  const dispatch = useDispatch();
 
   const handleEdit = () => {
+    if (editing) {
+      dispatch(updateProfile(user)); // Dispatch action to update profile
+    }
     setEditing(!editing);
   };
 
-  const handleColor = () => {
-    setColoring(!coloring);
-  }
-
   const handleChange = (e) => {
-    if (e.target.name === 'profileImage') {
-      setUser({...user, profileImage: URL.createObjectURL(e.target.files[0])});
-    } else {
-      setUser({...user, [e.target.name]: e.target.value});
-    }
-  };
-
-  const handleColorChange = (e) => {
-    // Change the background color to a new value
-    setBackgroundColor(e.target.value);
-    setBorderColor(e.target.value);
+    setUser({...user, [e.target.name]: e.target.value});
   };
 
   return (
@@ -61,18 +49,9 @@ const ProfileCard = () => {
             <p>Password: {user.password}</p>
           </div>
         )}
-        {coloring ? (
-          <div className="color-change">
-            <input type="color" onChange={handleColorChange} />
-          </div>
-        ) :
-        ( 
-          <div className="standard">
-          </div>
-        )}
+        
         <div>
           <button className='profile-edit' onClick={handleEdit}>{editing ? 'Save Profile' : 'Edit Profile'}</button>
-          <button className='backcolor-edit' style={{marginLeft: '2%'}} onClick={handleColor}> {coloring ? 'Save Profile' : 'Change Color'}</button>
         </div>
       </div>
     </div>
