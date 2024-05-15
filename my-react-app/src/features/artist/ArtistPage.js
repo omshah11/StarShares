@@ -228,7 +228,7 @@ const ArtistPage = () => {
     try {
       const addStockToDB = {
         method: "post",
-        url: "http://localhost:5000/api/addStock",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/addStock",
         data: {
           artistName,
           artistImage,
@@ -254,7 +254,7 @@ const ArtistPage = () => {
     try {
       const addStockToWatchlist = {
         method: "post",
-        url: "http://localhost:5000/api/addToWatchlist",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/addToWatchlist",
         data: {
           userId,
           stockId,

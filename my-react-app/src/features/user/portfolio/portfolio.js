@@ -38,7 +38,7 @@ const Portfolio = () => {
         try {
             const encodedUserId = encodeURIComponent(userId); // URL encode the userId
             const response = await axios.get(
-              `http://localhost:5000/api/getOwnedStocks?userId=${encodedUserId}`
+              `https://intense-inlet-40544-607910b59282.herokuapp.com/api/getOwnedStocks?userId=${encodedUserId}`
             );
             const ownedStockList = response.data.stocks;
             setOwnedStockList(ownedStockList);
