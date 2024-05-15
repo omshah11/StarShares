@@ -1,13 +1,40 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import axios from "axios";
 import OwnedStocks from './OwnedStocks';
 import DonutChart from './DonutChart';
 import LineChart from './LineChart';
 import BarChart from './BarChart';
-import { useSelector } from 'react-redux';
-import {selectUser} from '../userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import {selectUser, setOwnedStocksList} from '../userSlice';
 
 const Portfolio = () => {
+
+    const user = useSelector(selectUser);
+    const userId = user.user.userId;
+    const dispatch = useDispatch();
+    const [ownedStocksList, setOwnedStockList] = useState(user.ownedStockList);
     const chartData = [30, 40, 35, 50, 49, 60, 70, 91, 125];
+
+    useEffect(() => {
+        const getOwnedStockList = async () => {
+            try {
+                const encodedUserId = encodeURIComponent(userId); // URL encode the userId
+                const response = await axios.get(
+                    `https://intense-inlet-40544-607910b59282.herokuapp.com/api/getOwnedStocks?userId=${encodedUserId}`
+                );
+                const ownedStockList = response.data.stocks;
+                setOwnedStockList(ownedStockList);
+                dispatch(
+                    setOwnedStocksList({
+                        ownedStockList: ownedStockList,
+                    })
+                );
+            } catch (error) {
+                console.error("Error fetching owned stocks:", error);
+            }
+        };
+        getOwnedStockList();
+    }, [userId, dispatch]);
     const options = {
         chart: {
             id: "basic-line",
@@ -24,7 +51,7 @@ const Portfolio = () => {
             }
         ]
     };
-    const user = useSelector(selectUser);
+
     const userDetails = user.user;
     return (
         <div className=' justify-center px-64 flex flex-col h-full w-full bg-slate-200'>
@@ -33,12 +60,12 @@ const Portfolio = () => {
                 <div className='w-1/2'>
                 <h1 className="my-10 text-4xl font-semibold text-center">{userDetails.firstName}'s Portfolio</h1>
                 <div className="">
-                    <LineChart />
-                    <BarChart />
+                    {/* <LineChart /> */}
+                    <BarChart ownedStockList = {ownedStocksList}/>
                 </div>
                 </div>
                 <div className=" mx-5 justify-center items-center w-1/2">
-                    <DonutChart className="" scale="200px"/>
+                    <DonutChart ownedStockList = {ownedStocksList} className="" scale="200px"/>
                 </div>
             </div>
             </div>

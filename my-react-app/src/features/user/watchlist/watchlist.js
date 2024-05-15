@@ -37,7 +37,7 @@ const Watchlist = () => {
 
       const getStock = {
         method: "get",
-        url: "http://localhost:5000/api/getStock",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/getStock",
         params: {
           stockId: currentStockId,
         },
@@ -62,7 +62,7 @@ const Watchlist = () => {
     try {
       const createWatchlistConfig = {
         method: "post",
-        url: "http://localhost:5000/api/createWatchlist",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/createWatchlist",
         data: {
           userId,
         },
@@ -77,7 +77,7 @@ const Watchlist = () => {
 
       dispatch(
         setUserWatchlist({
-          watchlist: watchlistResp,
+          watchlist: [],
         })
       );
     } catch (error) {
@@ -91,11 +91,11 @@ const Watchlist = () => {
   };
 
   const deleteWatchlist = async () => {
-    const userId = user.user.id;
+    const userId = user.user.userId;
     try {
       const deleteWatchlistConfig = {
         method: "post",
-        url: "http://localhost:5000/api/deleteWatchlist",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/deleteWatchlist",
         data: {
           userId,
         },
@@ -125,7 +125,7 @@ const Watchlist = () => {
     try {
       const addStockToDB = {
         method: "post",
-        url: "http://localhost:5000/api/addStock",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/addStock",
         data: {
           artistName,
           artistImage,
@@ -148,7 +148,7 @@ const Watchlist = () => {
     try {
       const addStockToWatchlist = {
         method: "post",
-        url: "http://localhost:5000/api/addToWatchlist",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/addToWatchlist",
         data: {
           userId,
           stockId,
@@ -170,11 +170,12 @@ const Watchlist = () => {
   };
 
   const deleteFromWatchlist = async (stockId) => {
+    
     const userId = user.user.userId;
     try {
       const deleteFromWatchlist = {
         method: "post",
-        url: "http://localhost:5000/api/deleteFromWatchlist",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/deleteFromWatchlist",
         data: {
           userId,
           stockId,
@@ -205,7 +206,7 @@ const Watchlist = () => {
   return (
     <div className="todo-list">
       {watchlist ? (
-        <div>
+        <div className="bg-slate-300 px-24">
           <WatchlistedStocks
             stockDetailedList={stockDetailedList}
             deleteStock={deleteFromWatchlist}

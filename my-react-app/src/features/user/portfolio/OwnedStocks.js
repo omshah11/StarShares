@@ -1,318 +1,83 @@
-// OwnedStocks.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../userSlice';
+import { useNavigate} from 'react-router-dom';
 
-// This component represents the section of the portfolio page that displays the list of owned stocks.
-const OwnedStocks = () => {
+const StockCard = ({ stock }) => {
+  const navigate = useNavigate();
+
+  const handleStockBtn = () => {
+    console.log('Stock button clicked');
+    // Navigate to the artist page
+    navigate(`/artist?name=${stock.artistName}&id=${stock.spotifyId}`);
+  };
   return (
-    <div class="w-full  overflow-x-hidden border-t flex flex-col">
-      <main class="w-full flex-grow pt-0 p-6">
-        {/* This div contains the "Owned Stocks" section */}
-        <div class="w-full mt-12">
-          {/* This paragraph contains the title of the section */}
-          <p class="text-xl pb-3 flex items-center font-semibold my-2">
-            <i class="fas fa-list mr-3"></i> Owned Shares
-          </p>
+    <div className="block rounded-lg shadow-secondary-1 bg-white">
+      <div className="rounded-t-lg" onClick={handleStockBtn} style={{ cursor: 'pointer' }}>
+      <img
+          src={stock.artistImage}
+          alt={stock.artistName}
+          style={{ width: '100%', height: '350px', objectFit: 'cover', borderTopLeftRadius: '0.5rem', borderTopRightRadius: '0.5rem' }}
+        />
+        </div>
+      <div className="p-3 text-3xl text-surface">
+        <h5 className="mb-2 text-xl text-center font-medium leading-tight">{stock.artistName}</h5>
+        {/* Add other stock information here */}
+      </div>
+    </div>
+  );
+};
 
-          {/* This div contains the table of owned stocks */}
-          <div class="bg-white overflow-auto">
-            {/* This table displays the data for each owned stock */}
-            <table class="min-w-full leading-normal">
-              <thead>
-                {/* This row contains the table headers */}
-                <tr>
-                  <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Artist
-                  </th>
-                  <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Shares
-                  </th>
-                  <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Price
-                  </th>
-                  <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Average Cost
-                  </th>
-                  <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Total Return
-                  </th>
-                  <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Equity
-                  </th>
-                  <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Gains
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {/* This row contains the data for the first owned stock */}
-                <tr>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    <div class="flex items-center">
-                      <div class="flex-shrink-0 w-10 h-10">
-                        {/* This image represents the artist of the first owned stock */}
-                        <img class="w-full h-full rounded-full" src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSNmANevq5C_6uKrTKHssGKOcELvMJNccZ_Omq5BumJD2YYZLzT" alt="" />
-                      </div>
-                      <div class="ml-3">
-                        {/* This paragraph contains the name of the artist of the first owned stock */}
-                        <p class="text-gray-900 whitespace-no-wrap">
-                          Usher
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the number of shares of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">1000</p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the price of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">
-                      $0.01
-                    </p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the average cost of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">
-                      $0.00
-                    </p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the total return of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">
-                      $0.00
-                    </p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the equity of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">
-                      $10.00
-                    </p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This span contains the gains of the first owned stock */}
-                    <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                      <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
-                      <span class="relative">Positive</span>
-                    </span>
-                  </td>
-                </tr>
-                {/* Repeat the above row for each owned stock */}
-                <tr>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    <div class="flex items-center">
-                      <div class="flex-shrink-0 w-10 h-10">
-                        {/* This image represents the artist of the first owned stock */}
-                        <img class="w-full h-full rounded-full" src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSNmANevq5C_6uKrTKHssGKOcELvMJNccZ_Omq5BumJD2YYZLzT" alt="" />
-                      </div>
-                      <div class="ml-3">
-                        {/* This paragraph contains the name of the artist of the first owned stock */}
-                        <p class="text-gray-900 whitespace-no-wrap">
-                          Usher
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the number of shares of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">1000</p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the price of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">
-                      $0.01
-                    </p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the average cost of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">
-                      $0.00
-                    </p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the total return of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">
-                      $0.00
-                    </p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the equity of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">
-                      $10.00
-                    </p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This span contains the gains of the first owned stock */}
-                    <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                      <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
-                      <span class="relative">Positive</span>
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    <div class="flex items-center">
-                      <div class="flex-shrink-0 w-10 h-10">
-                        {/* This image represents the artist of the first owned stock */}
-                        <img class="w-full h-full rounded-full" src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSNmANevq5C_6uKrTKHssGKOcELvMJNccZ_Omq5BumJD2YYZLzT" alt="" />
-                      </div>
-                      <div class="ml-3">
-                        {/* This paragraph contains the name of the artist of the first owned stock */}
-                        <p class="text-gray-900 whitespace-no-wrap">
-                          Usher
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the number of shares of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">1000</p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the price of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">
-                      $0.01
-                    </p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the average cost of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">
-                      $0.00
-                    </p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the total return of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">
-                      $0.00
-                    </p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the equity of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">
-                      $10.00
-                    </p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This span contains the gains of the first owned stock */}
-                    <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                      <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
-                      <span class="relative">Positive</span>
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    <div class="flex items-center">
-                      <div class="flex-shrink-0 w-10 h-10">
-                        {/* This image represents the artist of the first owned stock */}
-                        <img class="w-full h-full rounded-full" src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSNmANevq5C_6uKrTKHssGKOcELvMJNccZ_Omq5BumJD2YYZLzT" alt="" />
-                      </div>
-                      <div class="ml-3">
-                        {/* This paragraph contains the name of the artist of the first owned stock */}
-                        <p class="text-gray-900 whitespace-no-wrap">
-                          Usher
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the number of shares of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">1000</p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the price of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">
-                      $0.01
-                    </p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the average cost of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">
-                      $0.00
-                    </p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the total return of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">
-                      $0.00
-                    </p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the equity of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">
-                      $10.00
-                    </p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This span contains the gains of the first owned stock */}
-                    <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                      <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
-                      <span class="relative">Positive</span>
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    <div class="flex items-center">
-                      <div class="flex-shrink-0 w-10 h-10">
-                        {/* This image represents the artist of the first owned stock */}
-                        <img class="w-full h-full rounded-full" src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSNmANevq5C_6uKrTKHssGKOcELvMJNccZ_Omq5BumJD2YYZLzT" alt="" />
-                      </div>
-                      <div class="ml-3">
-                        {/* This paragraph contains the name of the artist of the first owned stock */}
-                        <p class="text-gray-900 whitespace-no-wrap">
-                          Usher
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the number of shares of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">1000</p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the price of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">
-                      $0.01
-                    </p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the average cost of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">
-                      $0.00
-                    </p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the total return of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">
-                      $0.00
-                    </p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This paragraph contains the equity of the first owned stock */}
-                    <p class="text-gray-900 whitespace-no-wrap">
-                      $10.00
-                    </p>
-                  </td>
-                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {/* This span contains the gains of the first owned stock */}
-                    <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                      <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
-                      <span class="relative">Positive</span>
-                    </span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+const OwnedStocks = () => {
+  const [ownedStocks, setOwnedStocks] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
+  const user = useSelector(selectUser);
+  const userId = user.user.userId;
 
-          {/* This paragraph contains the source of the table */}
-          <p class="pt-1 text-gray-600">
-            Source: <a class="underline" href="https://tailwindcomponents.com/component/table-responsive-with-filters">https://tailwindcomponents.com/component/table-responsive-with-filters</a>
+  useEffect(() => {
+    const fetchOwnedStocks = async () => {
+      try {
+        const encodedUserId = encodeURIComponent(userId);
+        console.log(userId);
+        console.log(encodedUserId);
+        const response = await axios.get(`https://intense-inlet-40544-607910b59282.herokuapp.com/api/getOwnedStocks?userId=${encodedUserId}`);
+        setOwnedStocks(response.data.stocks);
+      } catch (error) {
+        console.error('Error fetching owned stocks:', error);
+        // Display error message to the user
+      } finally {
+        setLoading(false); // Update loading state when done
+      }
+    };
+
+    fetchOwnedStocks();
+  }, [userId]);
+
+  return (
+    <div className="w-full overflow-x-hidden border-t flex flex-col">
+      <main className="w-full flex-grow pt-0 p-6">
+        <div className="w-full mt-12">
+          <p className="text-xl pb-3 flex items-center font-semibold my-2">
+            <i className="fas fa-list mr-3"></i> Owned Shares
           </p>
+          {loading ? (
+            <p>Loading...</p> 
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {ownedStocks.map((stock, index) => (
+                <StockCard key={index} stock={stock} />
+              ))}
+            </div>
+          )}
+          {/* <p className="pt-1 text-gray-600">
+            Source: <a className="underline" href="https://tailwindcomponents.com/component/table-responsive-with-filters">https://tailwindcomponents.com/component/table-responsive-with-filters</a>
+          </p> */}
         </div>
       </main>
     </div>
-  )
-}
+  );
+};
+
 
 export default OwnedStocks;

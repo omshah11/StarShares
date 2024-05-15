@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser, setUserWatchlist } from "../user/userSlice";
+import { selectUser, setUserWatchlist, selectUserId, setOwnedStocksList } from "../user/userSlice";
 import { fetchAccessToken } from "../user/landingPage/RecentlyViewedArtist";
 import { fetchArtistDetails } from "../user/landingPage/RecentlyViewedArtist";
 import { addRecentlyViewedArtist } from "../user/actions";
+import BuyModal from "./BuyModal";
+import SellModal from "./SellModal";
+import stockPriceAlgorithm from "../../algorithm/stockPriceAlgorithm";
 
 import axios from "axios";
 
@@ -13,7 +16,7 @@ const ArtistPage = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [watchlist, setWatchlist] = useState(user.watchlist);
-  const userId = user.userid;
+  const userId = user.user.userId;
   const queryParams = new URLSearchParams(location.search);
 
   const name = queryParams.get("name");
@@ -24,31 +27,45 @@ const ArtistPage = () => {
 
   const [stockId, setStockId] = useState("");
   const [addedToWatchlist, setAddedToWatchlist] = useState(false);
+  const [ownedStockList, setOwnedStockList] = useState(user.ownedStockList);
   const [artistImage, setArtistImage] = useState(null);
   const [artistGenre, setArtistGenre] = useState(null);
+  const [artistPopularity, setArtistPopularity] = useState(0);
+  const [prevArtistPopularity, setprevArtistPopularity] = useState(0);
   const [topTracks, setTopTracks] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [artistFollowers, setArtistFollowers] = useState(null);
+  const [artistValue, setArtistValue] = useState(0);
+  const [stockTransactionCount, setStockTransactionCount] = useState(0);
+  const [stats, setStats] = useState(0);
   const [spotifyId, setSpotifyId] = useState(null);
+  const [showBuyModal, setShowBuyModal] = useState(false);
+  const [showSellModal, setShowSellModal] = useState(false);
+  const [buyQuantity, setBuyQuantity] = useState(0);
+  const [sellQuantity, setSellQuantity] = useState(0);
+  const [artistDescription, setArtistDescription] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const accessToken = await fetchAccessToken(CLIENT_ID, CLIENT_SECRET);
-        const artistDetails = await fetchArtistDetails(id, accessToken);
-        setSpotifyId(artistDetails.id);
-        setArtistImage(artistDetails.images[0].url);
-        setArtistGenre(artistDetails.genres[0]);
-        setArtistFollowers(artistDetails.followers.total);
+    // const fetchData = async () => {
+    //   try {
+    //     const accessToken = await fetchAccessToken(CLIENT_ID, CLIENT_SECRET);
+    //     const artistDetails = await fetchArtistDetails(id, accessToken);
+    //     setSpotifyId(artistDetails.id);
+    //     setArtistImage(artistDetails.images[0].url);
+    //     setArtistGenre(artistDetails.genres[0]);
+    //     setArtistFollowers(artistDetails.followers.total);
 
-        const topTracksData = await fetchArtistTopTracks(id, accessToken);
-        setTopTracks(topTracksData.tracks);
-      } catch (error) {
-        console.error("Error fetching artist details:", error);
-      }
-    };
-    getArtistStockId(name);
+    //     const topTracksData = await fetchArtistTopTracks(id, accessToken);
+    //     setTopTracks(topTracksData.tracks);
+    //     setArtistValueFunction(artistDetails.popularity, artistDetails.followers.total, stockTransactionCount);
+    //   } catch (error) {
+    //     console.error("Error fetching artist details:", error);
+    //   }
+    // };
+    getArtistStock(name);
     fetchData();
+    getOwnedStockList();
+    handleCardClick(name)
   }, [id, watchlist]);
 
   useEffect(() => {
@@ -56,9 +73,52 @@ const ArtistPage = () => {
       dispatch(addRecentlyViewedArtist(id));
     }
   }, [id, dispatch]);
-  
-  
 
+  const fetchData = async () => {
+    try {
+      const accessToken = await fetchAccessToken(CLIENT_ID, CLIENT_SECRET);
+      const artistDetails = await fetchArtistDetails(id, accessToken);
+      console.log(artistDetails);
+      // getArtistStock(name);
+      // const transactionCount = await getArtistStockTransactionCount(stockId)
+      console.log(stockTransactionCount);
+      //const monthlyListeners = fetchStats(id);
+      setSpotifyId(artistDetails.id);
+      setArtistImage(artistDetails.images[0].url);
+      setArtistGenre(artistDetails.genres[0]);
+      setArtistPopularity(artistDetails.popularity);
+      setArtistFollowers(artistDetails.followers.total);
+
+      const topTracksData = await fetchArtistTopTracks(id, accessToken);
+      setTopTracks(topTracksData.tracks);
+      setArtistValueFunction(artistDetails.popularity, artistDetails.followers.total, stockTransactionCount);
+    } catch (error) {
+      console.error("Error fetching artist details:", error);
+    }
+  };
+
+  // const fetchStats = async (artistID) => {
+  //   const options = {
+  //     method: 'GET',
+  //     url: `https://spotify-statistics-and-stream-count.p.rapidapi.com/artist/${artistID}`,
+  //     headers: {
+  //       'X-RapidAPI-Key': '1c62b0f6e7msh2aff4d73906d018p12bc62jsnc6052f06d1c7',
+  //       'X-RapidAPI-Host': 'spotify-statistics-and-stream-count.p.rapidapi.com'
+  //     }
+  //   };
+
+  //   try {
+  //     const response = await axios.request(options);
+  //     console.log("trial response data: ", response);
+  //     setStats(response.data);
+  //     setMonthlyListeners(response.data.monthlyListeners);
+  //     setWorldRank(response.data.worldRank);
+  //     return response.data.monthlyListeners;
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+  
   const fetchArtistTopTracks = async (artistID, accessToken) => {
     const artistResponse = await fetch(
       `https://api.spotify.com/v1/artists/${artistID}/top-tracks?country=US`,
@@ -71,6 +131,12 @@ const ArtistPage = () => {
     const topTracks = await artistResponse.json();
     return topTracks;
   };
+
+  const setArtistValueFunction = (artistPopularity, artistFollowers, transactionCount) => {
+    console.log("artist popularity: ", artistPopularity);
+    console.log("stock trade count: ", transactionCount);
+    setArtistValue(stockPriceAlgorithm(artistPopularity, artistFollowers, transactionCount));
+  }
 
   const playSnippet = (previewUrl) => {
     if (previewUrl === null) {
@@ -89,11 +155,12 @@ const ArtistPage = () => {
     }
   };
 
-  const getArtistStockId = async (artistName) => {
+
+  const getArtistStock = async (artistName) => {
     try {
-      const getStockId = {
+      const getStock = {
         method: "get",
-        url: "http://localhost:5000/api/getStockByName",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/getStockByName",
         params: {
           artistName,
         },
@@ -102,23 +169,66 @@ const ArtistPage = () => {
         },
       };
 
-      const getStockIdResponse = await axios(getStockId);
+      const getStockIdResponse = await axios(getStock);
+      console.log("saved artist stock data: ", getStockIdResponse);
       setStockId(getStockIdResponse.data.stock._id);
+      setprevArtistPopularity(getStockIdResponse.data.stock.artistPopularity);
       const isArtistInWatchlist = watchlist.includes(getStockIdResponse.data.stock._id);
       setAddedToWatchlist(isArtistInWatchlist);
+      getArtistStockTransactionCount(getStockIdResponse.data.stock._id);
+      return getStockIdResponse.data;
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  const getArtistStockTransactionCount = async (stockId) => {
+    console.log("stock id inside tradeCount: ", stockId);
+    try {
+      const getCount = {
+        method: "get",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/getStockTradeCount",
+        params: {
+          stockId,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+      const getArtistStockTransactionCount = await axios(getCount);
+      console.log(getArtistStockTransactionCount)
+      const artistStockTransactionCount = getArtistStockTransactionCount.data.stockTradeCount;
+      console.log(artistStockTransactionCount)
+      setStockTransactionCount(artistStockTransactionCount)
+
+      return artistStockTransactionCount;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const getOwnedStockList = async () => {
+    try {
+      const encodedUserId = encodeURIComponent(userId); // URL encode the userId
+      const response = await axios.get(`https://intense-inlet-40544-607910b59282.herokuapp.com/api/getOwnedStocks?userId=${encodedUserId}`);
+      setOwnedStockList(response.data.stocks);
+      dispatch(
+        setOwnedStocksList({
+          ownedStockList: ownedStockList,
+        })
+      );
+    } catch (error) {
+      console.error('Error fetching owned stocks:', error);
     }
   }
 
   const addToWatchlist = async (artistName, artistImage, spotifyId) => {
     const userId = user.user.userId;
     let stockId = "";
-
     try {
       const addStockToDB = {
         method: "post",
-        url: "http://localhost:5000/api/addStock",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/addStock",
         data: {
           artistName,
           artistImage,
@@ -139,10 +249,12 @@ const ArtistPage = () => {
         console.error(error);
       }
     }
+
+    console.log("wathclist: ", userId, stockId);
     try {
       const addStockToWatchlist = {
         method: "post",
-        url: "http://localhost:5000/api/addToWatchlist",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/addToWatchlist",
         data: {
           userId,
           stockId,
@@ -167,11 +279,11 @@ const ArtistPage = () => {
   };
 
   const deleteFromWatchlist = async (stockId) => {
-    const userId = user.user.userId;
+    const userId = user.userId;
     try {
       const deleteFromWatchlist = {
         method: "post",
-        url: "http://localhost:5000/api/deleteFromWatchlist",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/deleteFromWatchlist",
         data: {
           userId,
           stockId,
@@ -191,6 +303,91 @@ const ArtistPage = () => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleCardClick = async (track) => {
+      try {
+        // Fetch the artist ID from the Genius API
+        const response = await fetch(
+          `https://api.genius.com/search?q=${encodeURIComponent(track)}&access_token=g8J7SWDhjrS2W1eVOmZSubSEtv2HJyBzRT1OEHR_NWOoj8tbu739v7u2RtN6dsJV`
+        );
+        if (!response.ok) {
+          throw new Error('Failed to search for artist ID');
+        }
+        const data = await response.json();
+        const hit = data.response.hits.find(hit => hit.result.primary_artist.name === track);
+        console.log(hit)
+        if (!hit) {
+          // throw new Error('Artist not found in search results');
+          setArtistDescription("Unable to fetch Genuis artist description");
+        }
+        const artistId = hit.result.primary_artist.id;
+        console.log("yuhhhhhhhhh" + artistId)
+  
+        await fetchArtistDescription(artistId, 200);
+    
+      } catch (error) {
+        console.error('Error fetching artist ID:', error);
+        // Handle error if necessary
+      }
+  };
+
+  const fetchArtistDescription = async (artistId, wordLimit) => {
+    try {
+      if (!artistId) {
+        setArtistDescription("Unable to fetch artist description");
+        return;
+      }
+      
+      const response = await fetch(
+        `https://api.genius.com/artists/${artistId}?access_token=g8J7SWDhjrS2W1eVOmZSubSEtv2HJyBzRT1OEHR_NWOoj8tbu739v7u2RtN6dsJV`
+      );
+      if (!response.ok) {
+        throw new Error('Failed to fetch artist description');
+      }
+      const data = await response.json();
+      const descriptionDOM = data.response.artist.description.dom;
+
+      const extractTextContent = (element) => {
+          if (typeof element === 'string') {
+              return element;
+          }
+          if (element.children && Array.isArray(element.children)) {
+              return element.children.map(child => extractTextContent(child)).join('');
+          }
+          return '';
+      };
+
+      const combinedDescription = descriptionDOM.children
+          .filter(child => child.tag === 'p')
+          .map(paragraph => extractTextContent(paragraph))
+          .join(' '); 
+
+      const words = combinedDescription.split(/\s+/);
+      const truncatedDescription = words.slice(0, wordLimit).join(' ');
+
+      setArtistDescription(truncatedDescription+"...");
+
+    } catch (error) {
+      console.error('Error fetching artist description:', error);
+      setArtistDescription("Unable to fetch artist description");
+    }
+  };
+
+  const openBuyModal = () => {
+    setShowBuyModal(true);
+  };
+
+  const closeBuyModal = () => {
+    setShowBuyModal(false);
+  };
+
+  const openSellModal = () => {
+    setShowSellModal(true);
+  };
+
+  const closeSellModal = () => {
+    setShowSellModal(false);
   };
 
   return (
@@ -258,6 +455,7 @@ const ArtistPage = () => {
                         style={{ backgroundColor: "#00F000" }}
                         className="bg-green-500 active:bg-green-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                         type="button"
+                        onClick={openBuyModal}
                       >
                         Buy
                       </button>
@@ -265,6 +463,7 @@ const ArtistPage = () => {
                         style={{ backgroundColor: "#F00000" }}
                         className="bg-green-500 active:bg-green-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                         type="button"
+                        onClick={openSellModal}
                       >
                         Sell
                       </button>
@@ -305,14 +504,37 @@ const ArtistPage = () => {
                           Followers
                         </span>
                       </div>
+                      {/* <div className="lg:mr-4 p-3 text-center">
+                        <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
+                          {monthlyListeners}
+                        </span>
+                        <span className="text-sm text-blueGray-400">
+                          Monthly Listeners
+                        </span>
+                      </div>
+                      <div className="lg:mr-4 p-3 text-center">
+                        <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
+                          {worldRank}
+                        </span>
+                        <span className="text-sm text-blueGray-400">
+                          World Rank
+                        </span>
+                      </div> */}
                     </div>
                   </div>
                 </div>
                 <div className="text-center mt-12">
+
                   <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
                     {name}
                   </h3>
+                  <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
+                    {artistValue}
+                  </h3>
                   <div className="text-left mb-2 text-blueGray-600 mt-10">
+                    {/* <p className="mx-4 text-xl mb-2">Performance</p> */}
+                    {/* Insert Artist Graph here*/}
+
                     <p className="mx-4 text-xl mb-2">Top Tracks</p>
                     <div className="mx-10 grid grid-cols-5  justify-center">
                       {topTracks.map((track, index) => (
@@ -340,12 +562,7 @@ const ArtistPage = () => {
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-9/12 px-4">
                       <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
-                        Mariah Carey (born March 27, 1970) is an American
-                        singer, songwriter, actress, record producer and #1 New
-                        York Times bestselling author. Referred to as the
-                        "Songbird Supreme", she is noted for her five-octave
-                        vocal range, melismatic singing style and signature use
-                        of the whistle reg…
+                        {artistDescription}
                       </p>
                       <a href="#pablo" className="font-normal">
                         read more
@@ -357,7 +574,7 @@ const ArtistPage = () => {
             </div>
           </div>
 
-          <footer className="relative bg-blueGray-200 pt-8 pb-6 mt-8">
+          {/* <footer className="relative bg-blueGray-200 pt-8 pb-6 mt-8">
             <div className="container mx-auto px-4">
               <div className="flex flex-wrap items-center md:justify-between justify-center">
                 <div className="w-full md:w-6/12 px-4 mx-auto text-center">
@@ -385,8 +602,30 @@ const ArtistPage = () => {
                 </div>
               </div>
             </div>
-          </footer>
+          </footer> */}
         </section>
+        <BuyModal
+        showModal={showBuyModal}
+        closeModal={closeBuyModal}
+        setQuantity={setBuyQuantity}
+        userId={userId}
+        stockId={stockId}
+        artistImage={artistImage}
+        artistName={name}
+        spotifyId={spotifyId}
+        artistValue={artistValue}
+      />
+        <SellModal
+        showModal={showSellModal}
+        closeModal={closeSellModal}
+        setQuantity={setSellQuantity}
+        userId={userId}
+        stockId={stockId}
+        artistImage={artistImage}
+        artistName={name}
+        spotifyId={spotifyId}
+        artistValue={artistValue}
+      />
       </main>
     </div>
   );

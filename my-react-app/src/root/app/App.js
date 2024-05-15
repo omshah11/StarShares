@@ -32,7 +32,7 @@ const App = () => {
     try {
       const configuration = {
         method: "get", // Assuming you are using a GET request for login
-        url: "http://localhost:5000/api/getUserByToken",
+        url: "https://intense-inlet-40544-607910b59282.herokuapp.com/api/getUserByToken",
         params: {
           // Pass parameters as 'params' instead of 'data'
           userToken,
@@ -52,6 +52,7 @@ const App = () => {
       const password = response.data.user.password;
       const watchlist = response.data.user.watchlist;
       const profileBio = response.data.profileBio;
+      const balance = response.data.user.balance;
 
       // Assuming 'loggedIn' is derived from the userState or another logic
       const loggedIn = true;
@@ -60,16 +61,18 @@ const App = () => {
       dispatch(
         login({
           user: {
-            id: userId,
+            userId: userId,
             firstName: firstName,
             lastName: lastName,
             email: email,
             password: password
           },
+          userId: userId,
           isLoggedIn: loggedIn,
           token: userToken, // Include the token in the login action
           watchlist: watchlist,
           profileBio: profileBio,
+          balance: balance
         })
       );
     } catch (error) {
