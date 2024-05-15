@@ -41,7 +41,7 @@ const OwnedStocks = () => {
         const encodedUserId = encodeURIComponent(userId);
         console.log(userId);
         console.log(encodedUserId);
-        const response = await axios.get(`https://intense-inlet-40544-607910b59282.herokuapp.com/api/getOwnedStocks?userId=${encodedUserId}`);
+        const response = await axios.get(`http://localhost:5000/api/getOwnedStocks?userId=${encodedUserId}`);
         setOwnedStocks(response.data.stocks);
       } catch (error) {
         console.error('Error fetching owned stocks:', error);

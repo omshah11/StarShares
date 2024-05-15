@@ -16,8 +16,25 @@ const Portfolio = () => {
     const chartData = [30, 40, 35, 50, 49, 60, 70, 91, 125];
 
     useEffect(() => {
+        const getOwnedStockList = async () => {
+            try {
+                const encodedUserId = encodeURIComponent(userId); // URL encode the userId
+                const response = await axios.get(
+                    `https://intense-inlet-40544-607910b59282.herokuapp.com/api/getOwnedStocks?userId=${encodedUserId}`
+                );
+                const ownedStockList = response.data.stocks;
+                setOwnedStockList(ownedStockList);
+                dispatch(
+                    setOwnedStocksList({
+                        ownedStockList: ownedStockList,
+                    })
+                );
+            } catch (error) {
+                console.error("Error fetching owned stocks:", error);
+            }
+        };
         getOwnedStockList();
-    });
+    }, [userId, dispatch]);
     const options = {
         chart: {
             id: "basic-line",
@@ -34,23 +51,6 @@ const Portfolio = () => {
             }
         ]
     };
-    const getOwnedStockList = async () => {
-        try {
-            const encodedUserId = encodeURIComponent(userId); // URL encode the userId
-            const response = await axios.get(
-              `https://intense-inlet-40544-607910b59282.herokuapp.com/api/getOwnedStocks?userId=${encodedUserId}`
-            );
-            const ownedStockList = response.data.stocks;
-            setOwnedStockList(ownedStockList);
-            dispatch(
-              setOwnedStocksList({
-                ownedStockList: ownedStockList,
-              })
-            );
-          } catch (error) {
-            console.error("Error fetching owned stocks:", error);
-          }
-        };
 
     const userDetails = user.user;
     return (

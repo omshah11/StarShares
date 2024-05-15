@@ -8,7 +8,6 @@ import { selectUser } from '../userSlice';
 // Functional component for the Navbar
 const Navbar = () => {
   const user = useSelector(selectUser);
-  console.log("navbar: ", user);
   const [userBalance, setUserBalance] = useState(user.balance);
   return (
     <nav className="bgcolorSS2 flex justify-between items-center px-4 py-2 text-white">
