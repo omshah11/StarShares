@@ -11,7 +11,7 @@ const TransactionsCard = () => {
   const fetchRecentTransactions = async () => {
     try {
       // Make an HTTP GET request to your backend endpoint
-      const response = await axios.get('/api/transactions'); // Replace '/api/transactions' with your actual backend endpoint
+      const response = await axios.get('https://intense-inlet-40544-607910b59282.herokuapp.com/api/transactions'); 
       // Assuming the response data is an array of transactions
       setTransactions(response.data);
     } catch (error) {
