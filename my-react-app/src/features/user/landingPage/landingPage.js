@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { logout, selectToken, selectUser, selectRecentlyViewedArtists } from '../userSlice'
 import RecentlyViewedArtist from './RecentlyViewedArtist';
 import Logo from '../../../Imgs/starsharesLogo.png';
+import Notification from '../notification/notification';
 
 const LandingPage = () => {
   const user = useSelector(selectUser);
@@ -32,6 +33,7 @@ const LandingPage = () => {
         <div className="flex flex-col justify-center  gap-4">
           <p className='text-[#37515F] font-medium text-xl'>Welcome back, </p>
           <h1><span className="pt-0 md:text-6xl text-5xl fontsemibold font-mono">{userDetails.firstName}</span></h1>
+          <Notification />
           <p>StarShares, a platform revolutionizing the way we interact with music.</p>
           <div> 
         <h1 className="text-3xl font-semibold text-[#37515F] mt-12">Discover new music</h1>
